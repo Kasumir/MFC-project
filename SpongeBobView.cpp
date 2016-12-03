@@ -163,6 +163,8 @@ void CSpongeBobView::OnDraw(CDC* pDC)
 
 	if (object.wd_visible == TRUE) {
 
+		object.WD_Cehck(&Tile_list, monster_array);
+
 		wd_bitmap.LoadBitmap(IDB_WaterDrop);
 		BITMAP wd_bmpinfo;
 		wd_bitmap.GetBitmap(&wd_bmpinfo);

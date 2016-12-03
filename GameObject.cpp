@@ -43,7 +43,7 @@ void GameObject::check(CList<CPoint, CPoint&>* Tile_list)
 		c_UDstate = DOWN;
 
 }
-void GameObject::WD_Cehck(CList<CPoint, CPoint&>* Tile_list)
+void GameObject::WD_Cehck(CList<CPoint, CPoint&>* Tile_list, CArray<CPoint,CPoint&> Monster_point)
 {
 	for (int i = 1; i <= 3; i++) {
 		CPoint wd_pos;
@@ -53,7 +53,7 @@ void GameObject::WD_Cehck(CList<CPoint, CPoint&>* Tile_list)
 		CPoint tile_pos;
 		int count = 0;
 
-		//타일 충돌을 검사하는 코드입니다.
+		// 타일 충돌을 검사하는 코드입니다.
 		for (p = Tile_list->GetHeadPosition(); p != NULL;)
 		{
 			tile_pos = Tile_list->GetNext(p);
@@ -66,6 +66,24 @@ void GameObject::WD_Cehck(CList<CPoint, CPoint&>* Tile_list)
 			}
 			else if (wd_LRstate[i] == RIGHT) {
 				if ((wd_pos.x + 36 >= tile_pos.x) && (wd_pos.x <= tile_pos.x) && (wd_pos.y + 24 > tile_pos.y) && (wd_pos.y - 24 < tile_pos.y))
+				{
+					wdcount[i] = 0;
+					break;
+				}
+			}
+		}
+
+		// 몬스터 충돌을 검사하는 코드입니다.
+		for (int i = 1; i < Monster_point.GetSize() + 1; i++) {
+			if (wd_LRstate[i] == LEFT) {
+				if ((wd_pos.x - 36 <= Monster_point[i - 1].x) && (wd_pos.x >= Monster_point[i - 1].x) && (wd_pos.y + 24 > Monster_point[i - 1].y) && (wd_pos.y - 24 < Monster_point[i - 1].y))
+				{
+					wdcount[i] = 0;
+					break;
+				}
+			}
+			else if (wd_LRstate[i] == RIGHT) {
+				if ((wd_pos.x + 36 >= Monster_point[i-1].x) && (wd_pos.x <= Monster_point[i - 1].x) && (wd_pos.y + 24 > Monster_point[i - 1].y) && (wd_pos.y - 24 < Monster_point[i - 1].y))
 				{
 					wdcount[i] = 0;
 					break;
@@ -99,12 +117,12 @@ void GameObject::WaterDrop()
 		if (index < 10) {
 			CPoint pos = c_pos;
 			if (c_lastLRstate == LEFT) {
-				pos.x -= 40;
+				pos.x -= 65;
 				pos.y += 25;
 				wd_LRstate[index] = LEFT;
 			}
 			else {
-				pos.x += 40;
+				pos.x += 65;
 				pos.y += 25;
 				wd_LRstate[index] = RIGHT;
 			}
