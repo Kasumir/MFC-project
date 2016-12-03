@@ -28,6 +28,10 @@ public:
 	BOOL c_visible;//캐릭터가 생성되어 있는지
 	BOOL c_space; //space 상태 정보, space가 눌려있는지 상태를 점검합니다.
 	BOOL wd_visible; // 물방울이 생성되어 있는지 확인합니다.
+	BOOL monstercrash();
+	int monsterindex();
+	int monster_index;
+	BOOL crash;
 
 public:
 	void move();

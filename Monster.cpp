@@ -127,6 +127,7 @@ void Monster::check(CList<CPoint, CPoint&>* Tile_list)
 			if (!(m_pos.x > pos.x - M_SIZE && m_pos.x < pos.x + B_SIZE && m_pos.y > pos.y - M_SIZE && m_pos.y < pos.y - M_SIZE + B_SIZE / 2))
 				count++;//밑에 모든 벽돌이 없는지 검사.
 	}
+
 	if (count == Tile_list->GetCount())
 		m_UDstate = DOWN; // 타일숫자 = 검사한 숫자 -> 떨어짐.
 	if (jumpcount == 6) // 점프가 6번 프레임 만큼 돌고 떨어짐.

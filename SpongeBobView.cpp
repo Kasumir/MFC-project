@@ -146,6 +146,22 @@ void CSpongeBobView::OnDraw(CDC* pDC)
 	monster_array[3] = monster4.m_pos;
 	monster_array[4] = monster5.m_pos;
 	
+	for (int i = 0; i < 5; i++)
+		if (object.monsterindex() == i)
+			if (object.monstercrash() == TRUE)
+			{
+				if (i == 0)
+					monster1.MonsterDie();
+				else if (i == 1)
+					monster2.MonsterDie();
+				else if (i == 2)
+					monster3.MonsterDie();
+				else if (i == 3)
+					monster4.MonsterDie();
+				else if (i == 4)
+					monster5.MonsterDie();		
+			}
+
 
 	if (monster1.m_visible == TRUE)
 	{
@@ -228,7 +244,7 @@ void CSpongeBobView::OnDraw(CDC* pDC)
 	//물방울을 출력하는 코드입니다.
 
 	if (object.wd_visible == TRUE) {
-
+		object.crash = FALSE;
 		object.WD_Cehck(&Tile_list, &monster_array);
 
 		wd_bitmap.LoadBitmap(IDB_WaterDrop);
