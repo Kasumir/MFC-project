@@ -99,12 +99,8 @@ void Monster::StopState()//게임대기상태나 캐릭터에게 공격당해서 갇혀있는 상태
 	m_pos.x += 0;
 	m_pos.y += 0;
 
-	/*
-	if(게임이 켜져있는 상태 && 캐릭터랑 부딪힌다면)
-	몬스터 소멸
-
-	*/
 }
+
 
 
 void Monster::check(CList<CPoint, CPoint&>* Tile_list)
@@ -126,12 +122,27 @@ void Monster::check(CList<CPoint, CPoint&>* Tile_list)
 		else if (m_UDstate == STOP) // 밑에 벽돌이 있는지 없는지 검사.
 			if (!(m_pos.x > pos.x - M_SIZE && m_pos.x < pos.x + B_SIZE && m_pos.y > pos.y - M_SIZE && m_pos.y < pos.y - M_SIZE + B_SIZE / 2))
 				count++;//밑에 모든 벽돌이 없는지 검사.
-	}
 
-	if (count == Tile_list->GetCount())
-		m_UDstate = DOWN; // 타일숫자 = 검사한 숫자 -> 떨어짐.
-	if (jumpcount == 6) // 점프가 6번 프레임 만큼 돌고 떨어짐.
-		m_UDstate = DOWN;
+		if (m_LRstate == LEFT||m_LRstate == STOP) {
+			if ((m_pos.x - B_SIZE <= pos.x) && (m_pos.x >= pos.x) && (m_pos.y + B_SIZE > pos.y) && (m_pos.y - B_SIZE < pos.y))
+			{
+				m_LRstate = STOP;
+				m_pos.x = pos.x + B_SIZE;
+			}
+		}
+		else if (m_LRstate == RIGHT||m_LRstate == STOP) {
+			if ((m_pos.x + B_SIZE >= pos.x) && (m_pos.x <= pos.x) && (m_pos.y + B_SIZE > pos.y) && (m_pos.y - B_SIZE < pos.y))
+			{
+				m_LRstate = STOP;
+				m_pos.x = pos.x - M_SIZE;
+			}
+		}
+
+		if (count == Tile_list->GetCount())
+			m_UDstate = DOWN; // 타일숫자 = 검사한 숫자 -> 떨어짐.
+		if (jumpcount == 6) // 점프가 6번 프레임 만큼 돌고 떨어짐.
+			m_UDstate = DOWN;
+	}
 }
 
 
@@ -140,6 +151,8 @@ void Monster::MonsterDie()
 	m_visible = FALSE;
 	m_pos.x = 0;
 	m_pos.y = 0;
+	m_LRstate = STOP;
+	m_UDstate = STOP;
 }
 
 void Monster::MonsterCreate(int x, int y)

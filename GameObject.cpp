@@ -37,6 +37,20 @@ void GameObject::check(CList<CPoint, CPoint&>* Tile_list)
 		else if (c_UDstate == STOP) // 밑에 벽돌이 있는지 없는지 검사.
 			if (!(c_pos.x > pos.x - C_SIZE && c_pos.x < pos.x + B_SIZE && c_pos.y > pos.y - C_SIZE && c_pos.y < pos.y - C_SIZE + B_SIZE / 2))
 				count++;//밑에 모든 벽돌이 없는지 검사.
+		if (c_LRstate == LEFT || c_LRstate == STOP) {
+			if ((c_pos.x - B_SIZE <= pos.x) && (c_pos.x >= pos.x) && (c_pos.y + B_SIZE > pos.y) && (c_pos.y - B_SIZE < pos.y))
+			{
+				c_LRstate = STOP;
+				c_pos.x = pos.x + B_SIZE;
+			}
+		}
+		else if (c_LRstate == RIGHT || c_LRstate == STOP) {
+			if ((c_pos.x + B_SIZE >= pos.x) && (c_pos.x <= pos.x) && (c_pos.y + B_SIZE > pos.y) && (c_pos.y - B_SIZE < pos.y))
+			{
+				c_LRstate = STOP;
+				c_pos.x = pos.x - C_SIZE;
+			}
+		}
 	}
 	if (count == Tile_list->GetCount())
 		c_UDstate = DOWN; // 타일숫자 = 검사한 숫자 -> 떨어짐.
