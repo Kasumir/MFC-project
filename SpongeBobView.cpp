@@ -170,7 +170,7 @@ void CSpongeBobView::OnDraw(CDC* pDC)
 		CPoint pos;
 		wd_dcmem.CreateCompatibleDC(pDC);
 		wd_dcmem.SelectObject(&wd_bitmap);
-		for (int i = 1; i <= 3; i++) {
+		for (int i = 1; i <= 10; i++) {
 			if (object.wdcount[i] != 0) {
 				pos = object.Water_drop.GetAt(i);
 				pDC->TransparentBlt(pos.x, pos.y, wd_bmpinfo.bmWidth, wd_bmpinfo.bmHeight, &wd_dcmem, 0, 0, wd_bmpinfo.bmWidth, wd_bmpinfo.bmHeight, RGB(0, 255, 0));
