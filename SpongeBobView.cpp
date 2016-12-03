@@ -117,12 +117,12 @@ void CSpongeBobView::OnDraw(CDC* pDC)
 		else if (object.c_LRstate == RIGHT)
 		{
 			object.LRcount++;
-			c_bitmap.LoadBitmap((object.LRcount % 6) + 335);
+			c_bitmap.LoadBitmap((object.LRcount % 6) + 319);
 		}
 		else if (object.c_LRstate == LEFT)
 		{
 			object.LRcount++;
-			c_bitmap.LoadBitmap((object.LRcount % 6) + 342);
+			c_bitmap.LoadBitmap((object.LRcount % 6) + 311);
 		}
 
 		BITMAP c_bmpinfo;
@@ -307,14 +307,8 @@ void CSpongeBobView::OnKeyUp(UINT nChar, UINT nRepCnt, UINT nFlags)
 void CSpongeBobView::OnSave()
 {
 	CDialog dlg(IDD_SAVEDIALOG);
-	if (dlg.DoModal() == IDOK)
-	{
-
-	}
-	else
-	{
-
-	}
+	int result = dlg.DoModal();
+	
 	CFile file;
 	CFileException e;
 	if (!file.Open(_T("mytext.txt"), CFile::modeCreate | CFile::modeWrite, &e)) {

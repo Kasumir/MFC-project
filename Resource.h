@@ -24,7 +24,6 @@
 #define IDB_MONSTER1                    326
 #define IDB_WaterDrop                   327
 #define IDB_BACKGROUND1                 328
-#define IDD_DIALOG1                     329
 #define IDD_SAVEDIALOG                  329
 #define IDC_EDIT1                       1001
 #define ID_32771                        32771
