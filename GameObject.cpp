@@ -45,10 +45,10 @@ void GameObject::check(CList<CPoint, CPoint&>* Tile_list)
 			}
 		}
 		else if (c_LRstate == RIGHT || c_LRstate == STOP) {
-			if ((c_pos.x + B_SIZE >= pos.x) && (c_pos.x <= pos.x) && (c_pos.y + B_SIZE > pos.y) && (c_pos.y - B_SIZE < pos.y))
+			if ((c_pos.x + C_SIZE >= pos.x) && (c_pos.x <= pos.x) && (c_pos.y + B_SIZE > pos.y) && (c_pos.y - B_SIZE < pos.y))
 			{
 				c_LRstate = STOP;
-				c_pos.x = pos.x - C_SIZE;
+				c_pos.x = pos.x -C_SIZE;
 			}
 		}
 	}
