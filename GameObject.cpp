@@ -85,6 +85,10 @@ void GameObject::WD_Cehck(CList<CPoint, CPoint&>* Tile_list, CArray<CPoint,CPoin
 					wdcount[i] = 0;
 					break;
 				}
+				else if (wdcount[i] == 16 && Monster_point->GetAt(p - 1).x < c_pos.x + 40 && Monster_point->GetAt(p - 1).x >c_pos.x - 40 && (wd_pos.y + 24 > Monster_point->GetAt(p - 1).y) && (wd_pos.y - 24 < Monster_point->GetAt(p - 1).y)) {
+					wdcount[i] = 0;
+					break;
+				}
 			}
 			else if (wd_LRstate[i] == RIGHT) {
 				if ((wd_pos.x + 36 >= Monster_point->GetAt(p - 1).x) && (wd_pos.x <= Monster_point->GetAt(p - 1).x) && (wd_pos.y + 24 > Monster_point->GetAt(p - 1).y) && (wd_pos.y - 24 < Monster_point->GetAt(p - 1).y))
@@ -93,6 +97,10 @@ void GameObject::WD_Cehck(CList<CPoint, CPoint&>* Tile_list, CArray<CPoint,CPoin
 					break;
 				}
 				else if (wdcount[i] == 16 && Monster_point->GetAt(p - 1).x < c_pos.x + 40 && Monster_point->GetAt(p - 1).x >c_pos.x - 40 && (wd_pos.y + 24 > Monster_point->GetAt(p - 1).y) && (wd_pos.y - 24 < Monster_point->GetAt(p - 1).y)) {
+					wdcount[i] = 0;
+					break;
+				}
+				else if (wdcount[i] == 16 && Monster_point->GetAt(p - 1).x > c_pos.x - 40 && Monster_point->GetAt(p - 1).x <c_pos.x + 40 && (wd_pos.y + 24 > Monster_point->GetAt(p - 1).y) && (wd_pos.y - 24 < Monster_point->GetAt(p - 1).y)) {
 					wdcount[i] = 0;
 					break;
 				}
