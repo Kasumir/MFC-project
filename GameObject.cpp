@@ -12,7 +12,7 @@ GameObject::GameObject()
 	Water_drop.SetSize(11);
 	wdcount[0] = wdcount[1] = wdcount[2] = wdcount[3] = wdcount[4] = wdcount[5] = wdcount[6] = wdcount[7] = wdcount[8] = wdcount[9] = wdcount[10] = 0;
 	c_lastLRstate = RIGHT;
-	crash = FALSE;
+	crash[0] = crash[1] = crash[2] = crash[3]=crash[4]=crash[5]=crash[6]=crash[7]=crash[8]=crash[9]=crash[10]=FALSE;
 }
 GameObject::~GameObject()
 {
@@ -94,8 +94,8 @@ void GameObject::WD_Cehck(CList<CPoint, CPoint&>* Tile_list, CArray<CPoint, CPoi
 			if (wd_LRstate[i] == LEFT) {
 				if ((wd_pos.x - 36 <= Monster_point->GetAt(p - 1).x) && (wd_pos.x >= Monster_point->GetAt(p - 1).x) && (wd_pos.y + 24 > Monster_point->GetAt(p - 1).y) && (wd_pos.y - 24 < Monster_point->GetAt(p - 1).y))
 				{
-					crash = TRUE;
-					monster_index = p - 1;
+					crash[i] = TRUE;
+					monster_index[i] = p - 1;
 					wdcount[i] = 0;
 					break;
 				}
@@ -112,8 +112,8 @@ void GameObject::WD_Cehck(CList<CPoint, CPoint&>* Tile_list, CArray<CPoint, CPoi
 				if ((wd_pos.x + 36 >= Monster_point->GetAt(p - 1).x) && (wd_pos.x <= Monster_point->GetAt(p - 1).x) && (wd_pos.y + 24 > Monster_point->GetAt(p - 1).y) && (wd_pos.y - 24 < Monster_point->GetAt(p - 1).y))
 				{
 					wdcount[i] = 0;
-					crash = TRUE;
-					monster_index = p - 1;
+					crash[i] = TRUE;
+					monster_index[i] = p - 1;
 					break;
 				}
 				else if (wdcount[i] == 16 && Monster_point->GetAt(p - 1).x < c_pos.x + 40 && Monster_point->GetAt(p - 1).x >c_pos.x - 40 && (wd_pos.y + 24 > Monster_point->GetAt(p - 1).y) && (wd_pos.y - 24 < Monster_point->GetAt(p - 1).y)) {
@@ -202,13 +202,13 @@ void GameObject::WaterDropMove()
 		wd_visible = FALSE;
 	}
 }
-BOOL GameObject::monstercrash()
+BOOL GameObject::monstercrash(int i)
 {
-	return crash;
+	return crash[i];
 }
-int GameObject::monsterindex()
+int GameObject::monsterindex(int i)
 {
-	return monster_index;
+	return monster_index[i];
 }
 
 void GameObject::move()

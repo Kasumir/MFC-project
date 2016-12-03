@@ -146,27 +146,27 @@ void CSpongeBobView::OnDraw(CDC* pDC)
 	monster_array[2] = monster3.m_pos;
 	monster_array[3] = monster4.m_pos;
 	monster_array[4] = monster5.m_pos;
-	
 
-	if (object.monstercrash() == TRUE)
-		{
-		if (object.monsterindex() == 0) {
+	for(int i=1;i<11;i++)
+	if (object.monstercrash(i) == TRUE)
+	{
+		if (object.monsterindex(i) == 0) {
 			monster1.MonsterDie();
 		}
-		else if (object.monsterindex() == 1) {
+		else if (object.monsterindex(i) == 1) {
 			monster2.MonsterDie();
 		}
-		else if (object.monsterindex() == 2) {
+		else if (object.monsterindex(i) == 2) {
 			monster3.MonsterDie();
 		}
-		else if (object.monsterindex() == 3) {
+		else if (object.monsterindex(i) == 3) {
 			monster4.MonsterDie();
 		}
-		else if (object.monsterindex() == 4) {
+		else if (object.monsterindex(i) == 4) {
 			monster5.MonsterDie();
 		}
-			object.crash = FALSE;
-		}
+		object.crash[i] = FALSE;
+	}
 
 
 	if (monster1.m_visible == TRUE)
