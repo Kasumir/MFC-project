@@ -3,6 +3,8 @@
 //
 
 #pragma once
+#include "Monster.h"
+#include "GameObject.h"
 
 
 class CSpongeBobView : public CView
@@ -11,7 +13,11 @@ protected: // serialization에서만 만들어집니다.
 	CSpongeBobView();
 	DECLARE_DYNCREATE(CSpongeBobView)
 
-// 특성입니다.
+	Monster monster1;
+	int s_state; //scene의 상태
+	GameObject object;
+	CList<CPoint, CPoint&> Tile_list;
+
 public:
 	CSpongeBobDoc* GetDocument() const;
 
@@ -40,6 +46,13 @@ protected:
 // 생성된 메시지 맵 함수
 protected:
 	DECLARE_MESSAGE_MAP()
+public:
+	afx_msg void OnLButtonDown(UINT nFlags, CPoint point);
+	afx_msg void OnRButtonDown(UINT nFlags, CPoint point);
+	afx_msg void OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags);
+	afx_msg void OnKeyUp(UINT nChar, UINT nRepCnt, UINT nFlags);
+	afx_msg void OnSave();
+	afx_msg void OnLoad();
 };
 
 #ifndef _DEBUG  // SpongeBobView.cpp의 디버그 버전

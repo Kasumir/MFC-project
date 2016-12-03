@@ -39,6 +39,12 @@
     <ClInclude Include="Resource.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
+    <ClInclude Include="GameObject.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="Monster.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="SpongeBob.cpp">
@@ -54,6 +60,12 @@
       <Filter>소스 파일</Filter>
     </ClCompile>
     <ClCompile Include="SpongeBobView.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="GameObject.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="Monster.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
   </ItemGroup>
@@ -75,6 +87,63 @@
       <Filter>리소스 파일</Filter>
     </Image>
     <Image Include="res\Toolbar.bmp">
+      <Filter>리소스 파일</Filter>
+    </Image>
+    <Image Include="res\L1.bmp">
+      <Filter>리소스 파일</Filter>
+    </Image>
+    <Image Include="res\L2.bmp">
+      <Filter>리소스 파일</Filter>
+    </Image>
+    <Image Include="res\L3.bmp">
+      <Filter>리소스 파일</Filter>
+    </Image>
+    <Image Include="res\L4.bmp">
+      <Filter>리소스 파일</Filter>
+    </Image>
+    <Image Include="res\L5.bmp">
+      <Filter>리소스 파일</Filter>
+    </Image>
+    <Image Include="res\L6.bmp">
+      <Filter>리소스 파일</Filter>
+    </Image>
+    <Image Include="res\L7.bmp">
+      <Filter>리소스 파일</Filter>
+    </Image>
+    <Image Include="res\R1.bmp">
+      <Filter>리소스 파일</Filter>
+    </Image>
+    <Image Include="res\bitmap2.bmp">
+      <Filter>리소스 파일</Filter>
+    </Image>
+    <Image Include="res\R2.bmp">
+      <Filter>리소스 파일</Filter>
+    </Image>
+    <Image Include="res\R3.bmp">
+      <Filter>리소스 파일</Filter>
+    </Image>
+    <Image Include="res\R4.bmp">
+      <Filter>리소스 파일</Filter>
+    </Image>
+    <Image Include="res\R5.bmp">
+      <Filter>리소스 파일</Filter>
+    </Image>
+    <Image Include="res\R6.bmp">
+      <Filter>리소스 파일</Filter>
+    </Image>
+    <Image Include="res\R7.bmp">
+      <Filter>리소스 파일</Filter>
+    </Image>
+    <Image Include="res\bitmap.bmp">
+      <Filter>리소스 파일</Filter>
+    </Image>
+    <Image Include="res\bmp00002.bmp">
+      <Filter>리소스 파일</Filter>
+    </Image>
+    <Image Include="res\bubble.bmp">
+      <Filter>리소스 파일</Filter>
+    </Image>
+    <Image Include="res\background1.bmp">
       <Filter>리소스 파일</Filter>
     </Image>
   </ItemGroup>

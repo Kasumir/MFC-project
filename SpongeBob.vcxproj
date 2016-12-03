@@ -185,7 +185,9 @@
     <Text Include="ReadMe.txt" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="GameObject.h" />
     <ClInclude Include="MainFrm.h" />
+    <ClInclude Include="Monster.h" />
     <ClInclude Include="Resource.h" />
     <ClInclude Include="SpongeBob.h" />
     <ClInclude Include="SpongeBobDoc.h" />
@@ -194,7 +196,9 @@
     <ClInclude Include="targetver.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="GameObject.cpp" />
     <ClCompile Include="MainFrm.cpp" />
+    <ClCompile Include="Monster.cpp" />
     <ClCompile Include="SpongeBob.cpp" />
     <ClCompile Include="SpongeBobDoc.cpp" />
     <ClCompile Include="SpongeBobView.cpp" />
@@ -212,6 +216,25 @@
     <None Include="res\SpongeBob.rc2" />
   </ItemGroup>
   <ItemGroup>
+    <Image Include="res\background1.bmp" />
+    <Image Include="res\bitmap.bmp" />
+    <Image Include="res\bitmap2.bmp" />
+    <Image Include="res\bmp00002.bmp" />
+    <Image Include="res\bubble.bmp" />
+    <Image Include="res\L1.bmp" />
+    <Image Include="res\L2.bmp" />
+    <Image Include="res\L3.bmp" />
+    <Image Include="res\L4.bmp" />
+    <Image Include="res\L5.bmp" />
+    <Image Include="res\L6.bmp" />
+    <Image Include="res\L7.bmp" />
+    <Image Include="res\R1.bmp" />
+    <Image Include="res\R2.bmp" />
+    <Image Include="res\R3.bmp" />
+    <Image Include="res\R4.bmp" />
+    <Image Include="res\R5.bmp" />
+    <Image Include="res\R6.bmp" />
+    <Image Include="res\R7.bmp" />
     <Image Include="res\SpongeBob.ico" />
     <Image Include="res\SpongeBobDoc.ico" />
     <Image Include="res\Toolbar.bmp" />
@@ -219,4 +242,9 @@
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>
+  <ProjectExtensions>
+    <VisualStudio>
+      <UserProperties RESOURCE_FILE="SpongeBob.rc" />
+    </VisualStudio>
+  </ProjectExtensions>
 </Project>
