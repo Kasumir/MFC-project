@@ -20,8 +20,8 @@ public:
 	int jumpcount;
 	int LRcount;
 	int c_lastLRstate; // 캐릭터가 마지막으로 보고있던 방향을 확인합니다.
-	int wd_LRstate[4];	//각 물방울의 LR state 정보를 담고 있습니다.
-	int wdcount[4]; // 물방울 카운트, 인덱스 0은 일정 주기로 물방울을 쏘기 위해 OnPain()의 호출 횟수를 점검합니다.
+	int wd_LRstate[11];	//각 물방울의 LR state 정보를 담고 있습니다.
+	int wdcount[11]; // 물방울 카운트, 인덱스 0은 일정 주기로 물방울을 쏘기 위해 OnPain()의 호출 횟수를 점검합니다.
 	BOOL c_bottom; //캐릭터발이 땅에 닿아있는지
 	BOOL c_left;  //캐릭터 왼쪽에 벽이 있는지
 	BOOL c_right; //캐릭터 오른쪽에 벽이 있는지
@@ -32,6 +32,7 @@ public:
 public:
 	void move();
 	void check(CList<CPoint, CPoint&>*);
+	void WD_Cehck(CList<CPoint, CPoint&>*);
 	void CreateCharacter(int, int);
 	void DeleteCharacter();
 	void WaterDrop();
