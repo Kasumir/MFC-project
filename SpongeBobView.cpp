@@ -123,12 +123,12 @@ void CSpongeBobView::OnDraw(CDC* pDC)
 		else if (object.c_LRstate == RIGHT)
 		{
 			object.LRcount++;
-			c_bitmap.LoadBitmap((object.LRcount % 6) + 335);
+			c_bitmap.LoadBitmap((object.LRcount % 6) + 319);
 		}
 		else if (object.c_LRstate == LEFT)
 		{
 			object.LRcount++;
-			c_bitmap.LoadBitmap((object.LRcount % 6) + 342);
+			c_bitmap.LoadBitmap((object.LRcount % 6) + 311);
 		}
 
 		BITMAP c_bmpinfo;
@@ -236,7 +236,7 @@ void CSpongeBobView::OnDraw(CDC* pDC)
 		CPoint pos;
 		wd_dcmem.CreateCompatibleDC(pDC);
 		wd_dcmem.SelectObject(&wd_bitmap);
-		for (int i = 1; i <= 3; i++) {
+		for (int i = 1; i <= 10; i++) {
 			if (object.wdcount[i] != 0) {
 				pos = object.Water_drop.GetAt(i);
 				pDC->TransparentBlt(pos.x, pos.y, wd_bmpinfo.bmWidth, wd_bmpinfo.bmHeight, &wd_dcmem, 0, 0, wd_bmpinfo.bmWidth, wd_bmpinfo.bmHeight, RGB(0, 255, 0));
@@ -373,14 +373,8 @@ void CSpongeBobView::OnKeyUp(UINT nChar, UINT nRepCnt, UINT nFlags)
 void CSpongeBobView::OnSave()
 {
 	CDialog dlg(IDD_SAVEDIALOG);
-	if (dlg.DoModal() == IDOK)
-	{
-
-	}
-	else
-	{
-
-	}
+	int result = dlg.DoModal();
+	
 	CFile file;
 	CFileException e;
 	if (!file.Open(_T("mytext.txt"), CFile::modeCreate | CFile::modeWrite, &e)) {

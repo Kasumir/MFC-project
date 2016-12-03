@@ -9,11 +9,8 @@ GameObject::GameObject()
 	c_visible = FALSE;
 	jumpcount = 6;
 	LRcount = 1;
-	Water_drop.SetSize(4);
-	wdcount[0] = 0;
-	wdcount[1] = 0;
-	wdcount[2] = 0;
-	wdcount[3] = 0;
+	Water_drop.SetSize(11);
+	wdcount[0] = wdcount[1] = wdcount[2] = wdcount[3] = wdcount[4] = wdcount[5] = wdcount[6] = wdcount[7] = wdcount[8] = wdcount[9] = wdcount[10] = 0;
 	c_lastLRstate = RIGHT;
 }
 GameObject::~GameObject()
@@ -46,6 +43,37 @@ void GameObject::check(CList<CPoint, CPoint&>* Tile_list)
 		c_UDstate = DOWN;
 
 }
+void GameObject::WD_Cehck(CList<CPoint, CPoint&>* Tile_list)
+{
+	for (int i = 1; i <= 3; i++) {
+		CPoint wd_pos;
+		wd_pos = Water_drop[i];
+
+		POSITION p;
+		CPoint tile_pos;
+		int count = 0;
+
+		//타일 충돌을 검사하는 코드입니다.
+		for (p = Tile_list->GetHeadPosition(); p != NULL;)
+		{
+			tile_pos = Tile_list->GetNext(p);
+			if (wd_LRstate[i] == LEFT) {
+				if ((wd_pos.x - 36 <= tile_pos.x) && (wd_pos.x >= tile_pos.x) && (wd_pos.y + 24 > tile_pos.y) && (wd_pos.y - 24 < tile_pos.y))
+				{
+					wdcount[i] = 0;
+					break;
+				}
+			}
+			else if (wd_LRstate[i] == RIGHT) {
+				if ((wd_pos.x + 36 >= tile_pos.x) && (wd_pos.x <= tile_pos.x) && (wd_pos.y + 24 > tile_pos.y) && (wd_pos.y - 24 < tile_pos.y))
+				{
+					wdcount[i] = 0;
+					break;
+				}
+			}
+		}
+	}
+}
 void GameObject::CreateCharacter(int x, int y)
 {
 	c_pos.x = x;
@@ -60,7 +88,7 @@ void GameObject::WaterDrop()
 {
 	int index = 1;
 	if (wdcount[0] == 0) {
-		for (int i = 1; i <= 3; i++) {
+		for (int i = 1; i <= 10; i++) {
 			if (wdcount[i] == 0)	//물방울을 사용 중이지 않은 인덱스를 찾습니다.
 				break;
 			index++;
@@ -68,14 +96,16 @@ void GameObject::WaterDrop()
 
 		//찾은 인덱스에 새로운 물방울을 생성하는 코드입니다.
 
-		if (index < 4) {
+		if (index < 10) {
 			CPoint pos = c_pos;
 			if (c_lastLRstate == LEFT) {
 				pos.x -= 40;
+				pos.y += 25;
 				wd_LRstate[index] = LEFT;
 			}
 			else {
 				pos.x += 40;
+				pos.y += 25;
 				wd_LRstate[index] = RIGHT;
 			}
 
@@ -89,7 +119,7 @@ void GameObject::WaterDrop()
 void GameObject::WaterDropMove()
 {
 	//물방울을 이동시키는 코드입니다.
-	for (int i = 1; i <= 3; i++) {
+	for (int i = 1; i <= 10; i++) {
 		if (wdcount[i] > 0) {
 			wdcount[i] -= 1;
 			CPoint d_pos = Water_drop.GetAt(i);
@@ -103,15 +133,15 @@ void GameObject::WaterDropMove()
 			Water_drop.SetAt(i, d_pos);
 		}
 	}
-
+	int count = 0;
 	//생성된 물방울이 존재 하는지 확인하는 코드입니다.
-	if (wdcount[1] == 0)
-		Water_drop[1].SetPoint(0, 0);
-	else if (wdcount[2] == 0)
-		Water_drop[2].SetPoint(0, 0);
-	else if (wdcount[3] == 0)
-		Water_drop[3].SetPoint(0, 0);
-	if (wdcount[1] == 0 && wdcount[2] == 0 && wdcount[3] == 0) {	//생성된 물방울이 존재하지 않으면 보이지 않도록 설정합니다.
+	for (int i = 1; i <= 10; i++) {
+		if (wdcount[i] == 0) {
+			Water_drop[i].SetPoint(0, 0);
+			count++;
+		}
+	}
+	if (count == 10) {	//생성된 물방울이 존재하지 않으면 보이지 않도록 설정합니다.
 		wd_visible = FALSE;
 	}
 }
