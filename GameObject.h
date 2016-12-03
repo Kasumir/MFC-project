@@ -32,7 +32,7 @@ public:
 public:
 	void move();
 	void check(CList<CPoint, CPoint&>*);
-	void WD_Cehck(CList<CPoint, CPoint&>*, CArray<CPoint, CPoint&>);
+	void WD_Cehck(CList<CPoint, CPoint&>*, CArray<CPoint, CPoint&>*);
 	void CreateCharacter(int, int);
 	void DeleteCharacter();
 	void WaterDrop();
