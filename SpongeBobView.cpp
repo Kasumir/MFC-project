@@ -145,7 +145,7 @@ void CSpongeBobView::OnDraw(CDC* pDC)
 	monster_array[2] = monster3.m_pos;
 	monster_array[3] = monster4.m_pos;
 	monster_array[4] = monster5.m_pos;
-
+	
 
 	if (monster1.m_visible == TRUE)
 	{
