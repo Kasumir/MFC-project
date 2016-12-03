@@ -11,6 +11,7 @@
 
 #include "SpongeBobDoc.h"
 #include "SpongeBobView.h"
+#include "Monster.h"
 
 
 #ifdef _DEBUG
@@ -41,6 +42,11 @@ CSpongeBobView::CSpongeBobView()
 {
 	object.CreateCharacter(0, 0);
 	monster1.MonsterCreate(500, 100);
+	monster2.MonsterCreate(500, 100);
+	monster3.MonsterCreate(500, 100);
+	monster4.MonsterCreate(500, 100);
+	monster5.MonsterCreate(500, 100);
+	monster_array.SetSize(5);
 }
 
 CSpongeBobView::~CSpongeBobView()
@@ -71,7 +77,7 @@ void CSpongeBobView::OnDraw(CDC* pDC)
 	CDC dcmem;
 	dcmem.CreateCompatibleDC(pDC);
 	//---------------------
-	CBitmap m1_bitmap, b1_bitmap, wd_bitmap;
+	CBitmap m1_bitmap, b1_bitmap, wd_bitmap, m2_bitmap, m3_bitmap, m4_bitmap, m5_bitmap, m6_bitmap;
 	b1_bitmap.LoadBitmap(IDB_BACKGROUND1);
 	BITMAP b1_bmpinfo;
 	b1_bitmap.GetBitmap(&b1_bmpinfo);
@@ -134,6 +140,12 @@ void CSpongeBobView::OnDraw(CDC* pDC)
 		pDC->TransparentBlt(object.c_pos.x, object.c_pos.y, c_bmpinfo.bmWidth * 2 / 3, c_bmpinfo.bmHeight * 2 / 3, &c_dcmem, 0, 0, c_bmpinfo.bmWidth, c_bmpinfo.bmHeight, RGB(0, 255, 0));
 	}
 
+	monster_array[0] = monster1.m_pos;
+	monster_array[1] = monster2.m_pos;
+	monster_array[2] = monster3.m_pos;
+	monster_array[3] = monster4.m_pos;
+	monster_array[4] = monster5.m_pos;
+
 
 	if (monster1.m_visible == TRUE)
 	{
@@ -148,6 +160,60 @@ void CSpongeBobView::OnDraw(CDC* pDC)
 		m1_dcmem.SelectObject(&m1_bitmap);
 		pDC->TransparentBlt(monster1.m_pos.x, monster1.m_pos.y, m1_bmpinfo.bmWidth, m1_bmpinfo.bmHeight, &m1_dcmem, 0, 0, m1_bmpinfo.bmWidth, m1_bmpinfo.bmHeight, RGB(0, 255, 0));
 	}
+	if (monster2.m_visible == TRUE)
+	{
+		monster2.MoveState();
+		monster2.check(&Tile_list);
+		m2_bitmap.LoadBitmap(IDB_MONSTER1);
+
+		BITMAP m2_bmpinfo;
+		m2_bitmap.GetBitmap(&m2_bmpinfo);
+		CDC m2_dcmem;
+		m2_dcmem.CreateCompatibleDC(pDC);
+		m2_dcmem.SelectObject(&m2_bitmap);
+		pDC->TransparentBlt(monster2.m_pos.x, monster2.m_pos.y, m2_bmpinfo.bmWidth, m2_bmpinfo.bmHeight, &m2_dcmem, 0, 0, m2_bmpinfo.bmWidth, m2_bmpinfo.bmHeight, RGB(0, 255, 0));
+	}
+	if (monster3.m_visible == TRUE)
+	{
+		monster3.MoveState();
+		monster3.check(&Tile_list);
+		m3_bitmap.LoadBitmap(IDB_MONSTER1);
+
+		BITMAP m3_bmpinfo;
+		m3_bitmap.GetBitmap(&m3_bmpinfo);
+		CDC m3_dcmem;
+		m3_dcmem.CreateCompatibleDC(pDC);
+		m3_dcmem.SelectObject(&m3_bitmap);
+		pDC->TransparentBlt(monster3.m_pos.x, monster3.m_pos.y, m3_bmpinfo.bmWidth, m3_bmpinfo.bmHeight, &m3_dcmem, 0, 0, m3_bmpinfo.bmWidth, m3_bmpinfo.bmHeight, RGB(0, 255, 0));
+	}
+	if (monster4.m_visible == TRUE)
+	{
+		monster4.MoveState();
+		monster4.check(&Tile_list);
+		m4_bitmap.LoadBitmap(IDB_MONSTER1);
+
+		BITMAP m4_bmpinfo;
+		m4_bitmap.GetBitmap(&m4_bmpinfo);
+		CDC m4_dcmem;
+		m4_dcmem.CreateCompatibleDC(pDC);
+		m4_dcmem.SelectObject(&m4_bitmap);
+		pDC->TransparentBlt(monster4.m_pos.x, monster4.m_pos.y, m4_bmpinfo.bmWidth, m4_bmpinfo.bmHeight, &m4_dcmem, 0, 0, m4_bmpinfo.bmWidth, m4_bmpinfo.bmHeight, RGB(0, 255, 0));
+	}
+	if (monster5.m_visible == TRUE)
+	{
+		monster5.MoveState();
+		monster5.check(&Tile_list);
+		m5_bitmap.LoadBitmap(IDB_MONSTER1);
+
+		BITMAP m5_bmpinfo;
+		m5_bitmap.GetBitmap(&m5_bmpinfo);
+		CDC m5_dcmem;
+		m5_dcmem.CreateCompatibleDC(pDC);
+		m5_dcmem.SelectObject(&m5_bitmap);
+		pDC->TransparentBlt(monster5.m_pos.x, monster5.m_pos.y, m5_bmpinfo.bmWidth, m5_bmpinfo.bmHeight, &m5_dcmem, 0, 0, m5_bmpinfo.bmWidth, m5_bmpinfo.bmHeight, RGB(0, 255, 0));
+	}
+
+
 	//스페이스 바가 눌렸을 때, 물방울을 생성합니다.
 	if (object.c_space == TRUE) {
 		object.WaterDrop();
@@ -309,14 +375,8 @@ void CSpongeBobView::OnKeyUp(UINT nChar, UINT nRepCnt, UINT nFlags)
 void CSpongeBobView::OnSave()
 {
 	CDialog dlg(IDD_SAVEDIALOG);
-	if (dlg.DoModal() == IDOK)
-	{
-
-	}
-	else
-	{
-
-	}
+	int result = dlg.DoModal();
+	
 	CFile file;
 	CFileException e;
 	if (!file.Open(_T("mytext.txt"), CFile::modeCreate | CFile::modeWrite, &e)) {
