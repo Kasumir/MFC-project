@@ -46,7 +46,7 @@ void GameObject::check(CList<CPoint, CPoint&>* Tile_list)
 }
 void GameObject::WD_Cehck(CList<CPoint, CPoint&>* Tile_list, CArray<CPoint, CPoint&>* Monster_point)
 {
-	for (int i = 1; i <= 3; i++) {
+	for (int i = 1; i <= 10; i++) {
 		CPoint wd_pos;
 		wd_pos = Water_drop[i];
 
