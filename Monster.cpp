@@ -138,6 +138,8 @@ void Monster::check(CList<CPoint, CPoint&>* Tile_list)
 void Monster::MonsterDie()
 {
 	m_visible = FALSE;
+	m_pos.x = 0;
+	m_pos.y = 0;
 }
 
 void Monster::MonsterCreate(int x, int y)
