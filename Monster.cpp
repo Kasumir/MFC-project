@@ -19,6 +19,8 @@ Monster::Monster() // 몬스터 생성. 매개변수로 원하는 위치에 생성.
 	Lcount = 0;
 	Rcount = 0;
 	random1 = 0;
+	die = FALSE;
+	followstate = FALSE;
 }
 
 Monster::~Monster()
@@ -39,33 +41,43 @@ END_MESSAGE_MAP()
 
 void Monster::MoveState()//돌아다니다가 유저를 인식하면 쫓아감
 {
-
-	if (Lcount == 0 || Rcount == 0)
+	if (die == TRUE)
+		StopState();
+	else if (followstate != FALSE)
 	{
-		random1 = rand() % 3;
-	}
-	if (Lcount<10 || Rcount<10)
-		if (random1 == 0) // 몬스터가 랜덤으로 돌아다님. 근데 점프 횟수를 더 적게.
-		{
+		if (followstate == LEFT)
 			m_LRstate = LEFT;
-			Lcount++;
-		}
-		else if (random1 == 1)
-		{
+		else if (followstate == RIGHT)
 			m_LRstate = RIGHT;
-			Rcount++;
-		}
-		else  if (random1 == 2)// 랜덤으로 점프
-		{
-			for (; jumpcount < 6; jumpcount++)
-				m_UDstate = UP;
-		}
-	if (Lcount == 10 || Rcount == 10)
-	{
-		Lcount = 0;
-		Rcount = 0;
 	}
-
+	else
+	{
+		if (Lcount == 0 || Rcount == 0)
+		{
+			random1 = rand() % 3;
+		}
+		if (Lcount < 10 || Rcount < 10)
+			if (random1 == 0) // 몬스터가 랜덤으로 돌아다님. 근데 점프 횟수를 더 적게.
+			{
+				m_LRstate = LEFT;
+				Lcount++;
+			}
+			else if (random1 == 1)
+			{
+				m_LRstate = RIGHT;
+				Rcount++;
+			}
+			else  if (random1 == 2)// 랜덤으로 점프
+			{
+				for (; jumpcount < 6; jumpcount++)
+					m_UDstate = UP;
+			}
+		if (Lcount == 10 || Rcount == 10)
+		{
+			Lcount = 0;
+			Rcount = 0;
+		}
+	}
 	switch (m_UDstate) {
 	case STOP:
 		m_pos.y += 0;
@@ -149,15 +161,37 @@ void Monster::check(CList<CPoint, CPoint&>* Tile_list)
 void Monster::MonsterDie()
 {
 	m_visible = FALSE;
-	m_pos.x = 0;
+	m_pos.x = -1;
 	m_pos.y = 0;
 	m_LRstate = STOP;
 	m_UDstate = STOP;
+	die = TRUE;
 }
 
 void Monster::MonsterCreate(int x, int y)
 {
 	m_visible = TRUE;
+	die = FALSE;
 	m_pos.x = x;
 	m_pos.y = y;
+}
+
+void Monster::followcharacter(CPoint point, int state)
+{
+	if (state == LEFT) {
+		if ((m_pos.x + 48 * 4 + M_SIZE >= point.x) && (point.y <= m_pos.y + 48 * 4 + M_SIZE) && (point.y + C_SIZE >= m_pos.y - 48 * 4)&&(point.x>=m_pos.x))
+		{
+			followstate = RIGHT;
+		}
+		else
+			followstate = 0;
+	}
+	else if (state == RIGHT) {
+		if ((m_pos.x - 48 * 4 <= point.x + C_SIZE) && (point.y <= m_pos.y + 48 * 4 + M_SIZE) && (point.y + C_SIZE >= m_pos.y - 48 * 4)&&(point.x<=m_pos.x))
+		{
+			followstate = LEFT;
+		}
+		else
+			followstate = 0;
+	}
 }

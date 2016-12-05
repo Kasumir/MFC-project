@@ -47,7 +47,12 @@ CSpongeBobView::CSpongeBobView()
 	monster3.MonsterCreate(500, 100);
 	monster4.MonsterCreate(500, 100);
 	monster5.MonsterCreate(500, 100);
-	monster_array.SetSize(5);
+	monster6.MonsterCreate(500, 100);
+	monster7.MonsterCreate(500, 100);
+	monster8.MonsterCreate(500, 100);
+	monster9.MonsterCreate(500, 100);
+	monster10.MonsterCreate(500, 100);
+	monster_array.SetSize(10);
 }
 
 CSpongeBobView::~CSpongeBobView()
@@ -78,7 +83,7 @@ void CSpongeBobView::OnDraw(CDC* pDC)
 	CDC dcmem;
 	dcmem.CreateCompatibleDC(pDC);
 	//---------------------
-	CBitmap m1_bitmap, b1_bitmap, wd_bitmap, m2_bitmap, m3_bitmap, m4_bitmap, m5_bitmap, m6_bitmap;
+	CBitmap m1_bitmap, b1_bitmap, wd_bitmap, m2_bitmap, m3_bitmap, m4_bitmap, m5_bitmap, m6_bitmap, m7_bitmap, m8_bitmap, m9_bitmap, m10_bitmap;
 	b1_bitmap.LoadBitmap(IDB_BACKGROUND1);
 	BITMAP b1_bmpinfo;
 	b1_bitmap.GetBitmap(&b1_bmpinfo);
@@ -141,38 +146,70 @@ void CSpongeBobView::OnDraw(CDC* pDC)
 		pDC->TransparentBlt(object.c_pos.x, object.c_pos.y, c_bmpinfo.bmWidth * 2 / 3, c_bmpinfo.bmHeight * 2 / 3, &c_dcmem, 0, 0, c_bmpinfo.bmWidth, c_bmpinfo.bmHeight, RGB(0, 255, 0));
 	}
 	
+
 	monster_array[0] = monster1.m_pos;
 	monster_array[1] = monster2.m_pos;
 	monster_array[2] = monster3.m_pos;
 	monster_array[3] = monster4.m_pos;
 	monster_array[4] = monster5.m_pos;
+	monster_array[5] = monster6.m_pos;
+	monster_array[6] = monster7.m_pos;
+	monster_array[7] = monster8.m_pos;
+	monster_array[8] = monster9.m_pos;
+	monster_array[9] = monster10.m_pos;
+	
 
 	for(int i=1;i<11;i++)
 	if (object.monstercrash(i) == TRUE)
 	{
 		if (object.monsterindex(i) == 0) {
 			monster1.MonsterDie();
+		//	monster_array.RemoveAt(0);
 		}
 		else if (object.monsterindex(i) == 1) {
 			monster2.MonsterDie();
+	//		monster_array.RemoveAt(1);
 		}
 		else if (object.monsterindex(i) == 2) {
 			monster3.MonsterDie();
+	//		monster_array.RemoveAt(2);
 		}
 		else if (object.monsterindex(i) == 3) {
 			monster4.MonsterDie();
+	//		monster_array.RemoveAt(3);
 		}
 		else if (object.monsterindex(i) == 4) {
 			monster5.MonsterDie();
+	//		monster_array.RemoveAt(4);
+		}
+		else if (object.monsterindex(i) == 5) {
+			monster6.MonsterDie();
+	//		monster_array.RemoveAt(5);
+		}
+		else if (object.monsterindex(i) == 6) {
+			monster7.MonsterDie();
+	//		monster_array.RemoveAt(6);
+		}
+		else if (object.monsterindex(i) == 7) {
+			monster8.MonsterDie();
+	//		monster_array.RemoveAt(7);
+		}
+		else if (object.monsterindex(i) == 8) {
+			monster9.MonsterDie();
+	//		monster_array.RemoveAt(8);
+		}
+		else if (object.monsterindex(i) == 9) {
+			monster10.MonsterDie();
+		//	monster_array.RemoveAt(9);
 		}
 		object.crash[i] = FALSE;
 	}
-
 
 	if (monster1.m_visible == TRUE)
 	{
 		monster1.MoveState();
 		monster1.check(&Tile_list);
+		monster1.followcharacter(object.c_pos, object.c_LRstate);
 		m1_bitmap.LoadBitmap(IDB_MONSTER1);
 
 		BITMAP m1_bmpinfo;
@@ -186,6 +223,7 @@ void CSpongeBobView::OnDraw(CDC* pDC)
 	{
 		monster2.MoveState();
 		monster2.check(&Tile_list);
+		monster2.followcharacter(object.c_pos, object.c_LRstate);
 		m2_bitmap.LoadBitmap(IDB_MONSTER1);
 
 		BITMAP m2_bmpinfo;
@@ -199,6 +237,7 @@ void CSpongeBobView::OnDraw(CDC* pDC)
 	{
 		monster3.MoveState();
 		monster3.check(&Tile_list);
+		monster3.followcharacter(object.c_pos, object.c_LRstate);
 		m3_bitmap.LoadBitmap(IDB_MONSTER1);
 
 		BITMAP m3_bmpinfo;
@@ -212,6 +251,7 @@ void CSpongeBobView::OnDraw(CDC* pDC)
 	{
 		monster4.MoveState();
 		monster4.check(&Tile_list);
+		monster4.followcharacter(object.c_pos, object.c_LRstate);
 		m4_bitmap.LoadBitmap(IDB_MONSTER1);
 
 		BITMAP m4_bmpinfo;
@@ -225,6 +265,7 @@ void CSpongeBobView::OnDraw(CDC* pDC)
 	{
 		monster5.MoveState();
 		monster5.check(&Tile_list);
+		monster5.followcharacter(object.c_pos, object.c_LRstate);
 		m5_bitmap.LoadBitmap(IDB_MONSTER1);
 
 		BITMAP m5_bmpinfo;
@@ -234,7 +275,77 @@ void CSpongeBobView::OnDraw(CDC* pDC)
 		m5_dcmem.SelectObject(&m5_bitmap);
 		pDC->TransparentBlt(monster5.m_pos.x, monster5.m_pos.y, m5_bmpinfo.bmWidth, m5_bmpinfo.bmHeight, &m5_dcmem, 0, 0, m5_bmpinfo.bmWidth, m5_bmpinfo.bmHeight, RGB(0, 255, 0));
 	}
+	if (monster6.m_visible == TRUE)
+	{
+		monster6.MoveState();
+		monster6.check(&Tile_list);
+		monster6.followcharacter(object.c_pos, object.c_LRstate);
+		m6_bitmap.LoadBitmap(IDB_MONSTER1);
 
+		BITMAP m6_bmpinfo;
+		m6_bitmap.GetBitmap(&m6_bmpinfo);
+		CDC m6_dcmem;
+		m6_dcmem.CreateCompatibleDC(pDC);
+		m6_dcmem.SelectObject(&m6_bitmap);
+		pDC->TransparentBlt(monster6.m_pos.x, monster6.m_pos.y, m6_bmpinfo.bmWidth, m6_bmpinfo.bmHeight, &m6_dcmem, 0, 0, m6_bmpinfo.bmWidth, m6_bmpinfo.bmHeight, RGB(0, 255, 0));
+	}
+	if (monster7.m_visible == TRUE)
+	{
+		monster7.MoveState();
+		monster7.check(&Tile_list);
+		monster7.followcharacter(object.c_pos, object.c_LRstate);
+		m7_bitmap.LoadBitmap(IDB_MONSTER1);
+
+		BITMAP m7_bmpinfo;
+		m7_bitmap.GetBitmap(&m7_bmpinfo);
+		CDC m7_dcmem;
+		m7_dcmem.CreateCompatibleDC(pDC);
+		m7_dcmem.SelectObject(&m7_bitmap);
+		pDC->TransparentBlt(monster7.m_pos.x, monster7.m_pos.y, m7_bmpinfo.bmWidth, m7_bmpinfo.bmHeight, &m7_dcmem, 0, 0, m7_bmpinfo.bmWidth, m7_bmpinfo.bmHeight, RGB(0, 255, 0));
+	}
+	if (monster8.m_visible == TRUE)
+	{
+		monster8.MoveState();
+		monster8.check(&Tile_list);
+		monster8.followcharacter(object.c_pos, object.c_LRstate);
+		m8_bitmap.LoadBitmap(IDB_MONSTER1);
+
+		BITMAP m8_bmpinfo;
+		m8_bitmap.GetBitmap(&m8_bmpinfo);
+		CDC m8_dcmem;
+		m8_dcmem.CreateCompatibleDC(pDC);
+		m8_dcmem.SelectObject(&m8_bitmap);
+		pDC->TransparentBlt(monster8.m_pos.x, monster8.m_pos.y, m8_bmpinfo.bmWidth, m8_bmpinfo.bmHeight, &m8_dcmem, 0, 0, m8_bmpinfo.bmWidth, m8_bmpinfo.bmHeight, RGB(0, 255, 0));
+	}
+	if (monster9.m_visible == TRUE)
+	{
+		monster9.MoveState();
+		monster9.check(&Tile_list);
+		monster9.followcharacter(object.c_pos, object.c_LRstate);
+		m9_bitmap.LoadBitmap(IDB_MONSTER1);
+
+		BITMAP m9_bmpinfo;
+		m9_bitmap.GetBitmap(&m9_bmpinfo);
+		CDC m9_dcmem;
+		m9_dcmem.CreateCompatibleDC(pDC);
+		m9_dcmem.SelectObject(&m9_bitmap);
+		pDC->TransparentBlt(monster9.m_pos.x, monster9.m_pos.y, m9_bmpinfo.bmWidth, m9_bmpinfo.bmHeight, &m9_dcmem, 0, 0, m9_bmpinfo.bmWidth, m9_bmpinfo.bmHeight, RGB(0, 255, 0));
+	}
+	if (monster10.m_visible == TRUE)
+	{
+		monster10.MoveState();
+		monster10.check(&Tile_list);
+		monster10.followcharacter(object.c_pos, object.c_LRstate);
+		m10_bitmap.LoadBitmap(IDB_MONSTER1);
+
+		BITMAP m10_bmpinfo;
+		m10_bitmap.GetBitmap(&m10_bmpinfo);
+		CDC m10_dcmem;
+		m10_dcmem.CreateCompatibleDC(pDC);
+		m10_dcmem.SelectObject(&m10_bitmap);
+		pDC->TransparentBlt(monster10.m_pos.x, monster10.m_pos.y, m10_bmpinfo.bmWidth, m10_bmpinfo.bmHeight, &m10_dcmem, 0, 0, m10_bmpinfo.bmWidth, m10_bmpinfo.bmHeight, RGB(0, 255, 0));
+	}
+	
 
 	//스페이스 바가 눌렸을 때, 물방울을 생성합니다.
 	if (object.c_space == TRUE) {
@@ -270,7 +381,6 @@ void CSpongeBobView::OnDraw(CDC* pDC)
 
 	Sleep(1000 / 8);     //프레임
 	object.jumpcount++;
-	monster1.jumpcount++;
 	Invalidate();
 }
 

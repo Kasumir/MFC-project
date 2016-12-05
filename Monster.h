@@ -23,12 +23,15 @@ public:
 	BOOL m_left;  //몬스터 왼쪽에 벽이 있는지
 	BOOL m_right; //몬스터 오른쪽에 벽이 있는지
 	BOOL m_visible;//몬스터가 생성되어 있는지
+	BOOL die;//몬스터가 죽었는지
+	int followstate;
 	int m_UDstate;
 	int m_LRstate;
 	int jumpcount;
 	int Lcount;
 	int Rcount;
 	int random1;
+	
 
 
 protected:
@@ -39,4 +42,5 @@ public:
 	void check(CList<CPoint, CPoint&>*);
 	void MonsterDie();
 	void MonsterCreate(int x, int y);
+	void followcharacter(CPoint point, int state);
 };
