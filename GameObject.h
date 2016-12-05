@@ -22,21 +22,25 @@ public:
 	int c_lastLRstate; // 캐릭터가 마지막으로 보고있던 방향을 확인합니다.
 	int wd_LRstate[11];	//각 물방울의 LR state 정보를 담고 있습니다.
 	int wdcount[11]; // 물방울 카운트, 인덱스 0은 일정 주기로 물방울을 쏘기 위해 OnPain()의 호출 횟수를 점검합니다.
+	int monster_index[11];
 	BOOL c_bottom; //캐릭터발이 땅에 닿아있는지
 	BOOL c_left;  //캐릭터 왼쪽에 벽이 있는지
 	BOOL c_right; //캐릭터 오른쪽에 벽이 있는지
 	BOOL c_visible;//캐릭터가 생성되어 있는지
 	BOOL c_space; //space 상태 정보, space가 눌려있는지 상태를 점검합니다.
 	BOOL wd_visible; // 물방울이 생성되어 있는지 확인합니다.
+	BOOL crash[11];
 
 public:
 	void move();
 	void check(CList<CPoint, CPoint&>*);
-	void WD_Cehck(CList<CPoint, CPoint&>*);
+	void WD_Cehck(CList<CPoint, CPoint&>*, CArray<CPoint, CPoint&>*);
 	void CreateCharacter(int, int);
 	void DeleteCharacter();
 	void WaterDrop();
 	void WaterDropMove();
+	int monsterindex(int);
+	BOOL monstercrash(int);
 	GameObject();
 	~GameObject();
 

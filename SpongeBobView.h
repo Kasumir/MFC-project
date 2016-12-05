@@ -13,7 +13,8 @@ protected: // serialization에서만 만들어집니다.
 	CSpongeBobView();
 	DECLARE_DYNCREATE(CSpongeBobView)
 
-	Monster monster1;
+	Monster monster0, monster1, monster2, monster3, monster4, monster5, monster6, monster7, monster8, monster9,monster10;
+	CArray<CPoint, CPoint&> monster_array;
 	int s_state; //scene의 상태
 	GameObject object;
 	CList<CPoint, CPoint&> Tile_list;
@@ -21,10 +22,10 @@ protected: // serialization에서만 만들어집니다.
 public:
 	CSpongeBobDoc* GetDocument() const;
 
-// 작업입니다.
+	// 작업입니다.
 public:
 
-// 재정의입니다.
+	// 재정의입니다.
 public:
 	virtual void OnDraw(CDC* pDC);  // 이 뷰를 그리기 위해 재정의되었습니다.
 	virtual BOOL PreCreateWindow(CREATESTRUCT& cs);
@@ -33,7 +34,7 @@ protected:
 	virtual void OnBeginPrinting(CDC* pDC, CPrintInfo* pInfo);
 	virtual void OnEndPrinting(CDC* pDC, CPrintInfo* pInfo);
 
-// 구현입니다.
+	// 구현입니다.
 public:
 	virtual ~CSpongeBobView();
 #ifdef _DEBUG
@@ -43,7 +44,7 @@ public:
 
 protected:
 
-// 생성된 메시지 맵 함수
+	// 생성된 메시지 맵 함수
 protected:
 	DECLARE_MESSAGE_MAP()
 public:
@@ -57,6 +58,8 @@ public:
 
 #ifndef _DEBUG  // SpongeBobView.cpp의 디버그 버전
 inline CSpongeBobDoc* CSpongeBobView::GetDocument() const
-   { return reinterpret_cast<CSpongeBobDoc*>(m_pDocument); }
+{
+	return reinterpret_cast<CSpongeBobDoc*>(m_pDocument);
+}
 #endif
 
