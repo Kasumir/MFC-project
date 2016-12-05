@@ -17,7 +17,7 @@ protected: // serialization에서만 만들어집니다.
 	int s_state; //scene의 상태
 	GameObject object;
 	CList<CPoint, CPoint&> Tile_list;
-
+	BOOL i_state;
 public:
 	CSpongeBobDoc* GetDocument() const;
 

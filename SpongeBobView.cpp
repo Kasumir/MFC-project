@@ -11,6 +11,8 @@
 
 #include "SpongeBobDoc.h"
 #include "SpongeBobView.h"
+#include "SaveDialog.h"
+#include "LoadDialog.h"
 
 
 #ifdef _DEBUG
@@ -41,6 +43,7 @@ CSpongeBobView::CSpongeBobView()
 {
 	object.CreateCharacter(0, 0);
 	monster1.MonsterCreate(500, 100);
+	i_state = TRUE;
 }
 
 CSpongeBobView::~CSpongeBobView()
@@ -179,10 +182,13 @@ void CSpongeBobView::OnDraw(CDC* pDC)
 		object.WaterDropMove();
 	}
 
-	Sleep(1000 / 8);     //프레임
-	object.jumpcount++;
-	monster1.jumpcount++;
-	Invalidate();
+	if (i_state)
+	{
+		Sleep(1000 / 8);     //프레임
+		object.jumpcount++;
+		monster1.jumpcount++;
+		Invalidate();
+	}
 }
 
 
@@ -303,42 +309,92 @@ void CSpongeBobView::OnKeyUp(UINT nChar, UINT nRepCnt, UINT nFlags)
 	}
 }
 
-
 void CSpongeBobView::OnSave()
 {
-	CDialog dlg(IDD_SAVEDIALOG);
+	i_state = FALSE;
+	//새파일 생성
+	CString str;
+	SaveDialog dlg;
 	int result = dlg.DoModal();
-	
-	CFile file;
-	CFileException e;
-	if (!file.Open(_T("mytext.txt"), CFile::modeCreate | CFile::modeWrite, &e)) {
-		e.ReportError();
-		return;
+	if (result == IDOK) {
+		str.Format(_T("%s.txt"), dlg.str);
+		CFile file;
+		CFileException e;
+		if (!file.Open(str, CFile::modeCreate | CFile::modeWrite, &e)) {
+			e.ReportError();
+			return;
+		}
+		for (POSITION p = Tile_list.GetHeadPosition(); p != NULL;) {
+			int buf[2];
+			buf[0] = Tile_list.GetAt(p).x;
+			buf[1] = Tile_list.GetNext(p).y;
+			file.Write(buf, 2 * sizeof(int));
+		}
+
+		//파일 목록 갱신
+		CFile file_list;
+		CFileException e1;
+		filename tmp;
+		CList<filename, filename&> namelist;
+		if (!file_list.Open(_T("filename.txt"), CFile::modeReadWrite, &e1)) {  //파일객체 생성
+			e1.ReportError();
+			return;
+		}
+		tmp.size = (int)str.GetLength() * 2;
+		tmp.name = str;
+		file_list.SeekToEnd();
+		file_list.Write(&(tmp.size), 4);
+		file_list.Write(tmp.name.GetBuffer(tmp.size), tmp.size);
+		tmp.name.ReleaseBuffer(tmp.size);
 	}
-	POSITION p;
-	for (p = Tile_list.GetHeadPosition(); p != NULL;) {
-		int buf[2];
-		buf[0] = Tile_list.GetAt(p).x;
-		buf[1] = Tile_list.GetNext(p).y;
-		file.Write(buf, 2 * sizeof(int));
-	}
+
+	i_state = TRUE;
+	Invalidate();
 }
 
 
 void CSpongeBobView::OnLoad()
 {
-	CFile file;
-	CFileException e;
-	if (!file.Open(_T("mytext.txt"), CFile::modeRead, &e)) {
-		e.ReportError();
+	i_state = FALSE;
+	LoadDialog dlg;
+	int pos;
+	filename tmp;
+	CFile name_list;
+	CFileException e1;
+	if (!name_list.Open(_T("filename.txt"), CFile::modeRead, &e1)) {//파일객체생성
+		e1.ReportError();
 		return;
 	}
-	Tile_list.RemoveAll();
-	for (int i = 0; i < file.GetLength() / 8; i++)
-	{
-		int buf[2];
-		file.Read(buf, 2 * sizeof(int));
-		CPoint pos = { buf[0], buf[1] };
-		Tile_list.AddTail(pos);
+	int len = (int)(name_list.GetLength());
+	while(1){                          //filename.txt를 읽어들임
+		if (name_list.GetPosition() >= len)
+			break;
+		name_list.Read(&tmp.size, sizeof(int));
+		name_list.Read(tmp.name.GetBuffer(tmp.size), tmp.size);
+		tmp.name.ReleaseBuffer(tmp.size);
+		dlg.tmp_list.AddTail(tmp);
 	}
+
+	int result = dlg.DoModal();
+
+	if (result == IDOK) {
+		CFile file;
+		CFileException e;
+		if (!file.Open(dlg.str, CFile::modeRead, &e)) {
+			e.ReportError();
+			i_state = TRUE;
+			Invalidate();
+			return;
+		}
+		Tile_list.RemoveAll();
+		for (int i = 0; i < file.GetLength() / 8; i++)
+		{
+			int buf[2];
+			file.Read(buf, 2 * sizeof(int));
+			CPoint pos = { buf[0], buf[1] };
+			Tile_list.AddTail(pos);
+		}
+	}
+	i_state = TRUE;
+	Invalidate();
 }
