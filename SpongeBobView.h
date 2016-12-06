@@ -18,6 +18,7 @@ protected: // serialization에서만 만들어집니다.
 	int s_state; //scene의 상태
 	GameObject object;
 	CList<CPoint, CPoint&> Tile_list;
+	BOOL e_block, e_char, e_mon;
 	BOOL i_state;
 public:
 	CSpongeBobDoc* GetDocument() const;
@@ -54,6 +55,12 @@ public:
 	afx_msg void OnKeyUp(UINT nChar, UINT nRepCnt, UINT nFlags);
 	afx_msg void OnSave();
 	afx_msg void OnLoad();
+	afx_msg void OnBlock();
+	afx_msg void OnCharacter();
+	afx_msg void OnMonster();
+	afx_msg void OnUpdateBlock(CCmdUI *pCmdUI);
+	afx_msg void OnUpdateCharacter(CCmdUI *pCmdUI);
+	afx_msg void OnUpdateMonster(CCmdUI *pCmdUI);
 };
 
 #ifndef _DEBUG  // SpongeBobView.cpp의 디버그 버전

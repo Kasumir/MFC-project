@@ -35,13 +35,18 @@ BEGIN_MESSAGE_MAP(CSpongeBobView, CView)
 	ON_WM_KEYUP()
 	ON_COMMAND(ID_SAVE, &CSpongeBobView::OnSave)
 	ON_COMMAND(ID_LOAD, &CSpongeBobView::OnLoad)
+	ON_COMMAND(ID_BLOCK, &CSpongeBobView::OnBlock)
+	ON_COMMAND(ID_CHARACTER, &CSpongeBobView::OnCharacter)
+	ON_COMMAND(ID_MONSTER, &CSpongeBobView::OnMonster)
+	ON_UPDATE_COMMAND_UI(ID_BLOCK, &CSpongeBobView::OnUpdateBlock)
+	ON_UPDATE_COMMAND_UI(ID_CHARACTER, &CSpongeBobView::OnUpdateCharacter)
+	ON_UPDATE_COMMAND_UI(ID_MONSTER, &CSpongeBobView::OnUpdateMonster)
 END_MESSAGE_MAP()
 
 // CSpongeBobView 생성/소멸
 
 CSpongeBobView::CSpongeBobView()
 {
-	object.CreateCharacter(0, 0);
 	monster0.MonsterCreate(500, 100);
 	monster1.MonsterCreate(500, 100);
 	monster2.MonsterCreate(500, 100);
@@ -54,6 +59,7 @@ CSpongeBobView::CSpongeBobView()
 	monster9.MonsterCreate(500, 100);
 	monster10.MonsterCreate(500, 100);
 	monster_array.SetSize(10);
+	e_block = e_mon = e_char = FALSE;
 	i_state = TRUE;
 }
 
@@ -448,31 +454,55 @@ CSpongeBobDoc* CSpongeBobView::GetDocument() const // 디버그되지 않은 버전은 인�
 void CSpongeBobView::OnLButtonDown(UINT nFlags, CPoint point)
 {
 	CPoint pos;
-	pos.x = (point.x / B_SIZE) * B_SIZE;
-	pos.y = (point.y / B_SIZE) * B_SIZE;
-	POSITION p;
-	for (p = Tile_list.GetHeadPosition(); p != NULL;) {
-		if (pos == Tile_list.GetAt(p)) {
-			return;
+	if (e_block)
+	{
+		pos.x = (point.x / B_SIZE) * B_SIZE;
+		pos.y = (point.y / B_SIZE) * B_SIZE;
+		POSITION p;
+		for (p = Tile_list.GetHeadPosition(); p != NULL;) {
+			if (pos == Tile_list.GetAt(p)) {
+				return;
+			}
+			Tile_list.GetNext(p);
 		}
-		Tile_list.GetNext(p);
+		Tile_list.AddTail(pos);
 	}
-	Tile_list.AddTail(pos);
+	else if (e_char)
+	{
+		pos.x = (point.x / B_SIZE) * B_SIZE;
+		pos.y = (point.y / B_SIZE) * B_SIZE;
+		object.CreateCharacter(pos.x, pos.y);
+	}
+	else if (e_mon)
+	{
+		;
+	}
 }
 
 
 void CSpongeBobView::OnRButtonDown(UINT nFlags, CPoint point)
 {
 	CPoint pos;
-	pos.x = (point.x / B_SIZE) * B_SIZE;
-	pos.y = (point.y / B_SIZE) * B_SIZE;
-	POSITION p;
-	for (p = Tile_list.GetHeadPosition(); p != NULL;) {
-		if (pos == Tile_list.GetAt(p)) {
-			Tile_list.RemoveAt(p);
-			break;
+	if (e_block)
+	{
+		pos.x = (point.x / B_SIZE) * B_SIZE;
+		pos.y = (point.y / B_SIZE) * B_SIZE;
+		POSITION p;
+		for (p = Tile_list.GetHeadPosition(); p != NULL;) {
+			if (pos == Tile_list.GetAt(p)) {
+				Tile_list.RemoveAt(p);
+				break;
+			}
+			Tile_list.GetNext(p);
 		}
-		Tile_list.GetNext(p);
+	}
+	else if (e_char)
+	{
+		object.DeleteCharacter();
+	}
+	else if (e_mon)
+	{
+		;
 	}
 }
 
@@ -607,4 +637,58 @@ void CSpongeBobView::OnLoad()
 	}
 	i_state = TRUE;
 	Invalidate();
+}
+
+
+void CSpongeBobView::OnBlock()
+{
+	if (e_block)
+		e_char = e_mon = e_block = FALSE;
+	else
+	{
+		e_char = e_mon = FALSE;
+		e_block = TRUE;
+	}
+}
+
+
+void CSpongeBobView::OnCharacter()
+{
+	if (e_char)
+		e_char = e_mon = e_block = FALSE;
+	else
+	{
+		e_mon = e_block = FALSE;
+		e_char = TRUE;
+	}
+}
+
+
+void CSpongeBobView::OnMonster()
+{
+	if (e_mon)
+		e_char = e_mon = e_block = FALSE;
+	else
+	{
+		e_char = e_block = FALSE;
+		e_mon = TRUE;
+	}
+}
+
+
+void CSpongeBobView::OnUpdateBlock(CCmdUI *pCmdUI)
+{
+	pCmdUI->SetCheck(e_block);
+}
+
+
+void CSpongeBobView::OnUpdateCharacter(CCmdUI *pCmdUI)
+{
+	pCmdUI->SetCheck(e_char);
+}
+
+
+void CSpongeBobView::OnUpdateMonster(CCmdUI *pCmdUI)
+{
+	pCmdUI->SetCheck(e_mon);
 }

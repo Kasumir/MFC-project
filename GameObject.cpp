@@ -131,15 +131,23 @@ void GameObject::WD_Cehck(CList<CPoint, CPoint&>* Tile_list, CArray<CPoint, CPoi
 
 	
 
-void GameObject::CreateCharacter(int x, int y)
+BOOL GameObject::CreateCharacter(int x, int y)
 {
+	if (c_visible)
+		return FALSE;
 	c_pos.x = x;
 	c_pos.y = y;
 	c_visible = TRUE;
+	return TRUE;
 }
-void GameObject::DeleteCharacter()
+BOOL GameObject::DeleteCharacter()
 {
+	if (!c_visible)
+		return FALSE;
+	c_pos.x = -100;
+	c_pos.y = -100;
 	c_visible = FALSE;
+	return TRUE;
 }
 void GameObject::WaterDrop()
 {
