@@ -25,6 +25,8 @@
 #define IDB_WaterDrop                   327
 #define IDB_BACKGROUND1                 328
 #define IDD_SAVEDIALOG                  329
+#define IDB_BITMAP1                     332
+#define IDB_StartMenu                   332
 #define IDC_EDIT1                       1001
 #define ID_32771                        32771
 #define ID_32772                        32772
@@ -35,7 +37,7 @@
 // 
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
-#define _APS_NEXT_RESOURCE_VALUE        331
+#define _APS_NEXT_RESOURCE_VALUE        333
 #define _APS_NEXT_COMMAND_VALUE         32775
 #define _APS_NEXT_CONTROL_VALUE         1002
 #define _APS_NEXT_SYMED_VALUE           310

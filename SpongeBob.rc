@@ -117,6 +117,8 @@ IDB_WaterDrop           BITMAP                  "res\\bubble.bmp"
 
 IDB_BACKGROUND1         BITMAP                  "res\\background1.bmp"
 
+IDB_StartMenu           BITMAP                  "res\\StartMenu.bmp"
+
 
 /////////////////////////////////////////////////////////////////////////////
 //

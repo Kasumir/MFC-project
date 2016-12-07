@@ -6,6 +6,11 @@
 #include "Monster.h"
 #include "GameObject.h"
 
+#define S_MENU 0
+#define S_START 1
+#define S_EDITOR 2
+#define S_END 3
+
 
 class CSpongeBobView : public CView
 {
@@ -13,9 +18,10 @@ protected: // serialization에서만 만들어집니다.
 	CSpongeBobView();
 	DECLARE_DYNCREATE(CSpongeBobView)
 
+	int s_state; //scene의 상태
+	CRgn start_rgn, editor_rgn, end_rgn;
 	Monster monster1, monster2, monster3, monster4, monster5, monster6;
 	CArray<CPoint, CPoint&> monster_array;
-	int s_state; //scene의 상태
 	GameObject object;
 	CList<CPoint, CPoint&> Tile_list;
 
