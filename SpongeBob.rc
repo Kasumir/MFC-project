@@ -115,9 +115,7 @@ IDB_MONSTER1            BITMAP                  "res\\bmp00002.bmp"
 
 IDB_WaterDrop           BITMAP                  "res\\bubble.bmp"
 
-IDB_BACKGROUND1         BITMAP                  "res\\background1.bmp"
-
-IDB_StartMenu           BITMAP                  "res\\StartMenu.bmp"
+IDB_StartMenu           BITMAP                  "res\\background1.bmp"
 
 
 /////////////////////////////////////////////////////////////////////////////
@@ -183,6 +181,9 @@ BEGIN
     BEGIN
         MENUITEM "저장",                          ID_SAVE
         MENUITEM "불러오기",                        ID_LOAD
+        MENUITEM "벽돌",                          ID_BLOCK
+        MENUITEM "몬스터",                         ID_MONSTER
+        MENUITEM "캐릭터",                         ID_CHARACTER
     END
 END
 
@@ -235,7 +236,17 @@ BEGIN
     DEFPUSHBUTTON   "저장",IDOK,6,90,50,14
     PUSHBUTTON      "취소",IDCANCEL,60,90,50,14
     LTEXT           "파일명 입력",IDC_STATIC,6,6,96,8
-    EDITTEXT        IDC_EDIT1,6,18,102,14,ES_AUTOHSCROLL
+    EDITTEXT        IDC_STR1,6,18,102,14,ES_AUTOHSCROLL
+END
+
+IDD_LOADDIALOG DIALOGEX 0, 0, 400, 132
+STYLE DS_SETFONT | DS_MODALFRAME | DS_FIXEDSYS | WS_POPUP | WS_CAPTION | WS_SYSMENU
+CAPTION "Dialog"
+FONT 8, "MS Shell Dlg", 400, 0, 0x1
+BEGIN
+    DEFPUSHBUTTON   "확인",IDOK,6,114,50,14
+    PUSHBUTTON      "취소",IDCANCEL,63,114,50,14
+    LISTBOX         IDC_LIST2,5,5,388,102,LBS_NOINTEGRALHEIGHT | WS_VSCROLL | WS_TABSTOP
 END
 
 
@@ -301,6 +312,14 @@ BEGIN
         TOPMARGIN, 7
         BOTTOMMARGIN, 99
     END
+
+    IDD_LOADDIALOG, DIALOG
+    BEGIN
+        LEFTMARGIN, 7
+        RIGHTMARGIN, 393
+        TOPMARGIN, 7
+        BOTTOMMARGIN, 125
+    END
 END
 #endif    // APSTUDIO_INVOKED
 
@@ -311,6 +330,11 @@ END
 //
 
 IDD_SAVEDIALOG AFX_DIALOG_LAYOUT
+BEGIN
+    0
+END
+
+IDD_LOADDIALOG AFX_DIALOG_LAYOUT
 BEGIN
     0
 END

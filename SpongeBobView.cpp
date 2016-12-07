@@ -11,7 +11,8 @@
 
 #include "SpongeBobDoc.h"
 #include "SpongeBobView.h"
-#include "Monster.h"
+#include "SaveDialog.h"
+#include "LoadDialog.h"
 
 
 #ifdef _DEBUG
@@ -34,19 +35,32 @@ BEGIN_MESSAGE_MAP(CSpongeBobView, CView)
 	ON_WM_KEYUP()
 	ON_COMMAND(ID_SAVE, &CSpongeBobView::OnSave)
 	ON_COMMAND(ID_LOAD, &CSpongeBobView::OnLoad)
+	ON_COMMAND(ID_BLOCK, &CSpongeBobView::OnBlock)
+	ON_COMMAND(ID_CHARACTER, &CSpongeBobView::OnCharacter)
+	ON_COMMAND(ID_MONSTER, &CSpongeBobView::OnMonster)
+	ON_UPDATE_COMMAND_UI(ID_BLOCK, &CSpongeBobView::OnUpdateBlock)
+	ON_UPDATE_COMMAND_UI(ID_CHARACTER, &CSpongeBobView::OnUpdateCharacter)
+	ON_UPDATE_COMMAND_UI(ID_MONSTER, &CSpongeBobView::OnUpdateMonster)
 END_MESSAGE_MAP()
 
 // CSpongeBobView 생성/소멸
 
 CSpongeBobView::CSpongeBobView()
 {
-	object.CreateCharacter(0, 0);
+	monster0.MonsterCreate(500, 100);
 	monster1.MonsterCreate(500, 100);
 	monster2.MonsterCreate(500, 100);
 	monster3.MonsterCreate(500, 100);
 	monster4.MonsterCreate(500, 100);
 	monster5.MonsterCreate(500, 100);
-	monster_array.SetSize(5);
+	monster6.MonsterCreate(500, 100);
+	monster7.MonsterCreate(500, 100);
+	monster8.MonsterCreate(500, 100);
+	monster9.MonsterCreate(500, 100);
+	monster10.MonsterCreate(500, 100);
+	monster_array.SetSize(10);
+	e_block = e_mon = e_char = FALSE;
+	i_state = TRUE;
 	s_state = S_MENU;
 }
 
@@ -67,10 +81,10 @@ BOOL CSpongeBobView::PreCreateWindow(CREATESTRUCT& cs)
 void CSpongeBobView::OnDraw(CDC* pDC)
 {
 	CSpongeBobDoc* pDoc = GetDocument();
-
 	ASSERT_VALID(pDoc);
 	if (!pDoc)
 		return;
+	//---------------------
 
 	if (s_state == S_MENU) {
 
@@ -108,8 +122,8 @@ void CSpongeBobView::OnDraw(CDC* pDC)
 		bitmap.GetBitmap(&bmpinfo);
 		CDC dcmem;
 		dcmem.CreateCompatibleDC(pDC);
-		//---------------------
-		CBitmap m1_bitmap, b1_bitmap, wd_bitmap, m2_bitmap, m3_bitmap, m4_bitmap, m5_bitmap, m6_bitmap;
+		//----------------------
+		CBitmap m1_bitmap, b1_bitmap, wd_bitmap, m2_bitmap, m3_bitmap, m4_bitmap, m5_bitmap, m6_bitmap, m7_bitmap, m8_bitmap, m9_bitmap, m10_bitmap;
 		b1_bitmap.LoadBitmap(IDB_BACKGROUND1);
 		BITMAP b1_bmpinfo;
 		b1_bitmap.GetBitmap(&b1_bmpinfo);
@@ -171,18 +185,69 @@ void CSpongeBobView::OnDraw(CDC* pDC)
 			//pDC->BitBlt(object.c_pos.x, object.c_pos.y, c_bmpinfo.bmWidth, c_bmpinfo.bmHeight, &c_dcmem, 0, 0, SRCCOPY);
 			pDC->TransparentBlt(object.c_pos.x, object.c_pos.y, c_bmpinfo.bmWidth * 2 / 3, c_bmpinfo.bmHeight * 2 / 3, &c_dcmem, 0, 0, c_bmpinfo.bmWidth, c_bmpinfo.bmHeight, RGB(0, 255, 0));
 		}
-
 		monster_array[0] = monster1.m_pos;
 		monster_array[1] = monster2.m_pos;
 		monster_array[2] = monster3.m_pos;
 		monster_array[3] = monster4.m_pos;
 		monster_array[4] = monster5.m_pos;
+		monster_array[5] = monster6.m_pos;
+		monster_array[6] = monster7.m_pos;
+		monster_array[7] = monster8.m_pos;
+		monster_array[8] = monster9.m_pos;
+		monster_array[9] = monster10.m_pos;
 
 
-		if (monster1.m_visible == TRUE)
+		for (int i = 1; i < 11; i++)
+			if (object.monstercrash(i) == TRUE)
+			{
+				if (object.monsterindex(i) == 0) {
+					monster1.MonsterDie();
+					//   monster_array.RemoveAt(0);
+				}
+				else if (object.monsterindex(i) == 1) {
+					monster2.MonsterDie();
+					//      monster_array.RemoveAt(1);
+				}
+				else if (object.monsterindex(i) == 2) {
+					monster3.MonsterDie();
+					//      monster_array.RemoveAt(2);
+				}
+				else if (object.monsterindex(i) == 3) {
+					monster4.MonsterDie();
+					//      monster_array.RemoveAt(3);
+				}
+				else if (object.monsterindex(i) == 4) {
+					monster5.MonsterDie();
+					//      monster_array.RemoveAt(4);
+				}
+				else if (object.monsterindex(i) == 5) {
+					monster6.MonsterDie();
+					//      monster_array.RemoveAt(5);
+				}
+				else if (object.monsterindex(i) == 6) {
+					monster7.MonsterDie();
+					//      monster_array.RemoveAt(6);
+				}
+				else if (object.monsterindex(i) == 7) {
+					monster8.MonsterDie();
+					//      monster_array.RemoveAt(7);
+				}
+				else if (object.monsterindex(i) == 8) {
+					monster9.MonsterDie();
+					//      monster_array.RemoveAt(8);
+				}
+				else if (object.monsterindex(i) == 9) {
+					monster10.MonsterDie();
+					//   monster_array.RemoveAt(9);
+				}
+				object.crash[i] = FALSE;
+			}
+
+		if (monster1.m_visible == TRUE) // 몬스터 출력
 		{
 			monster1.MoveState();
 			monster1.check(&Tile_list);
+			monster1.followcharacter(object.c_pos, object.c_LRstate);
 			m1_bitmap.LoadBitmap(IDB_MONSTER1);
 
 			BITMAP m1_bmpinfo;
@@ -196,6 +261,7 @@ void CSpongeBobView::OnDraw(CDC* pDC)
 		{
 			monster2.MoveState();
 			monster2.check(&Tile_list);
+			monster2.followcharacter(object.c_pos, object.c_LRstate);
 			m2_bitmap.LoadBitmap(IDB_MONSTER1);
 
 			BITMAP m2_bmpinfo;
@@ -209,6 +275,7 @@ void CSpongeBobView::OnDraw(CDC* pDC)
 		{
 			monster3.MoveState();
 			monster3.check(&Tile_list);
+			monster3.followcharacter(object.c_pos, object.c_LRstate);
 			m3_bitmap.LoadBitmap(IDB_MONSTER1);
 
 			BITMAP m3_bmpinfo;
@@ -222,6 +289,7 @@ void CSpongeBobView::OnDraw(CDC* pDC)
 		{
 			monster4.MoveState();
 			monster4.check(&Tile_list);
+			monster4.followcharacter(object.c_pos, object.c_LRstate);
 			m4_bitmap.LoadBitmap(IDB_MONSTER1);
 
 			BITMAP m4_bmpinfo;
@@ -235,6 +303,7 @@ void CSpongeBobView::OnDraw(CDC* pDC)
 		{
 			monster5.MoveState();
 			monster5.check(&Tile_list);
+			monster5.followcharacter(object.c_pos, object.c_LRstate);
 			m5_bitmap.LoadBitmap(IDB_MONSTER1);
 
 			BITMAP m5_bmpinfo;
@@ -244,9 +313,92 @@ void CSpongeBobView::OnDraw(CDC* pDC)
 			m5_dcmem.SelectObject(&m5_bitmap);
 			pDC->TransparentBlt(monster5.m_pos.x, monster5.m_pos.y, m5_bmpinfo.bmWidth, m5_bmpinfo.bmHeight, &m5_dcmem, 0, 0, m5_bmpinfo.bmWidth, m5_bmpinfo.bmHeight, RGB(0, 255, 0));
 		}
+		if (monster6.m_visible == TRUE)
+		{
+			monster6.MoveState();
+			monster6.check(&Tile_list);
+			monster6.followcharacter(object.c_pos, object.c_LRstate);
+			m6_bitmap.LoadBitmap(IDB_MONSTER1);
 
+			BITMAP m6_bmpinfo;
+			m6_bitmap.GetBitmap(&m6_bmpinfo);
+			CDC m6_dcmem;
+			m6_dcmem.CreateCompatibleDC(pDC);
+			m6_dcmem.SelectObject(&m6_bitmap);
+			pDC->TransparentBlt(monster6.m_pos.x, monster6.m_pos.y, m6_bmpinfo.bmWidth, m6_bmpinfo.bmHeight, &m6_dcmem, 0, 0, m6_bmpinfo.bmWidth, m6_bmpinfo.bmHeight, RGB(0, 255, 0));
+		}
+		if (monster7.m_visible == TRUE)
+		{
+			monster7.MoveState();
+			monster7.check(&Tile_list);
+			monster7.followcharacter(object.c_pos, object.c_LRstate);
+			m7_bitmap.LoadBitmap(IDB_MONSTER1);
 
-		//스페이스 바가 눌렸을 때, 물방울을 생성합니다.
+			BITMAP m7_bmpinfo;
+			m7_bitmap.GetBitmap(&m7_bmpinfo);
+			CDC m7_dcmem;
+			m7_dcmem.CreateCompatibleDC(pDC);
+			m7_dcmem.SelectObject(&m7_bitmap);
+			pDC->TransparentBlt(monster7.m_pos.x, monster7.m_pos.y, m7_bmpinfo.bmWidth, m7_bmpinfo.bmHeight, &m7_dcmem, 0, 0, m7_bmpinfo.bmWidth, m7_bmpinfo.bmHeight, RGB(0, 255, 0));
+		}
+		if (monster8.m_visible == TRUE)
+		{
+			monster8.MoveState();
+			monster8.check(&Tile_list);
+			monster8.followcharacter(object.c_pos, object.c_LRstate);
+			m8_bitmap.LoadBitmap(IDB_MONSTER1);
+
+			BITMAP m8_bmpinfo;
+			m8_bitmap.GetBitmap(&m8_bmpinfo);
+			CDC m8_dcmem;
+			m8_dcmem.CreateCompatibleDC(pDC);
+			m8_dcmem.SelectObject(&m8_bitmap);
+			pDC->TransparentBlt(monster8.m_pos.x, monster8.m_pos.y, m8_bmpinfo.bmWidth, m8_bmpinfo.bmHeight, &m8_dcmem, 0, 0, m8_bmpinfo.bmWidth, m8_bmpinfo.bmHeight, RGB(0, 255, 0));
+		}
+		if (monster9.m_visible == TRUE)
+		{
+			monster9.MoveState();
+			monster9.check(&Tile_list);
+			monster9.followcharacter(object.c_pos, object.c_LRstate);
+			m9_bitmap.LoadBitmap(IDB_MONSTER1);
+
+			BITMAP m9_bmpinfo;
+			m9_bitmap.GetBitmap(&m9_bmpinfo);
+			CDC m9_dcmem;
+			m9_dcmem.CreateCompatibleDC(pDC);
+			m9_dcmem.SelectObject(&m9_bitmap);
+			pDC->TransparentBlt(monster9.m_pos.x, monster9.m_pos.y, m9_bmpinfo.bmWidth, m9_bmpinfo.bmHeight, &m9_dcmem, 0, 0, m9_bmpinfo.bmWidth, m9_bmpinfo.bmHeight, RGB(0, 255, 0));
+		}
+		if (monster10.m_visible == TRUE)
+		{
+			monster10.MoveState();
+			monster10.check(&Tile_list);
+			monster10.followcharacter(object.c_pos, object.c_LRstate);
+			m10_bitmap.LoadBitmap(IDB_MONSTER1);
+
+			BITMAP m10_bmpinfo;
+			m10_bitmap.GetBitmap(&m10_bmpinfo);
+			CDC m10_dcmem;
+			m10_dcmem.CreateCompatibleDC(pDC);
+			m10_dcmem.SelectObject(&m10_bitmap);
+			pDC->TransparentBlt(monster10.m_pos.x, monster10.m_pos.y, m10_bmpinfo.bmWidth, m10_bmpinfo.bmHeight, &m10_dcmem, 0, 0, m10_bmpinfo.bmWidth, m10_bmpinfo.bmHeight, RGB(0, 255, 0));
+		}
+		//몬스터 출력
+		//if (monster1.m_visible == TRUE)
+		//{
+			/*monster1.MoveState();
+			monster1.check(&Tile_list);
+			m1_bitmap.LoadBitmap(IDB_MONSTER1);
+
+			BITMAP m1_bmpinfo;
+			m1_bitmap.GetBitmap(&m1_bmpinfo);
+			CDC m1_dcmem;
+			m1_dcmem.CreateCompatibleDC(pDC);
+			m1_dcmem.SelectObject(&m1_bitmap);
+			pDC->TransparentBlt(monster1.m_pos.x, monster1.m_pos.y, m1_bmpinfo.bmWidth, m1_bmpinfo.bmHeight, &m1_dcmem, 0, 0, m1_bmpinfo.bmWidth, m1_bmpinfo.bmHeight, RGB(0, 255, 0));*/
+
+			//}
+			//스페이스 바가 눌렸을 때, 물방울을 생성합니다.
 		if (object.c_space == TRUE) {
 			object.WaterDrop();
 			object.wdcount[0] += 1;
@@ -260,7 +412,6 @@ void CSpongeBobView::OnDraw(CDC* pDC)
 		//물방울을 출력하는 코드입니다.
 
 		if (object.wd_visible == TRUE) {
-
 			object.WD_Cehck(&Tile_list, &monster_array);
 
 			wd_bitmap.LoadBitmap(IDB_WaterDrop);
@@ -279,12 +430,17 @@ void CSpongeBobView::OnDraw(CDC* pDC)
 			object.WaterDropMove();
 		}
 
-		object.jumpcount++;
-		monster1.jumpcount++;
-		Sleep(1000 / 8);     //프레임
-		Invalidate();
+		if (i_state)
+		{
+			Sleep(1000 / 8);     //프레임
+			object.jumpcount++;
+			monster1.jumpcount++;
+			Invalidate();
+		}
 	}
+	if (s_state == S_START) {
 
+	}
 }
 
 
@@ -349,16 +505,29 @@ void CSpongeBobView::OnLButtonDown(UINT nFlags, CPoint point)
 	}
 	else if (s_state == S_EDITOR) {
 		CPoint pos;
-		pos.x = (point.x / B_SIZE) * B_SIZE;
-		pos.y = (point.y / B_SIZE) * B_SIZE;
-		POSITION p;
-		for (p = Tile_list.GetHeadPosition(); p != NULL;) {
-			if (pos == Tile_list.GetAt(p)) {
-				return;
+		if (e_block)
+		{
+			pos.x = (point.x / B_SIZE) * B_SIZE;
+			pos.y = (point.y / B_SIZE) * B_SIZE;
+			POSITION p;
+			for (p = Tile_list.GetHeadPosition(); p != NULL;) {
+				if (pos == Tile_list.GetAt(p)) {
+					return;
+				}
+				Tile_list.GetNext(p);
 			}
-			Tile_list.GetNext(p);
+			Tile_list.AddTail(pos);
 		}
-		Tile_list.AddTail(pos);
+		else if (e_char)
+		{
+			pos.x = (point.x / B_SIZE) * B_SIZE;
+			pos.y = (point.y / B_SIZE) * B_SIZE;
+			object.CreateCharacter(pos.x, pos.y);
+		}
+		else if (e_mon)
+		{
+			;
+		}
 	}
 }
 
@@ -366,15 +535,26 @@ void CSpongeBobView::OnLButtonDown(UINT nFlags, CPoint point)
 void CSpongeBobView::OnRButtonDown(UINT nFlags, CPoint point)
 {
 	CPoint pos;
-	pos.x = (point.x / B_SIZE) * B_SIZE;
-	pos.y = (point.y / B_SIZE) * B_SIZE;
-	POSITION p;
-	for (p = Tile_list.GetHeadPosition(); p != NULL;) {
-		if (pos == Tile_list.GetAt(p)) {
-			Tile_list.RemoveAt(p);
-			break;
+	if (e_block)
+	{
+		pos.x = (point.x / B_SIZE) * B_SIZE;
+		pos.y = (point.y / B_SIZE) * B_SIZE;
+		POSITION p;
+		for (p = Tile_list.GetHeadPosition(); p != NULL;) {
+			if (pos == Tile_list.GetAt(p)) {
+				Tile_list.RemoveAt(p);
+				break;
+			}
+			Tile_list.GetNext(p);
 		}
-		Tile_list.GetNext(p);
+	}
+	else if (e_char)
+	{
+		object.DeleteCharacter();
+	}
+	else if (e_mon)
+	{
+		;
 	}
 }
 
@@ -421,42 +601,146 @@ void CSpongeBobView::OnKeyUp(UINT nChar, UINT nRepCnt, UINT nFlags)
 	}
 }
 
-
 void CSpongeBobView::OnSave()
 {
-	CDialog dlg(IDD_SAVEDIALOG);
+	i_state = FALSE;
+	//새파일 생성
+	CString str;
+	SaveDialog dlg;
 	int result = dlg.DoModal();
-	
-	CFile file;
-	CFileException e;
-	if (!file.Open(_T("mytext.txt"), CFile::modeCreate | CFile::modeWrite, &e)) {
-		e.ReportError();
-		return;
+	if (result == IDOK) {
+		str.Format(_T("%s.txt"), dlg.str);
+		CFile file;
+		CFileException e;
+		if (!file.Open(str, CFile::modeCreate | CFile::modeWrite, &e)) {
+			e.ReportError();
+			return;
+		}
+		for (POSITION p = Tile_list.GetHeadPosition(); p != NULL;) {
+			int buf[2];
+			buf[0] = Tile_list.GetAt(p).x;
+			buf[1] = Tile_list.GetNext(p).y;
+			file.Write(buf, 2 * sizeof(int));
+		}
+
+		//파일 목록 갱신
+		CFile file_list;
+		CFileException e1;
+		filename tmp;
+		CList<filename, filename&> namelist;
+		if (!file_list.Open(_T("filename.txt"), CFile::modeReadWrite, &e1)) {  //파일객체 생성
+			e1.ReportError();
+			return;
+		}
+		tmp.size = (int)str.GetLength() * 2;
+		tmp.name = str;
+		file_list.SeekToEnd();
+		file_list.Write(&(tmp.size), 4);
+		file_list.Write(tmp.name.GetBuffer(tmp.size), tmp.size);
+		tmp.name.ReleaseBuffer(tmp.size);
 	}
-	POSITION p;
-	for (p = Tile_list.GetHeadPosition(); p != NULL;) {
-		int buf[2];
-		buf[0] = Tile_list.GetAt(p).x;
-		buf[1] = Tile_list.GetNext(p).y;
-		file.Write(buf, 2 * sizeof(int));
-	}
+
+	i_state = TRUE;
+	Invalidate();
 }
 
 
 void CSpongeBobView::OnLoad()
 {
-	CFile file;
-	CFileException e;
-	if (!file.Open(_T("mytext.txt"), CFile::modeRead, &e)) {
-		e.ReportError();
+	i_state = FALSE;
+	LoadDialog dlg;
+	int pos;
+	filename tmp;
+	CFile name_list;
+	CFileException e1;
+	if (!name_list.Open(_T("filename.txt"), CFile::modeRead, &e1)) {//파일객체생성
+		e1.ReportError();
 		return;
 	}
-	Tile_list.RemoveAll();
-	for (int i = 0; i < file.GetLength() / 8; i++)
-	{
-		int buf[2];
-		file.Read(buf, 2 * sizeof(int));
-		CPoint pos = { buf[0], buf[1] };
-		Tile_list.AddTail(pos);
+	int len = (int)(name_list.GetLength());
+	while(1){                          //filename.txt를 읽어들임
+		if (name_list.GetPosition() >= len)
+			break;
+		name_list.Read(&tmp.size, sizeof(int));
+		name_list.Read(tmp.name.GetBuffer(tmp.size), tmp.size);
+		tmp.name.ReleaseBuffer(tmp.size);
+		dlg.tmp_list.AddTail(tmp);
 	}
+
+	int result = dlg.DoModal();
+
+	if (result == IDOK) {
+		CFile file;
+		CFileException e;
+		if (!file.Open(dlg.str, CFile::modeRead, &e)) {
+			e.ReportError();
+			i_state = TRUE;
+			Invalidate();
+			return;
+		}
+		Tile_list.RemoveAll();
+		for (int i = 0; i < file.GetLength() / 8; i++)
+		{
+			int buf[2];
+			file.Read(buf, 2 * sizeof(int));
+			CPoint pos = { buf[0], buf[1] };
+			Tile_list.AddTail(pos);
+		}
+	}
+	i_state = TRUE;
+	Invalidate();
+}
+
+
+void CSpongeBobView::OnBlock()
+{
+	if (e_block)
+		e_char = e_mon = e_block = FALSE;
+	else
+	{
+		e_char = e_mon = FALSE;
+		e_block = TRUE;
+	}
+}
+
+
+void CSpongeBobView::OnCharacter()
+{
+	if (e_char)
+		e_char = e_mon = e_block = FALSE;
+	else
+	{
+		e_mon = e_block = FALSE;
+		e_char = TRUE;
+	}
+}
+
+
+void CSpongeBobView::OnMonster()
+{
+	if (e_mon)
+		e_char = e_mon = e_block = FALSE;
+	else
+	{
+		e_char = e_block = FALSE;
+		e_mon = TRUE;
+	}
+}
+
+
+void CSpongeBobView::OnUpdateBlock(CCmdUI *pCmdUI)
+{
+	pCmdUI->SetCheck(e_block);
+}
+
+
+void CSpongeBobView::OnUpdateCharacter(CCmdUI *pCmdUI)
+{
+	pCmdUI->SetCheck(e_char);
+}
+
+
+void CSpongeBobView::OnUpdateMonster(CCmdUI *pCmdUI)
+{
+	pCmdUI->SetCheck(e_mon);
 }

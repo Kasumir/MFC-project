@@ -18,12 +18,14 @@ protected: // serialization에서만 만들어집니다.
 	CSpongeBobView();
 	DECLARE_DYNCREATE(CSpongeBobView)
 
-	int s_state; //scene의 상태
-	CRgn start_rgn, editor_rgn, end_rgn;
-	Monster monster1, monster2, monster3, monster4, monster5, monster6;
+	Monster monster0, monster1, monster2, monster3, monster4, monster5, monster6, monster7, monster8, monster9,monster10;
 	CArray<CPoint, CPoint&> monster_array;
+	int s_state; //scene의 상태
 	GameObject object;
 	CList<CPoint, CPoint&> Tile_list;
+	BOOL e_block, e_char, e_mon;
+	BOOL i_state;
+	CRgn start_rgn, editor_rgn, end_rgn;
 
 public:
 	CSpongeBobDoc* GetDocument() const;
@@ -60,6 +62,12 @@ public:
 	afx_msg void OnKeyUp(UINT nChar, UINT nRepCnt, UINT nFlags);
 	afx_msg void OnSave();
 	afx_msg void OnLoad();
+	afx_msg void OnBlock();
+	afx_msg void OnCharacter();
+	afx_msg void OnMonster();
+	afx_msg void OnUpdateBlock(CCmdUI *pCmdUI);
+	afx_msg void OnUpdateCharacter(CCmdUI *pCmdUI);
+	afx_msg void OnUpdateMonster(CCmdUI *pCmdUI);
 };
 
 #ifndef _DEBUG  // SpongeBobView.cpp의 디버그 버전
