@@ -53,6 +53,7 @@ CSpongeBobView::CSpongeBobView()
 	monster_array.SetSize(10);
 	e_block = e_mon = e_char = FALSE;
 	i_state = TRUE;
+	s_state = S_MENU;
 }
 
 CSpongeBobView::~CSpongeBobView()
@@ -177,9 +178,9 @@ void CSpongeBobView::OnDraw(CDC* pDC)
 			c_dcmem.SelectObject(&c_bitmap);
 			pDC->TransparentBlt(object.c_pos.x, object.c_pos.y, c_bmpinfo.bmWidth * 2 / 3, c_bmpinfo.bmHeight * 2 / 3, &c_dcmem, 0, 0, c_bmpinfo.bmWidth, c_bmpinfo.bmHeight, RGB(0, 255, 0));
 		}
-		for (int i = 0; i < 10; i++)
+		for (int i = 0; i < 10; i++)                        //몬스터 출력
 			monster_array[i] = monster[i].m_pos;
-		for (int i = 1; i < 11; i++)
+		for (int i = 1; i < 11; i++)                        //몬스터 사망 검사...?
 			if (object.monstercrash(i) == TRUE)
 			{
 				if (object.monsterindex(i) == 0) {
@@ -216,9 +217,9 @@ void CSpongeBobView::OnDraw(CDC* pDC)
 		for (int i = 0; i < 10; i++) {
 			if (monster[i].m_visible)
 			{
-				monster[i].MoveState();
-				monster[i].check(&Tile_list);
-				monster[i].followcharacter(object.c_pos, object.c_LRstate);
+				//monster[i].MoveState();
+				//monster[i].check(&Tile_list);
+				//monster[i].followcharacter(object.c_pos, object.c_LRstate);
 				pDC->TransparentBlt(monster[i].m_pos.x, monster[i].m_pos.y, m_bmpinfo.bmWidth, m_bmpinfo.bmHeight, &m_dcmem, 0, 0, m_bmpinfo.bmWidth, m_bmpinfo.bmHeight, RGB(0, 255, 0));
 			}
 		}
@@ -359,10 +360,10 @@ void CSpongeBobView::OnLButtonDown(UINT nFlags, CPoint point)
 void CSpongeBobView::OnRButtonDown(UINT nFlags, CPoint point)
 {
 	CPoint pos;
+	pos.x = (point.x / B_SIZE) * B_SIZE;
+	pos.y = (point.y / B_SIZE) * B_SIZE;
 	if (e_block)
 	{
-		pos.x = (point.x / B_SIZE) * B_SIZE;
-		pos.y = (point.y / B_SIZE) * B_SIZE;
 		POSITION p;
 		for (p = Tile_list.GetHeadPosition(); p != NULL;) {
 			if (pos == Tile_list.GetAt(p)) {
@@ -378,7 +379,11 @@ void CSpongeBobView::OnRButtonDown(UINT nFlags, CPoint point)
 	}
 	else if (e_mon)
 	{
-		;
+		for (int i = 0; i < 10; i++) {
+			if (!monster[i].die)
+				if (monster[i].m_pos == pos)
+					monster[i].MonsterDie();
+		}
 	}
 }
 
@@ -440,8 +445,16 @@ void CSpongeBobView::OnSave()
 			e.ReportError();
 			return;
 		}
-		for (POSITION p = Tile_list.GetHeadPosition(); p != NULL;) {
-			int buf[2];
+		int buf[2];
+		buf[0] = object.c_pos.x;
+		buf[1] = object.c_pos.y;
+		file.Write(buf, 2 * sizeof(int)); //캐릭좌표 저장
+		for (int i = 0; i < 10; i++) {
+			buf[0] = monster[i].m_pos.x;
+			buf[1] = monster[i].m_pos.y;
+			file.Write(buf, 2 * sizeof(int));  //몬스터 좌표 저장
+		}
+		for (POSITION p = Tile_list.GetHeadPosition(); p != NULL;) {//벽돌좌표 저장
 			buf[0] = Tile_list.GetAt(p).x;
 			buf[1] = Tile_list.GetNext(p).y;
 			file.Write(buf, 2 * sizeof(int));
@@ -471,6 +484,11 @@ void CSpongeBobView::OnSave()
 
 void CSpongeBobView::OnLoad()
 {
+	object.DeleteCharacter();
+	for (int i = 0; i < 10; i++)
+		monster[i].MonsterDie();
+	Tile_list.RemoveAll();
+
 	i_state = FALSE;
 	LoadDialog dlg;
 	int pos;
@@ -502,10 +520,20 @@ void CSpongeBobView::OnLoad()
 			Invalidate();
 			return;
 		}
-		Tile_list.RemoveAll();
-		for (int i = 0; i < file.GetLength() / 8; i++)
+		int buf[2];
+		file.Read(buf, 2 * sizeof(int));
+		object.c_pos.x = buf[0];
+		object.c_pos.y = buf[1];
+		object.CreateCharacter(object.c_pos.x, object.c_pos.y);
+		for (int i = 0; i < 10; i++) {
+			file.Read(buf, 2 * sizeof(int));
+			monster[i].m_pos.x = buf[0];
+			monster[i].m_pos.y = buf[1];
+			if(monster[i].m_pos.x != -1)
+				monster[i].MonsterCreate(monster[i].m_pos.x, monster[i].m_pos.y);
+		}
+		for (int i = 0; i < (file.GetLength() - 88) / 8; i++) // 벽돌 좌표
 		{
-			int buf[2];
 			file.Read(buf, 2 * sizeof(int));
 			CPoint pos = { buf[0], buf[1] };
 			Tile_list.AddTail(pos);

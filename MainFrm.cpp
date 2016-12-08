@@ -12,11 +12,14 @@
 #endif
 
 // CMainFrame
+#define A 48 * 17 + 23
+#define B 48 * 13 + 100 +23
 
 IMPLEMENT_DYNCREATE(CMainFrame, CFrameWnd)
 
 BEGIN_MESSAGE_MAP(CMainFrame, CFrameWnd)
 	ON_WM_CREATE()
+	ON_WM_GETMINMAXINFO()
 END_MESSAGE_MAP()
 
 static UINT indicators[] =
@@ -73,6 +76,11 @@ BOOL CMainFrame::PreCreateWindow(CREATESTRUCT& cs)
 	// TODO: CREATESTRUCT cs를 수정하여 여기에서
 	//  Window 클래스 또는 스타일을 수정합니다.
 
+	cs.style &= ~(WS_THICKFRAME | WS_MAXIMIZEBOX);
+	cs.cx = A;
+	cs.cy = B;
+	cs.dwExStyle &= ~WS_EX_CLIENTEDGE;
+	cs.lpszClass = AfxRegisterWndClass(0);
 	return TRUE;
 }
 
@@ -93,3 +101,13 @@ void CMainFrame::Dump(CDumpContext& dc) const
 
 // CMainFrame 메시지 처리기
 
+
+
+void CMainFrame::OnGetMinMaxInfo(MINMAXINFO* lpMMI)
+{
+	lpMMI->ptMinTrackSize.x = A;
+	lpMMI->ptMinTrackSize.y = B;
+	lpMMI->ptMaxTrackSize.x = A;
+	lpMMI->ptMaxTrackSize.y = B;
+	CFrameWnd::OnGetMinMaxInfo(lpMMI);
+}
