@@ -1,4 +1,5 @@
 
+
 // SpongeBobView.cpp : CSpongeBobView 클래스의 구현
 //
 
@@ -74,152 +75,192 @@ void CSpongeBobView::OnDraw(CDC* pDC)
 	ASSERT_VALID(pDoc);
 	if (!pDoc)
 		return;
-	//---------------------
-	CBitmap bitmap, c_bitmap; //블록 비트맵 로딩
-	CBitmap m_bitmap, b1_bitmap, wd_bitmap;
-	bitmap.LoadBitmap(IDB_BLOCK);
-	BITMAP bmpinfo;
-	bitmap.GetBitmap(&bmpinfo);
-	CDC dcmem;
-	dcmem.CreateCompatibleDC(pDC);
-	dcmem.SelectObject(&bitmap); 
-	//----------------------
-	m_bitmap.LoadBitmap(IDB_MONSTER1);  //몬스터 비트맵 로딩
-	BITMAP m_bmpinfo;
-	m_bitmap.GetBitmap(&m_bmpinfo);
-	CDC m_dcmem;
-	m_dcmem.CreateCompatibleDC(pDC);
-	m_dcmem.SelectObject(&m_bitmap);
-	//------------------------
-	b1_bitmap.LoadBitmap(IDB_BACKGROUND1);  //배경 비트맵 로딩
-	BITMAP b1_bmpinfo;
-	b1_bitmap.GetBitmap(&b1_bmpinfo);
-	CDC b_dcmem;
-	b_dcmem.CreateCompatibleDC(pDC);
-	b_dcmem.SelectObject(&b1_bitmap);
-	pDC->StretchBlt(0, 0, b1_bmpinfo.bmWidth * 4 / 3, b1_bmpinfo.bmHeight * 4 / 3, &b_dcmem, 0, 0, b1_bmpinfo.bmWidth, b1_bmpinfo.bmHeight, SRCCOPY);//맵 그림. 맵 후에 다른거그려야함! 순서중요
-    //----------------------------------------------------------------------
-	CRect rect;
-	GetWindowRect(&rect);
-	for (int i = 0; i <= rect.bottom; i += B_SIZE) {   //가로선
-		pDC->MoveTo(0, i);
-		pDC->LineTo(rect.right, i);
-	}
-	for (int i = 0; i <= rect.right; i += B_SIZE) {    //세로선
-		pDC->MoveTo(i, 0);
-		pDC->LineTo(i, rect.bottom);
-	}
-	for (POSITION p = Tile_list.GetHeadPosition(); p != NULL;)    //블록출력
-	{
-		CPoint pos(Tile_list.GetNext(p));
-		pDC->BitBlt(pos.x, pos.y, bmpinfo.bmWidth, bmpinfo.bmHeight, &dcmem, 0, 0, SRCCOPY);
-	}
-	if (object.c_visible)   //캐릭출력
-	{
-		object.move();
-		object.check(&Tile_list);
-		if (object.c_LRstate == STOP)
-		{
-			if (object.LRcount > 0) {
-				object.LRcount = 1;
-				c_bitmap.LoadBitmap(IDB_CR1);
-			}
-			else if (object.LRcount < 0) {
-				object.LRcount = -1;
-				c_bitmap.LoadBitmap(IDB_CL1);
-			}
-		}
-		else if (object.c_LRstate == RIGHT)
-		{
-			object.LRcount++;
-			c_bitmap.LoadBitmap((object.LRcount % 6) + 319);
-		}
-		else if (object.c_LRstate == LEFT)
-		{
-			object.LRcount++;
-			c_bitmap.LoadBitmap((object.LRcount % 6) + 311);
-		}
+	if (s_state == S_MENU) {
 
-		BITMAP c_bmpinfo;
-		c_bitmap.GetBitmap(&c_bmpinfo);
-		CDC c_dcmem;
-		c_dcmem.CreateCompatibleDC(pDC);
-		c_dcmem.SelectObject(&c_bitmap);
-		pDC->TransparentBlt(object.c_pos.x, object.c_pos.y, c_bmpinfo.bmWidth * 2 / 3, c_bmpinfo.bmHeight * 2 / 3, &c_dcmem, 0, 0, c_bmpinfo.bmWidth, c_bmpinfo.bmHeight, RGB(0, 255, 0));
+		CBitmap menu_bitmap;
+		menu_bitmap.LoadBitmap(IDB_StartMenu);
+		BITMAP menu_bmpinfo;
+		menu_bitmap.GetBitmap(&menu_bmpinfo);
+		CDC menu_dcmem;
+		menu_dcmem.CreateCompatibleDC(pDC);
+		menu_dcmem.SelectObject(&menu_bitmap);
+
+		start_rgn.CreateRectRgn(menu_bmpinfo.bmWidth * 2 / 3 - 100, menu_bmpinfo.bmHeight / 2 - 100, menu_bmpinfo.bmWidth * 2 / 3 + 100, menu_bmpinfo.bmHeight / 2 - 40);
+		editor_rgn.CreateRectRgn(menu_bmpinfo.bmWidth * 2 / 3 - 100, menu_bmpinfo.bmHeight / 2 + 10, menu_bmpinfo.bmWidth * 2 / 3 + 100, menu_bmpinfo.bmHeight / 2 + 70);
+		end_rgn.CreateRectRgn(menu_bmpinfo.bmWidth * 2 / 3 - 100, menu_bmpinfo.bmHeight / 2 + 120, menu_bmpinfo.bmWidth * 2 / 3 + 100, menu_bmpinfo.bmHeight / 2 + 180);
+
+		pDC->StretchBlt(0, 0, menu_bmpinfo.bmWidth * 4 / 3, menu_bmpinfo.bmHeight * 4 / 3, &menu_dcmem, 0, 0, menu_bmpinfo.bmWidth, menu_bmpinfo.bmHeight, SRCCOPY);
+		CRect rect1, rect2, rect3;
+		rect1.SetRect(menu_bmpinfo.bmWidth * 2 / 3 - 100, menu_bmpinfo.bmHeight / 2 - 100, menu_bmpinfo.bmWidth * 2 / 3 + 100, menu_bmpinfo.bmHeight / 2 - 40);
+		rect2.SetRect(menu_bmpinfo.bmWidth * 2 / 3 - 100, menu_bmpinfo.bmHeight / 2 + 10, menu_bmpinfo.bmWidth * 2 / 3 + 100, menu_bmpinfo.bmHeight / 2 + 70);
+		rect3.SetRect(menu_bmpinfo.bmWidth * 2 / 3 - 100, menu_bmpinfo.bmHeight / 2 + 120, menu_bmpinfo.bmWidth * 2 / 3 + 100, menu_bmpinfo.bmHeight / 2 + 180);
+
+		CFont font;
+		font.CreatePointFont(210, _T("돋움체"), pDC);
+		pDC->SelectObject(&font);
+
+		pDC->DrawText(CString("게임 시작"), &rect1, DT_CENTER | DT_VCENTER | DT_SINGLELINE);
+		pDC->DrawText(CString("에디터 모드"), &rect2, DT_CENTER | DT_VCENTER | DT_SINGLELINE);
+		pDC->DrawText(CString("게임 종료"), &rect3, DT_CENTER | DT_VCENTER | DT_SINGLELINE);
 	}
-	for(int i= 0; i<10; i++)
-		monster_array[i] = monster[i].m_pos;
-	for (int i = 1; i<11; i++)
-		if (object.monstercrash(i) == TRUE)
-		{
-			if (object.monsterindex(i) == 0) {
-				monster[0].MonsterDie();
-			}else if (object.monsterindex(i) == 1) {
-				monster[1].MonsterDie();
-			}else if (object.monsterindex(i) == 2) {
-				monster[2].MonsterDie();
-			}else if (object.monsterindex(i) == 3) {
-				monster[3].MonsterDie();
-			}else if (object.monsterindex(i) == 4) {
-				monster[4].MonsterDie();
-			}else if (object.monsterindex(i) == 5) {
-				monster[5].MonsterDie();
-			}else if (object.monsterindex(i) == 6) {
-				monster[6].MonsterDie();
-			}else if (object.monsterindex(i) == 7) {
-				monster[7].MonsterDie();
-			}else if (object.monsterindex(i) == 8) {
-				monster[8].MonsterDie();
-			}else if (object.monsterindex(i) == 9) {
-				monster[9].MonsterDie();
-			}object.crash[i] = FALSE;}
-	for (int i = 0; i < 10; i++) {
-		if (monster[i].m_visible)
-		{
-			monster[i].MoveState();
-			monster[i].check(&Tile_list);
-			monster[i].followcharacter(object.c_pos, object.c_LRstate);
-			pDC->TransparentBlt(monster[i].m_pos.x, monster[i].m_pos.y, m_bmpinfo.bmWidth, m_bmpinfo.bmHeight, &m_dcmem, 0, 0, m_bmpinfo.bmWidth, m_bmpinfo.bmHeight, RGB(0, 255, 0));
+	else if (s_state == S_EDITOR) {
+		//---------------------
+		CBitmap bitmap, c_bitmap; //블록 비트맵 로딩
+		CBitmap m_bitmap, b1_bitmap, wd_bitmap;
+		bitmap.LoadBitmap(IDB_BLOCK);
+		BITMAP bmpinfo;
+		bitmap.GetBitmap(&bmpinfo);
+		CDC dcmem;
+		dcmem.CreateCompatibleDC(pDC);
+		dcmem.SelectObject(&bitmap);
+		//----------------------
+		m_bitmap.LoadBitmap(IDB_MONSTER1);  //몬스터 비트맵 로딩
+		BITMAP m_bmpinfo;
+		m_bitmap.GetBitmap(&m_bmpinfo);
+		CDC m_dcmem;
+		m_dcmem.CreateCompatibleDC(pDC);
+		m_dcmem.SelectObject(&m_bitmap);
+		//------------------------
+		b1_bitmap.LoadBitmap(IDB_BACKGROUND1);  //배경 비트맵 로딩
+		BITMAP b1_bmpinfo;
+		b1_bitmap.GetBitmap(&b1_bmpinfo);
+		CDC b_dcmem;
+		b_dcmem.CreateCompatibleDC(pDC);
+		b_dcmem.SelectObject(&b1_bitmap);
+		pDC->StretchBlt(0, 0, b1_bmpinfo.bmWidth * 4 / 3, b1_bmpinfo.bmHeight * 4 / 3, &b_dcmem, 0, 0, b1_bmpinfo.bmWidth, b1_bmpinfo.bmHeight, SRCCOPY);//맵 그림. 맵 후에 다른거그려야함! 순서중요
+																																						 //----------------------------------------------------------------------
+		CRect rect;
+		GetWindowRect(&rect);
+		for (int i = 0; i <= rect.bottom; i += B_SIZE) {   //가로선
+			pDC->MoveTo(0, i);
+			pDC->LineTo(rect.right, i);
 		}
-	}
-	//스페이스 바가 눌렸을 때, 물방울을 생성합니다.
-	if (object.c_space == TRUE) {
-		object.WaterDrop();
-		object.wdcount[0] += 1;
-		if (object.wdcount[0] == 8)
+		for (int i = 0; i <= rect.right; i += B_SIZE) {    //세로선
+			pDC->MoveTo(i, 0);
+			pDC->LineTo(i, rect.bottom);
+		}
+		for (POSITION p = Tile_list.GetHeadPosition(); p != NULL;)    //블록출력
+		{
+			CPoint pos(Tile_list.GetNext(p));
+			pDC->BitBlt(pos.x, pos.y, bmpinfo.bmWidth, bmpinfo.bmHeight, &dcmem, 0, 0, SRCCOPY);
+		}
+		if (object.c_visible)   //캐릭출력
+		{
+			object.move();
+			object.check(&Tile_list);
+			if (object.c_LRstate == STOP)
+			{
+				if (object.LRcount > 0) {
+					object.LRcount = 1;
+					c_bitmap.LoadBitmap(IDB_CR1);
+				}
+				else if (object.LRcount < 0) {
+					object.LRcount = -1;
+					c_bitmap.LoadBitmap(IDB_CL1);
+				}
+			}
+			else if (object.c_LRstate == RIGHT)
+			{
+				object.LRcount++;
+				c_bitmap.LoadBitmap((object.LRcount % 6) + 319);
+			}
+			else if (object.c_LRstate == LEFT)
+			{
+				object.LRcount++;
+				c_bitmap.LoadBitmap((object.LRcount % 6) + 311);
+			}
+
+			BITMAP c_bmpinfo;
+			c_bitmap.GetBitmap(&c_bmpinfo);
+			CDC c_dcmem;
+			c_dcmem.CreateCompatibleDC(pDC);
+			c_dcmem.SelectObject(&c_bitmap);
+			pDC->TransparentBlt(object.c_pos.x, object.c_pos.y, c_bmpinfo.bmWidth * 2 / 3, c_bmpinfo.bmHeight * 2 / 3, &c_dcmem, 0, 0, c_bmpinfo.bmWidth, c_bmpinfo.bmHeight, RGB(0, 255, 0));
+		}
+		for (int i = 0; i < 10; i++)
+			monster_array[i] = monster[i].m_pos;
+		for (int i = 1; i < 11; i++)
+			if (object.monstercrash(i) == TRUE)
+			{
+				if (object.monsterindex(i) == 0) {
+					monster[0].MonsterDie();
+				}
+				else if (object.monsterindex(i) == 1) {
+					monster[1].MonsterDie();
+				}
+				else if (object.monsterindex(i) == 2) {
+					monster[2].MonsterDie();
+				}
+				else if (object.monsterindex(i) == 3) {
+					monster[3].MonsterDie();
+				}
+				else if (object.monsterindex(i) == 4) {
+					monster[4].MonsterDie();
+				}
+				else if (object.monsterindex(i) == 5) {
+					monster[5].MonsterDie();
+				}
+				else if (object.monsterindex(i) == 6) {
+					monster[6].MonsterDie();
+				}
+				else if (object.monsterindex(i) == 7) {
+					monster[7].MonsterDie();
+				}
+				else if (object.monsterindex(i) == 8) {
+					monster[8].MonsterDie();
+				}
+				else if (object.monsterindex(i) == 9) {
+					monster[9].MonsterDie();
+				}object.crash[i] = FALSE;
+			}
+		for (int i = 0; i < 10; i++) {
+			if (monster[i].m_visible)
+			{
+				monster[i].MoveState();
+				monster[i].check(&Tile_list);
+				monster[i].followcharacter(object.c_pos, object.c_LRstate);
+				pDC->TransparentBlt(monster[i].m_pos.x, monster[i].m_pos.y, m_bmpinfo.bmWidth, m_bmpinfo.bmHeight, &m_dcmem, 0, 0, m_bmpinfo.bmWidth, m_bmpinfo.bmHeight, RGB(0, 255, 0));
+			}
+		}
+		//스페이스 바가 눌렸을 때, 물방울을 생성합니다.
+		if (object.c_space == TRUE) {
+			object.WaterDrop();
+			object.wdcount[0] += 1;
+			if (object.wdcount[0] == 8)
+				object.wdcount[0] = 0;
+
+		}
+		else if (object.wdcount[1] == 0 && object.wdcount[2] == 0 && object.wdcount[3] == 0)
 			object.wdcount[0] = 0;
 
-	}
-	else if (object.wdcount[1] == 0 && object.wdcount[2] == 0 && object.wdcount[3] == 0)
-		object.wdcount[0] = 0;
+		//물방울을 출력하는 코드입니다.
 
-	//물방울을 출력하는 코드입니다.
+		if (object.wd_visible == TRUE) {
+			object.WD_Cehck(&Tile_list, &monster_array);
 
-	if (object.wd_visible == TRUE) {
-		object.WD_Cehck(&Tile_list, &monster_array);
-
-		wd_bitmap.LoadBitmap(IDB_WaterDrop);
-		BITMAP wd_bmpinfo;
-		wd_bitmap.GetBitmap(&wd_bmpinfo);
-		CDC wd_dcmem;
-		CPoint pos;
-		wd_dcmem.CreateCompatibleDC(pDC);
-		wd_dcmem.SelectObject(&wd_bitmap);
-		for (int i = 1; i <= 10; i++) {
-			if (object.wdcount[i] != 0) {
-				pos = object.Water_drop.GetAt(i);
-				pDC->TransparentBlt(pos.x, pos.y, wd_bmpinfo.bmWidth, wd_bmpinfo.bmHeight, &wd_dcmem, 0, 0, wd_bmpinfo.bmWidth, wd_bmpinfo.bmHeight, RGB(0, 255, 0));
+			wd_bitmap.LoadBitmap(IDB_WaterDrop);
+			BITMAP wd_bmpinfo;
+			wd_bitmap.GetBitmap(&wd_bmpinfo);
+			CDC wd_dcmem;
+			CPoint pos;
+			wd_dcmem.CreateCompatibleDC(pDC);
+			wd_dcmem.SelectObject(&wd_bitmap);
+			for (int i = 1; i <= 10; i++) {
+				if (object.wdcount[i] != 0) {
+					pos = object.Water_drop.GetAt(i);
+					pDC->TransparentBlt(pos.x, pos.y, wd_bmpinfo.bmWidth, wd_bmpinfo.bmHeight, &wd_dcmem, 0, 0, wd_bmpinfo.bmWidth, wd_bmpinfo.bmHeight, RGB(0, 255, 0));
+				}
 			}
+			object.WaterDropMove();
 		}
-		object.WaterDropMove();
-	}
 
-	if (i_state)
-	{
-		Sleep(1000 / 8);     //프레임
-		object.jumpcount++;
-		//monster1.jumpcount++;
-		Invalidate();
+		if (i_state)
+		{
+			Sleep(1000 / 8);     //프레임
+			object.jumpcount++;
+			//monster1.jumpcount++;
+			Invalidate();
+		}
 	}
 }
 
@@ -269,30 +310,46 @@ CSpongeBobDoc* CSpongeBobView::GetDocument() const // 디버그되지 않은 버전은 인�
 
 void CSpongeBobView::OnLButtonDown(UINT nFlags, CPoint point)
 {
-	CPoint pos;
-	pos.x = (point.x / B_SIZE) * B_SIZE;
-	pos.y = (point.y / B_SIZE) * B_SIZE;
-	if (e_block)
-	{
-		for (POSITION p = Tile_list.GetHeadPosition(); p != NULL;) {
-			if (pos == Tile_list.GetAt(p)) {
-				return;
-			}
-			Tile_list.GetNext(p);
+	if (s_state == S_MENU) {
+		if (start_rgn.PtInRegion(point)) {
+			s_state = S_START;
+			Invalidate();
 		}
-		Tile_list.AddTail(pos);
+		else if (editor_rgn.PtInRegion(point)) {
+			s_state = S_EDITOR;
+			Invalidate();
+		}
+		else if (end_rgn.PtInRegion(point)) {
+			s_state = S_END;
+			AfxGetMainWnd()->PostMessage(WM_CLOSE);
+		}
 	}
-	else if (e_char)
-	{
-		object.CreateCharacter(pos.x, pos.y);
-	}
-	else if (e_mon)
-	{
-		for (int i = 0; i < 10; i++)
+	else if (s_state == S_EDITOR) {
+		CPoint pos;
+		pos.x = (point.x / B_SIZE) * B_SIZE;
+		pos.y = (point.y / B_SIZE) * B_SIZE;
+		if (e_block)
 		{
-			if (monster[i].die) {
-				monster[i].MonsterCreate(pos.x, pos.y);
-				break;
+			for (POSITION p = Tile_list.GetHeadPosition(); p != NULL;) {
+				if (pos == Tile_list.GetAt(p)) {
+					return;
+				}
+				Tile_list.GetNext(p);
+			}
+			Tile_list.AddTail(pos);
+		}
+		else if (e_char)
+		{
+			object.CreateCharacter(pos.x, pos.y);
+		}
+		else if (e_mon)
+		{
+			for (int i = 0; i < 10; i++)
+			{
+				if (monster[i].die) {
+					monster[i].MonsterCreate(pos.x, pos.y);
+					break;
+				}
 			}
 		}
 	}
@@ -425,7 +482,7 @@ void CSpongeBobView::OnLoad()
 		return;
 	}
 	int len = (int)(name_list.GetLength());
-	while(1){                          //filename.txt를 읽어들임
+	while (1) {                          //filename.txt를 읽어들임
 		if (name_list.GetPosition() >= len)
 			break;
 		name_list.Read(&tmp.size, sizeof(int));
