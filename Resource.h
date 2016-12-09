@@ -24,7 +24,6 @@
 #define IDB_MONSTER1                    326
 #define IDB_WaterDrop                   327
 #define IDB_BACKGROUND1                 328
-#define IDB_StartMenu                   328
 #define IDD_SAVEDIALOG                  329
 #define IDD_LOADDIALOG                  331
 #define IDD_LOADDIALOG1                 331

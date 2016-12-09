@@ -115,7 +115,7 @@ IDB_MONSTER1            BITMAP                  "res\\bmp00002.bmp"
 
 IDB_WaterDrop           BITMAP                  "res\\bubble.bmp"
 
-IDB_StartMenu           BITMAP                  "res\\background1.bmp"
+IDB_BACKGROUND1         BITMAP                  "res\\background1.bmp"
 
 
 /////////////////////////////////////////////////////////////////////////////
