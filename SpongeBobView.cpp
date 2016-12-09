@@ -14,6 +14,7 @@
 #include "SpongeBobView.h"
 #include "SaveDialog.h"
 #include "LoadDialog.h"
+#include <conio.h>
 
 
 #ifdef _DEBUG
@@ -54,6 +55,13 @@ CSpongeBobView::CSpongeBobView()
 	e_block = e_mon = e_char = FALSE;
 	i_state = TRUE;
 	s_state = S_MENU;
+	szSoundPath = _T("C:\\Users\\user\\Source\\Repos\\MFC-project\\res\\Pen_Clicking.wav");
+//	mciOpen.lpstrElementName = "C:\\Users\\user\\Source\\Repos\\MFC-project\\res\\Bubblegum_Ballgame.wav";
+//	mciOpen.lpstrDeviceType = "waveaudio";
+//	mciSendCommand(NULL, MCI_OPEN, MCI_OPEN_TYPE | MCI_OPEN_ELEMENT, (DWORD)(LPVOID)&mciOpen);
+//	mciSendCommand(wID, MCI_PLAY, MCI_DGV_PLAY_REPEAT, (DWORD)(LPVOID)&mciPlay);
+	err = mciSendString(_T("open C:\\Users\\user\\Source\\Repos\\MFC-project\\res\\Bubblegum_Ballgame.wav alias bgm"), NULL, 0, 0);
+	err = mciSendString(_T("play bgm"), NULL, 0, 0);
 }
 
 CSpongeBobView::~CSpongeBobView()
@@ -406,6 +414,7 @@ void CSpongeBobView::OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags)
 		}
 		break;
 	case VK_SPACE:
+		PlaySound(szSoundPath, AfxGetInstanceHandle(), SND_ASYNC); //È¿°úÀ½
 		object.c_space = TRUE;
 		object.wdcount[0] = 0;
 		break;
