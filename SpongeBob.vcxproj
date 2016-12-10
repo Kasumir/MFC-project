@@ -220,8 +220,11 @@
     <None Include="res\SpongeBob.rc2" />
   </ItemGroup>
   <ItemGroup>
+    <Image Include="..\..\..\..\desktop\png2.png" />
+    <Image Include="..\..\..\..\Desktop\StageClear.png" />
     <Image Include="res\background1.bmp" />
     <Image Include="res\bitmap.bmp" />
+    <Image Include="res\bitmap1.bmp" />
     <Image Include="res\bitmap2.bmp" />
     <Image Include="res\bmp00002.bmp" />
     <Image Include="res\bubble.bmp" />
@@ -241,6 +244,8 @@
     <Image Include="res\R7.bmp" />
     <Image Include="res\SpongeBob.ico" />
     <Image Include="res\SpongeBobDoc.ico" />
+    <Image Include="res\StageClear.bmp" />
+    <Image Include="res\StageClear.png" />
     <Image Include="res\Toolbar.bmp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
