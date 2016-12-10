@@ -230,6 +230,8 @@ void GameObject::move()
 		break;
 	case DOWN:
 		c_pos.y += 16;
+		if (c_pos.y > 611)
+			c_pos.y = 0;
 		break;
 	}
 	switch (c_LRstate) {
