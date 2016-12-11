@@ -13,6 +13,7 @@ GameObject::GameObject()
 	wdcount[0] = wdcount[1] = wdcount[2] = wdcount[3] = wdcount[4] = wdcount[5] = wdcount[6] = wdcount[7] = wdcount[8] = wdcount[9] = wdcount[10] = 0;
 	c_lastLRstate = RIGHT;
 	crash[0] = crash[1] = crash[2] = crash[3]=crash[4]=crash[5]=crash[6]=crash[7]=crash[8]=crash[9]=crash[10]=FALSE;
+	life = 3;
 }
 GameObject::~GameObject()
 {
@@ -138,6 +139,7 @@ BOOL GameObject::CreateCharacter(int x, int y)
 	c_pos.x = x;
 	c_pos.y = y;
 	c_visible = TRUE;
+	life = 3;
 	return TRUE;
 }
 BOOL GameObject::DeleteCharacter()
@@ -244,3 +246,21 @@ void GameObject::move()
 		break;
 	}
 }
+/*
+int GameObject::monster_check(CPoint m_pos, int m_state)
+{
+	if (m_state == RIGHT) {
+		if ((m_pos.x >= c_pos.x + C_SIZE) && (c_pos.y - C_SIZE <= m_pos.y - M_SIZE) && (c_pos.y + M_SIZE >= m_pos.y))
+		{
+			life--;
+		}
+	}
+	else if (m_state == LEFT) {
+		if ((m_pos.x <= c_pos.x + C_SIZE) && (c_pos.y - C_SIZE <= m_pos.y - M_SIZE) && (c_pos.y + M_SIZE >= m_pos.y))
+		{
+			life--;
+		}
+	}
+	return life;
+}
+*/

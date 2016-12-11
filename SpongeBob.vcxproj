@@ -222,6 +222,7 @@
   <ItemGroup>
     <Image Include="res\background1.bmp" />
     <Image Include="res\bitmap.bmp" />
+    <Image Include="res\bitmap1.bmp" />
     <Image Include="res\bitmap2.bmp" />
     <Image Include="res\bmp00002.bmp" />
     <Image Include="res\bubble.bmp" />

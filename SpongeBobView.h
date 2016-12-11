@@ -31,13 +31,13 @@ protected: // serialization에서만 만들어집니다.
 	BOOL i_state;
 	CRgn start_rgn, editor_rgn, end_rgn;
 	CString szSoundPath;
+	CString sound_menu;
+	CString sound_clear;
+	CString sound_gameover;
 
 public:
 	CSpongeBobDoc* GetDocument() const;
-	MCI_OPEN_PARMS      mciOpen; //파일을 로드
-	MCI_PLAY_PARMS       mciPlay; //파일을 재생
-	DWORD wID;
-	MCIERROR err;
+	
 	// 작업입니다.
 public:
 

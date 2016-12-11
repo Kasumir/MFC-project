@@ -1,7 +1,7 @@
 #pragma once
 //캐릭터, 블록, 몬스터등 오브젝트들 대부분의 정보를 GameObject파일에서 관리할 계획
 //몬스터는 여러마리를 생성하므로... 여기에 함수 쓰면서 했는데 안되서 클래스로 보냄.
-
+#define M_SIZE 48		//몬스터의 가로 세로 길이.
 #define B_SIZE 48      //블록의 가로 세로 길이
 #define C_SIZE 80      //캐릭터의 가로 세로 길이
 #define STOP 0
@@ -23,6 +23,7 @@ public:
 	int wd_LRstate[11];	//각 물방울의 LR state 정보를 담고 있습니다.
 	int wdcount[11]; // 물방울 카운트, 인덱스 0은 일정 주기로 물방울을 쏘기 위해 OnPain()의 호출 횟수를 점검합니다.
 	int monster_index[11];
+	int life;
 	BOOL c_bottom; //캐릭터발이 땅에 닿아있는지
 	BOOL c_left;  //캐릭터 왼쪽에 벽이 있는지
 	BOOL c_right; //캐릭터 오른쪽에 벽이 있는지
@@ -46,4 +47,5 @@ public:
 
 public:
 	CArray<CPoint, CPoint&> Water_drop; //물방울 좌표 저장
+//	int monster_check(CPoint m_pos, int);
 };

@@ -28,6 +28,8 @@
 #define IDD_SAVEDIALOG                  329
 #define IDD_LOADDIALOG                  331
 #define IDD_LOADDIALOG1                 331
+#define IDB_BITMAP1                     333
+#define IDB_HEART                       333
 #define IDC_EDIT1                       1001
 #define IDC_STR1                        1001
 #define IDC_LIST2                       1003
@@ -46,7 +48,7 @@
 // 
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
-#define _APS_NEXT_RESOURCE_VALUE        333
+#define _APS_NEXT_RESOURCE_VALUE        334
 #define _APS_NEXT_COMMAND_VALUE         32781
 #define _APS_NEXT_CONTROL_VALUE         1004
 #define _APS_NEXT_SYMED_VALUE           310

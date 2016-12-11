@@ -43,6 +43,7 @@ BEGIN_MESSAGE_MAP(CSpongeBobView, CView)
 	ON_UPDATE_COMMAND_UI(ID_BLOCK, &CSpongeBobView::OnUpdateBlock)
 	ON_UPDATE_COMMAND_UI(ID_CHARACTER, &CSpongeBobView::OnUpdateCharacter)
 	ON_UPDATE_COMMAND_UI(ID_MONSTER, &CSpongeBobView::OnUpdateMonster)
+//	ON_WM_MOUSEMOVE()
 END_MESSAGE_MAP()
 
 // CSpongeBobView 생성/소멸
@@ -56,12 +57,9 @@ CSpongeBobView::CSpongeBobView()
 	i_state = TRUE;
 	s_state = S_MENU;
 	szSoundPath = _T("C:\\Users\\user\\Source\\Repos\\MFC-project\\res\\Pen_Clicking.wav");
-//	mciOpen.lpstrElementName = "C:\\Users\\user\\Source\\Repos\\MFC-project\\res\\Bubblegum_Ballgame.wav";
-//	mciOpen.lpstrDeviceType = "waveaudio";
-//	mciSendCommand(NULL, MCI_OPEN, MCI_OPEN_TYPE | MCI_OPEN_ELEMENT, (DWORD)(LPVOID)&mciOpen);
-//	mciSendCommand(wID, MCI_PLAY, MCI_DGV_PLAY_REPEAT, (DWORD)(LPVOID)&mciPlay);
-	err = mciSendString(_T("open C:\\Users\\user\\Source\\Repos\\MFC-project\\res\\Bubblegum_Ballgame.wav alias bgm"), NULL, 0, 0);
-	err = mciSendString(_T("play bgm"), NULL, 0, 0);
+	sound_menu = _T("C:\\Users\\user\\Source\\Repos\\MFC-project\\res\\effect.wav");
+	sound_clear = _T("C:\\Users\\user\\Source\\Repos\\MFC-project\\res\\frash.wav");
+	sound_gameover = _T("C:\\Users\\user\\Source\\Repos\\MFC-project\\res\\gameover.wav");
 }
 
 CSpongeBobView::~CSpongeBobView()
@@ -271,6 +269,29 @@ void CSpongeBobView::OnDraw(CDC* pDC)
 			Invalidate();
 		}
 	}
+/*	else if (s_state == S_START)
+	{
+		CBitmap h_bitmap;
+		h_bitmap.LoadBitmap(IDB_HEART);  //하트 비트맵 로딩
+		BITMAP h_bmpinfo;
+		h_bitmap.GetBitmap(&h_bmpinfo);
+		CDC h_dcmem;
+		h_dcmem.CreateCompatibleDC(pDC);
+		h_dcmem.SelectObject(&h_bitmap);
+		//------------------------------------
+	//	for (int i = 0; i < 10; i++)
+//			object.monster_check(monster[i].m_pos, monster[i].m_LRstate);
+		if (object.life == 3)
+		{
+			pDC->TransparentBlt(0, 0, h_bmpinfo.bmWidth / 2, h_bmpinfo.bmHeight / 2, &h_dcmem, 0, 0, h_bmpinfo.bmWidth, h_bmpinfo.bmHeight, RGB(0, 255, 0));
+			pDC->TransparentBlt(25, 0, h_bmpinfo.bmWidth / 2, h_bmpinfo.bmHeight / 2, &h_dcmem, 0, 0, h_bmpinfo.bmWidth, h_bmpinfo.bmHeight, RGB(0, 255, 0));
+			pDC->TransparentBlt(50, 0, h_bmpinfo.bmWidth / 2, h_bmpinfo.bmHeight / 2, &h_dcmem, 0, 0, h_bmpinfo.bmWidth, h_bmpinfo.bmHeight, RGB(0, 255, 0));
+		}
+//		else if(object.life==2)
+//		else if(object.life ==1)
+//		else if(object.life ==0)
+			//game over;
+	}*/
 }
 
 
@@ -322,14 +343,17 @@ void CSpongeBobView::OnLButtonDown(UINT nFlags, CPoint point)
 	if (s_state == S_MENU) {
 		if (start_rgn.PtInRegion(point)) {
 			s_state = S_START;
+			PlaySound(sound_menu, AfxGetInstanceHandle(), SND_ASYNC); 
 			Invalidate();
 		}
 		else if (editor_rgn.PtInRegion(point)) {
 			s_state = S_EDITOR;
+			PlaySound(sound_menu, AfxGetInstanceHandle(), SND_ASYNC);
 			Invalidate();
 		}
 		else if (end_rgn.PtInRegion(point)) {
 			s_state = S_END;
+			PlaySound(sound_menu, AfxGetInstanceHandle(), SND_ASYNC);
 			AfxGetMainWnd()->PostMessage(WM_CLOSE);
 		}
 	}
@@ -605,3 +629,9 @@ void CSpongeBobView::OnUpdateMonster(CCmdUI *pCmdUI)
 {
 	pCmdUI->SetCheck(e_mon);
 }
+
+//void CSpongeBobView::OnMouseMove(UINT nFlags, CPoint point)
+//{
+//
+//}
+
