@@ -117,7 +117,7 @@ IDB_WaterDrop           BITMAP                  "res\\bubble.bmp"
 
 IDB_StartMenu           BITMAP                  "res\\background1.bmp"
 
-IDB_HEART               BITMAP                  "res\\heart.bmp"
+IDB_StageClear          BITMAP                  "res\\StageClear.bmp"
 
 
 /////////////////////////////////////////////////////////////////////////////

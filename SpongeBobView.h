@@ -14,6 +14,7 @@
 #define S_START 1
 #define S_EDITOR 2
 #define S_END 3
+#define S_STOP 4
 
 
 class CSpongeBobView : public CView
@@ -25,10 +26,13 @@ protected: // serialization에서만 만들어집니다.
 	Monster monster[10];
 	CArray<CPoint, CPoint&> monster_array;
 	int s_state; //scene의 상태
+	int stageNum;
+	int m_deadCount;
 	GameObject object;
 	CList<CPoint, CPoint&> Tile_list;
 	BOOL e_block, e_char, e_mon;
 	BOOL i_state;
+	BOOL openStage;
 	CRgn start_rgn, editor_rgn, end_rgn;
 	CString szSoundPath;
 	CString sound_menu;

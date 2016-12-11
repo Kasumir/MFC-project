@@ -191,11 +191,11 @@ void GameObject::WaterDropMove()
 			wdcount[i] -= 1;
 			CPoint d_pos = Water_drop.GetAt(i);
 			if (wd_LRstate[i] == RIGHT) {
-				d_pos.x += 9;
+				d_pos.x += 13;
 			}
 			else if (wd_LRstate[i] == LEFT)
 			{
-				d_pos.x -= 9;
+				d_pos.x -= 13;
 			}
 			Water_drop.SetAt(i, d_pos);
 		}
@@ -232,6 +232,8 @@ void GameObject::move()
 		break;
 	case DOWN:
 		c_pos.y += 16;
+		if (c_pos.y > 611)
+			c_pos.y = 0;
 		break;
 	}
 	switch (c_LRstate) {

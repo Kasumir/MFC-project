@@ -87,6 +87,8 @@ void Monster::MoveState()//돌아다니다가 유저를 인식하면 쫓아감
 		break;
 	case DOWN:
 		m_pos.y += 16;
+		if (m_pos.y > 611)
+			m_pos.y = 0;
 		break;
 	}
 	switch (m_LRstate) {
