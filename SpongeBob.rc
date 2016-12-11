@@ -119,6 +119,10 @@ IDB_StartMenu           BITMAP                  "res\\background1.bmp"
 
 IDB_StageClear          BITMAP                  "res\\StageClear.bmp"
 
+IDB_HEART               BITMAP                  "res\\heart.bmp"
+
+IDB_GAMEOVER            BITMAP                  "res\\over.bmp"
+
 
 /////////////////////////////////////////////////////////////////////////////
 //

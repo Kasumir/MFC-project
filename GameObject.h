@@ -1,4 +1,8 @@
 #pragma once
+#pragma comment(lib, "winmm.lib")
+#include <Windows.h>
+#include "Mmsystem.h"
+#include "Digitalv.h"
 //캐릭터, 블록, 몬스터등 오브젝트들 대부분의 정보를 GameObject파일에서 관리할 계획
 //몬스터는 여러마리를 생성하므로... 여기에 함수 쓰면서 했는데 안되서 클래스로 보냄.
 #define M_SIZE 48		//몬스터의 가로 세로 길이.
@@ -15,6 +19,7 @@ class GameObject  //모든 오브젝트를 관리할 클레스
 {
 public:
 	CPoint c_pos;
+	CString sound_damege;
 	int c_UDstate;
 	int c_LRstate;
 	int jumpcount;
@@ -47,5 +52,5 @@ public:
 
 public:
 	CArray<CPoint, CPoint&> Water_drop; //물방울 좌표 저장
-//	int monster_check(CPoint m_pos, int);
+	int monster_check(CPoint m_pos, int);
 };

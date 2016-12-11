@@ -60,6 +60,7 @@ CSpongeBobView::CSpongeBobView()
 	sound_menu = _T("C:\\Users\\user\\Source\\Repos\\MFC-project\\res\\effect.wav");
 	sound_clear = _T("C:\\Users\\user\\Source\\Repos\\MFC-project\\res\\frash.wav");
 	sound_gameover = _T("C:\\Users\\user\\Source\\Repos\\MFC-project\\res\\gameover.wav");
+	
 	stageNum = 1;
 	openStage = TRUE;
 	m_deadCount = 0;
@@ -334,6 +335,15 @@ void CSpongeBobView::OnDraw(CDC* pDC)
 			openStage = FALSE;
 			Invalidate();
 		}
+		//------------------------------------
+		CBitmap h_bitmap;
+		h_bitmap.LoadBitmap(IDB_HEART);  //하트 비트맵 로딩
+		BITMAP h_bmpinfo;
+		h_bitmap.GetBitmap(&h_bmpinfo);
+		CDC h_dcmem;
+		h_dcmem.CreateCompatibleDC(pDC);
+		h_dcmem.SelectObject(&h_bitmap);
+		
 		//---------------------
 		CBitmap bitmap, c_bitmap; //블록 비트맵 로딩
 		CBitmap m_bitmap, b1_bitmap, wd_bitmap;
@@ -358,17 +368,18 @@ void CSpongeBobView::OnDraw(CDC* pDC)
 		b_dcmem.CreateCompatibleDC(pDC);
 		b_dcmem.SelectObject(&b1_bitmap);
 		pDC->StretchBlt(0, 0, b1_bmpinfo.bmWidth * 4 / 3, b1_bmpinfo.bmHeight * 4 / 3, &b_dcmem, 0, 0, b1_bmpinfo.bmWidth, b1_bmpinfo.bmHeight, SRCCOPY);//맵 그림. 맵 후에 다른거그려야함! 순서중요
-																																						 //----------------------------------------------------------------------
+			
+		//----------------------------------------------------------------------
 		CRect rect;
 		GetWindowRect(&rect);
-		for (int i = 0; i <= rect.bottom; i += B_SIZE) {   //가로선
+	/*	for (int i = 0; i <= rect.bottom; i += B_SIZE) {   //가로선
 			pDC->MoveTo(0, i);
 			pDC->LineTo(rect.right, i);
 		}
 		for (int i = 0; i <= rect.right; i += B_SIZE) {    //세로선
 			pDC->MoveTo(i, 0);
 			pDC->LineTo(i, rect.bottom);
-		}
+		}*/
 		for (POSITION p = Tile_list.GetHeadPosition(); p != NULL;)    //블록출력
 		{
 			CPoint pos(Tile_list.GetNext(p));
@@ -500,6 +511,25 @@ void CSpongeBobView::OnDraw(CDC* pDC)
 		if (stageNum == 3) {
 			s_state = S_MENU;
 		}
+		for (int i = 0; i < 10; i++)
+			object.monster_check(monster[i].m_pos, monster[i].m_LRstate);
+		if (object.life == 3)
+		{
+			pDC->TransparentBlt(50, 0, h_bmpinfo.bmWidth / 2, h_bmpinfo.bmHeight / 2, &h_dcmem, 0, 0, h_bmpinfo.bmWidth, h_bmpinfo.bmHeight, RGB(0, 255, 0));
+			pDC->TransparentBlt(75, 0, h_bmpinfo.bmWidth / 2, h_bmpinfo.bmHeight / 2, &h_dcmem, 0, 0, h_bmpinfo.bmWidth, h_bmpinfo.bmHeight, RGB(0, 255, 0));
+			pDC->TransparentBlt(100, 0, h_bmpinfo.bmWidth / 2, h_bmpinfo.bmHeight / 2, &h_dcmem, 0, 0, h_bmpinfo.bmWidth, h_bmpinfo.bmHeight, RGB(0, 255, 0));
+		}
+		else if (object.life == 2)
+		{
+			pDC->TransparentBlt(50, 0, h_bmpinfo.bmWidth / 2, h_bmpinfo.bmHeight / 2, &h_dcmem, 0, 0, h_bmpinfo.bmWidth, h_bmpinfo.bmHeight, RGB(0, 255, 0));
+			pDC->TransparentBlt(75, 0, h_bmpinfo.bmWidth / 2, h_bmpinfo.bmHeight / 2, &h_dcmem, 0, 0, h_bmpinfo.bmWidth, h_bmpinfo.bmHeight, RGB(0, 255, 0));
+		}
+		else if (object.life == 1)
+			pDC->TransparentBlt(50, 0, h_bmpinfo.bmWidth / 2, h_bmpinfo.bmHeight / 2, &h_dcmem, 0, 0, h_bmpinfo.bmWidth, h_bmpinfo.bmHeight, RGB(0, 255, 0));
+		else if (object.life == 0)
+		{
+			s_state = S_OVER;
+		}
 
 		if (i_state)
 		{
@@ -509,31 +539,22 @@ void CSpongeBobView::OnDraw(CDC* pDC)
 			Invalidate();
 		}
 	}
-/*	else if (s_state == S_START)
-	{
-		CBitmap h_bitmap;
-		h_bitmap.LoadBitmap(IDB_HEART);  //하트 비트맵 로딩
-		BITMAP h_bmpinfo;
-		h_bitmap.GetBitmap(&h_bmpinfo);
-		CDC h_dcmem;
-		h_dcmem.CreateCompatibleDC(pDC);
-		h_dcmem.SelectObject(&h_bitmap);
-		//------------------------------------
-	//	for (int i = 0; i < 10; i++)
-//			object.monster_check(monster[i].m_pos, monster[i].m_LRstate);
-		if (object.life == 3)
-		{
-			pDC->TransparentBlt(0, 0, h_bmpinfo.bmWidth / 2, h_bmpinfo.bmHeight / 2, &h_dcmem, 0, 0, h_bmpinfo.bmWidth, h_bmpinfo.bmHeight, RGB(0, 255, 0));
-			pDC->TransparentBlt(25, 0, h_bmpinfo.bmWidth / 2, h_bmpinfo.bmHeight / 2, &h_dcmem, 0, 0, h_bmpinfo.bmWidth, h_bmpinfo.bmHeight, RGB(0, 255, 0));
-			pDC->TransparentBlt(50, 0, h_bmpinfo.bmWidth / 2, h_bmpinfo.bmHeight / 2, &h_dcmem, 0, 0, h_bmpinfo.bmWidth, h_bmpinfo.bmHeight, RGB(0, 255, 0));
-		}
-//		else if(object.life==2)
-//		else if(object.life ==1)
-//		else if(object.life ==0)
-			//game over;
-	}*/
+	else if (s_state == S_OVER) {
+		PlaySound(sound_gameover, AfxGetInstanceHandle(), SND_ASYNC); //배경음
+		CBitmap gameover_bitmap;
+		gameover_bitmap.LoadBitmap(IDB_GAMEOVER);
+		BITMAP over_bmpinfo;
+		gameover_bitmap.GetBitmap(&over_bmpinfo);
+		CDC over_dcmem;
+		over_dcmem.CreateCompatibleDC(pDC);
+		over_dcmem.SelectObject(&gameover_bitmap);
+
+		pDC->TransparentBlt(0, 20, over_bmpinfo.bmWidth * 14 / 15, over_bmpinfo.bmHeight * 8 / 5, &over_dcmem, 0, 0, over_bmpinfo.bmWidth, over_bmpinfo.bmHeight, RGB(0, 255, 0));
 	}
 	else if (s_state == S_STOP) {
+
+		PlaySound(sound_clear, AfxGetInstanceHandle(), SND_ASYNC);
+
 		CBitmap stageClear_bitmap;
 		stageClear_bitmap.LoadBitmap(IDB_StageClear);
 		BITMAP stageClear_bmpinfo;
@@ -542,9 +563,10 @@ void CSpongeBobView::OnDraw(CDC* pDC)
 		stgeClear_dcmem.CreateCompatibleDC(pDC);
 		stgeClear_dcmem.SelectObject(&stageClear_bitmap);
 
-		pDC->TransparentBlt(0, 20, stageClear_bmpinfo.bmWidth*14/15, stageClear_bmpinfo.bmHeight*8/5, &stgeClear_dcmem, 0, 0, stageClear_bmpinfo.bmWidth, stageClear_bmpinfo.bmHeight, RGB(0,255,0));
+		pDC->TransparentBlt(0, 20, stageClear_bmpinfo.bmWidth, stageClear_bmpinfo.bmHeight, &stgeClear_dcmem, 0, 0, stageClear_bmpinfo.bmWidth, stageClear_bmpinfo.bmHeight, RGB(0,255,0));
 
 	}
+	
 }
 
 
@@ -639,6 +661,8 @@ void CSpongeBobView::OnLButtonDown(UINT nFlags, CPoint point)
 			}
 		}
 	}
+	else if(s_state == S_OVER)
+		AfxGetMainWnd()->PostMessage(WM_CLOSE);
 }
 
 

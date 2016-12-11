@@ -15,6 +15,7 @@
 #define S_EDITOR 2
 #define S_END 3
 #define S_STOP 4
+#define S_OVER 5
 
 
 class CSpongeBobView : public CView
@@ -38,6 +39,7 @@ protected: // serialization에서만 만들어집니다.
 	CString sound_menu;
 	CString sound_clear;
 	CString sound_gameover;
+	
 
 public:
 	CSpongeBobDoc* GetDocument() const;

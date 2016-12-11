@@ -161,16 +161,22 @@
     <Image Include="res\bitmap1.bmp">
       <Filter>리소스 파일</Filter>
     </Image>
-    <Image Include="..\..\..\..\Desktop\StageClear.png">
+    <Image Include="res\heart.bmp">
       <Filter>리소스 파일</Filter>
     </Image>
     <Image Include="..\..\..\..\desktop\png2.png">
       <Filter>리소스 파일</Filter>
     </Image>
-    <Image Include="res\StageClear.png">
+    <Image Include="..\..\..\..\Desktop\StageClear.png">
       <Filter>리소스 파일</Filter>
     </Image>
     <Image Include="res\StageClear.bmp">
+      <Filter>리소스 파일</Filter>
+    </Image>
+    <Image Include="res\StageClear.png">
+      <Filter>리소스 파일</Filter>
+    </Image>
+    <Image Include="res\over.bmp">
       <Filter>리소스 파일</Filter>
     </Image>
   </ItemGroup>

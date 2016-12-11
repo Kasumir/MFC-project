@@ -236,6 +236,7 @@
     <Image Include="res\L5.bmp" />
     <Image Include="res\L6.bmp" />
     <Image Include="res\L7.bmp" />
+    <Image Include="res\over.bmp" />
     <Image Include="res\R1.bmp" />
     <Image Include="res\R2.bmp" />
     <Image Include="res\R3.bmp" />

@@ -14,6 +14,7 @@ GameObject::GameObject()
 	c_lastLRstate = RIGHT;
 	crash[0] = crash[1] = crash[2] = crash[3]=crash[4]=crash[5]=crash[6]=crash[7]=crash[8]=crash[9]=crash[10]=FALSE;
 	life = 3;
+	sound_damege = _T("C:\\Users\\user\\Source\\Repos\\MFC-project\\res\\ddiyoung.wav");
 }
 GameObject::~GameObject()
 {
@@ -248,21 +249,38 @@ void GameObject::move()
 		break;
 	}
 }
-/*
+
 int GameObject::monster_check(CPoint m_pos, int m_state)
 {
-	if (m_state == RIGHT) {
-		if ((m_pos.x >= c_pos.x + C_SIZE) && (c_pos.y - C_SIZE <= m_pos.y - M_SIZE) && (c_pos.y + M_SIZE >= m_pos.y))
+	/*if ((m_state == RIGHT)&& (m_pos.x<c_pos.x)&&(c_LRstate == LEFT)) {
+		if ((m_pos.x +M_SIZE>= c_pos.x) && (c_pos.y - C_SIZE <= m_pos.y - M_SIZE) && (c_pos.y + M_SIZE >= m_pos.y))
 		{
-			life--;
+			life--;	
+			c_pos.x = m_pos.x + M_SIZE + 2;
+			m_pos.x = c_pos.x - M_SIZE - 2;
 		}
 	}
-	else if (m_state == LEFT) {
+	else if ((m_state == LEFT)&& (m_pos.x>c_pos.x)&&(c_LRstate == RIGHT)) {
 		if ((m_pos.x <= c_pos.x + C_SIZE) && (c_pos.y - C_SIZE <= m_pos.y - M_SIZE) && (c_pos.y + M_SIZE >= m_pos.y))
 		{
 			life--;
+			c_pos.x = m_pos.x - C_SIZE - 2;
+			m_pos.x = c_pos.x + C_SIZE + 2;
+		}
+	}*/
+	if ((m_state == RIGHT) && (m_pos.x < c_pos.x)) {
+		if ((m_pos.x + M_SIZE >= c_pos.x) && (c_pos.y - C_SIZE <= m_pos.y - M_SIZE) && (c_pos.y + M_SIZE >= m_pos.y))
+		{
+			life--;
+			PlaySound(sound_damege, AfxGetInstanceHandle(), SND_ASYNC);
+		}
+	}
+	else if ((m_state == LEFT) && (m_pos.x > c_pos.x)) {
+		if ((m_pos.x <= c_pos.x + C_SIZE) && (c_pos.y - C_SIZE <= m_pos.y - M_SIZE) && (c_pos.y + M_SIZE >= m_pos.y))
+		{
+			life--;
+			PlaySound(sound_damege, AfxGetInstanceHandle(), SND_ASYNC);
 		}
 	}
 	return life;
 }
-*/
