@@ -226,6 +226,7 @@
     <Image Include="res\bitmap2.bmp" />
     <Image Include="res\bmp00002.bmp" />
     <Image Include="res\bubble.bmp" />
+    <Image Include="res\heart.bmp" />
     <Image Include="res\L1.bmp" />
     <Image Include="res\L2.bmp" />
     <Image Include="res\L3.bmp" />
