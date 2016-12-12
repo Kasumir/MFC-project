@@ -508,7 +508,7 @@ void CSpongeBobView::OnDraw(CDC* pDC)
 			openStage = TRUE;
 			s_state = S_STOP;
 		}
-		if (stageNum == 3) {
+		if (stageNum == 5) {
 			s_state = S_MENU;
 		}
 		for (int i = 0; i < 10; i++)
@@ -530,7 +530,7 @@ void CSpongeBobView::OnDraw(CDC* pDC)
 		{
 			s_state = S_OVER;
 		}
-		if (object.life_time == 15) // 무적타임..?..그거
+		if (object.life_time == 100000) // 무적타임..?..그거
 			object.life_time = 0;
 		if (i_state)
 		{
@@ -539,7 +539,7 @@ void CSpongeBobView::OnDraw(CDC* pDC)
 			//monster1.jumpcount++;
 			Invalidate();
 		}
-	}
+	}  
 	else if (s_state == S_OVER) {
 		PlaySound(MAKEINTRESOURCE(IDR_OVER), AfxGetInstanceHandle(), SND_RESOURCE | SND_ASYNC); //배경음
 		CBitmap gameover_bitmap;
@@ -721,7 +721,7 @@ void CSpongeBobView::OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags)
 				Invalidate();
 		}
 		else if (s_state == S_START) {
-			PlaySound(MAKEINTRESOURCE(IDR_ATTACK), AfxGetInstanceHandle(), SND_RESOURCE | SND_ASYNC); //효과음
+			PlaySound(MAKEINTRESOURCE(IDR_PEN), AfxGetInstanceHandle(), SND_RESOURCE | SND_ASYNC); //효과음
 			object.c_space = TRUE;
 			object.wdcount[0] = 0;
 			break;

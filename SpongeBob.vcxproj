@@ -256,6 +256,7 @@
     <Media Include="res\effect.wav" />
     <Media Include="res\frash.wav" />
     <Media Include="res\gameover.wav" />
+    <Media Include="res\PEN.wav" />
     <Media Include="res\Pen_Clicking.wav" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

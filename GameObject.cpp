@@ -41,7 +41,7 @@ void GameObject::check(CList<CPoint, CPoint&>* Tile_list)
 		else if (c_UDstate == STOP) // 밑에 벽돌이 있는지 없는지 검사.
 			if (!(c_pos.x > pos.x - C_SIZE && c_pos.x < pos.x + B_SIZE && c_pos.y > pos.y - C_SIZE && c_pos.y < pos.y - C_SIZE + B_SIZE / 2))
 				count++;//밑에 모든 벽돌이 없는지 검사.
-		if (c_LRstate == LEFT || c_LRstate == STOP) {
+/*		if (c_LRstate == LEFT || c_LRstate == STOP) {
 			if ((c_pos.x - B_SIZE <= pos.x) && (c_pos.x >= pos.x) && (c_pos.y + B_SIZE > pos.y) && (c_pos.y - B_SIZE < pos.y))
 			{
 				c_LRstate = STOP;
@@ -54,7 +54,7 @@ void GameObject::check(CList<CPoint, CPoint&>* Tile_list)
 				c_LRstate = STOP;
 				c_pos.x = pos.x -C_SIZE;
 			}
-		}
+		}*/
 	}
 	if (count == Tile_list->GetCount())
 		c_UDstate = DOWN; // 타일숫자 = 검사한 숫자 -> 떨어짐.
@@ -96,7 +96,14 @@ void GameObject::WD_Cehck(CList<CPoint, CPoint&>* Tile_list, CArray<CPoint, CPoi
 		// 몬스터 충돌을 검사하는 코드입니다.
 		for (int p = 1; p < Monster_point->GetSize() + 1; p++) {
 			if (wd_LRstate[i] == LEFT) {
-				if ((wd_pos.x - 36 <= Monster_point->GetAt(p - 1).x) && (wd_pos.x >= Monster_point->GetAt(p - 1).x) && (wd_pos.y + 24 > Monster_point->GetAt(p - 1).y) && (wd_pos.y - 24 < Monster_point->GetAt(p - 1).y))
+				if ((wd_pos.x - 36 <= Monster_point->GetAt(p - 1).x) && (wd_pos.x >= Monster_point->GetAt(p - 1).x) && (wd_pos.y + 24 > Monster_point->GetAt(p - 1).y) && (wd_pos.y - 60 < Monster_point->GetAt(p - 1).y))
+				{
+					crash[i] = TRUE;
+					monster_index[i] = p - 1;
+					wdcount[i] = 0;
+					break;
+				}
+				else if((wd_pos.x + 36 >= Monster_point->GetAt(p-1).x) && (wd_pos.x <= Monster_point->GetAt(p - 1).x) && (wd_pos.y + 24 > Monster_point->GetAt(p - 1).y) && (wd_pos.y - 60 < Monster_point->GetAt(p - 1).y))
 				{
 					crash[i] = TRUE;
 					monster_index[i] = p - 1;
@@ -105,31 +112,34 @@ void GameObject::WD_Cehck(CList<CPoint, CPoint&>* Tile_list, CArray<CPoint, CPoi
 				}
 				else if (wdcount[i] == 16 && Monster_point->GetAt(p - 1).x > c_pos.x - 40 && Monster_point->GetAt(p - 1).x < c_pos.x + 40 && (wd_pos.y + 24 > Monster_point->GetAt(p - 1).y) && (wd_pos.y - 24 < Monster_point->GetAt(p - 1).y)) {
 					wdcount[i] = 0;
-					crash[i] = TRUE;
 					break;
 				}
 				else if (wdcount[i] == 16 && Monster_point->GetAt(p - 1).x < c_pos.x + 40 && Monster_point->GetAt(p - 1).x >c_pos.x - 40 && (wd_pos.y + 24 > Monster_point->GetAt(p - 1).y) && (wd_pos.y - 24 < Monster_point->GetAt(p - 1).y)) {
 					wdcount[i] = 0;
-					crash[i] = TRUE;
 					break;
 				}
 			}
 			else if (wd_LRstate[i] == RIGHT) {
-				if ((wd_pos.x + 36 >= Monster_point->GetAt(p - 1).x) && (wd_pos.x <= Monster_point->GetAt(p - 1).x) && (wd_pos.y + 24 > Monster_point->GetAt(p - 1).y) && (wd_pos.y - 24 < Monster_point->GetAt(p - 1).y))
+				if ((wd_pos.x + 36 >= Monster_point->GetAt(p - 1).x) && (wd_pos.x <= Monster_point->GetAt(p - 1).x) && (wd_pos.y + 24 > Monster_point->GetAt(p - 1).y) && (wd_pos.y - 60 < Monster_point->GetAt(p - 1).y))
 				{
 					wdcount[i] = 0;
 					crash[i] = TRUE;
 					monster_index[i] = p - 1;
 					break;
 				}
+				else if ((wd_pos.x - 36 <= Monster_point->GetAt(p - 1).x) && (wd_pos.x >= Monster_point->GetAt(p - 1).x) && (wd_pos.y + 24 > Monster_point->GetAt(p - 1).y) && (wd_pos.y - 60 < Monster_point->GetAt(p - 1).y))
+				{
+					crash[i] = TRUE;
+					monster_index[i] = p - 1;
+					wdcount[i] = 0;
+					break;
+				}
 				else if (wdcount[i] == 16 && Monster_point->GetAt(p - 1).x < c_pos.x + 40 && Monster_point->GetAt(p - 1).x >c_pos.x - 40 && (wd_pos.y + 24 > Monster_point->GetAt(p - 1).y) && (wd_pos.y - 24 < Monster_point->GetAt(p - 1).y)) {
 					wdcount[i] = 0;
-					crash[i] = TRUE;
 					break;
 				}
 				else if (wdcount[i] == 16 && Monster_point->GetAt(p - 1).x > c_pos.x - 40 && Monster_point->GetAt(p - 1).x < c_pos.x + 40 && (wd_pos.y + 24 > Monster_point->GetAt(p - 1).y) && (wd_pos.y - 24 < Monster_point->GetAt(p - 1).y)) {
 					wdcount[i] = 0;
-					crash[i] = TRUE;
 					break;
 				}
 			}
@@ -283,11 +293,10 @@ int GameObject::monster_check(CPoint m_pos, int m_state)
 				{
 					life--;
 					PlaySound(MAKEINTRESOURCE(IDR_DAM), AfxGetInstanceHandle(), SND_RESOURCE | SND_ASYNC);
+					life_time++;
 				}
 				else
-					life_time++;
-//			else if((m_pos.x+M_SIZE>=c_pos.x)&&(c_pos.y-C_SIZE <= m_pos.y-M_SIZE)&& (c_pos.y + M_SIZE >= m_pos.y) && (m_pos.x<c_pos.x))
-				
+					life_time++;				
 			}
 			else
 				life_time = 0;
@@ -300,10 +309,10 @@ int GameObject::monster_check(CPoint m_pos, int m_state)
 				{
 					life--;
 					PlaySound(MAKEINTRESOURCE(IDR_DAM), AfxGetInstanceHandle(), SND_RESOURCE | SND_ASYNC);
+					life_time++;
 				}
 				else
 					life_time++;
-				
 			}
 			else
 				life_time = 0;

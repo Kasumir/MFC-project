@@ -362,6 +362,8 @@ IDR_ATTACK              WAVE                    "res\\Pen_Clicking.wav"
 
 IDR_DAM                 WAVE                    "res\\damage.wav"
 
+IDR_PEN                 WAVE                    "res\\PEN.wav"
+
 
 /////////////////////////////////////////////////////////////////////////////
 //
