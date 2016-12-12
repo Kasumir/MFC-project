@@ -290,8 +290,14 @@ void CSpongeBobView::OnDraw(CDC* pDC)
 			Tile_list.RemoveAll();
 
 			i_state = FALSE;
-			/*LoadDialog dlg;
-			int pos;
+			object.DeleteCharacter();
+			for (int i = 0; i < 10; i++)
+				monster[i].MonsterDie();
+			Tile_list.RemoveAll();                  //리스트 초기화
+			LRTile_list.RemoveAll();
+
+			i_state = FALSE;
+			LoadDialog dlg;
 			filename tmp;
 			CFile name_list;
 			CFileException e1;
@@ -307,7 +313,9 @@ void CSpongeBobView::OnDraw(CDC* pDC)
 				name_list.Read(tmp.name.GetBuffer(tmp.size), tmp.size);
 				tmp.name.ReleaseBuffer(tmp.size);
 				dlg.tmp_list.AddTail(tmp);
-			}*/
+			}
+
+
 			CString str;
 			str.Format(_T("stage%d.txt"), stageNum);
 			CFile file;
@@ -318,23 +326,46 @@ void CSpongeBobView::OnDraw(CDC* pDC)
 				Invalidate();
 				return;
 			}
-			int buf[2];
-			file.Read(buf, 2 * sizeof(int));
-			object.c_pos.x = buf[0];
-			object.c_pos.y = buf[1];
-			object.CreateCharacter(object.c_pos.x, object.c_pos.y);
-			for (int i = 0; i < 10; i++) {
+				int buf[2];
 				file.Read(buf, 2 * sizeof(int));
-				monster[i].m_pos.x = buf[0];
-				monster[i].m_pos.y = buf[1];
-				if (monster[i].m_pos.x != -1)
-					monster[i].MonsterCreate(monster[i].m_pos.x, monster[i].m_pos.y);
-			}
-			for (int i = 0; i < (file.GetLength() - 88) / 8; i++) // 벽돌 좌표
-			{
-				file.Read(buf, 2 * sizeof(int));
-				CPoint pos = { buf[0], buf[1] };
-				Tile_list.AddTail(pos);
+				object.c_pos.x = buf[0];
+				object.c_pos.y = buf[1];
+				object.CreateCharacter(object.c_pos.x, object.c_pos.y);   //캐릭터 읽고
+				for (int i = 0; i < 10; i++) {
+					file.Read(buf, 2 * sizeof(int));
+					monster[i].m_pos.x = buf[0];
+					monster[i].m_pos.y = buf[1];
+					if (monster[i].m_pos.x != -1)
+						monster[i].MonsterCreate(monster[i].m_pos.x, monster[i].m_pos.y);  //몬스터 읽고
+				}
+				int num;
+				file.Read(&num, sizeof(int));
+				for (int i = 0; i < num; i++) // 벽돌 좌표
+				{
+					file.Read(buf, 2 * sizeof(int));
+					CPoint pos = { buf[0], buf[1] };
+					Tile_list.AddTail(pos);
+				}
+				file.Read(&num, sizeof(int));
+				for (int i = 0; i < num; i++) // 좌우 벽돌 좌표
+				{
+					file.Read(buf, 2 * sizeof(int));
+					CPoint pos = { buf[0], buf[1] };
+					tilestyle tmp;
+					tmp.pos = pos;
+					tmp.left = TRUE;
+					tmp.right = TRUE;
+					LRTile_list.AddTail(tmp);
+				}
+				for (POSITION p = LRTile_list.GetHeadPosition(); p != NULL; LRTile_list.GetNext(p)) {
+					tilestyle tmp = LRTile_list.GetAt(p);
+					for (POSITION p1 = LRTile_list.GetHeadPosition(); p1 != NULL; LRTile_list.GetNext(p1)) {
+						if ((LRTile_list.GetAt(p1).pos.x == tmp.pos.x + B_SIZE) && (LRTile_list.GetAt(p1).pos.y == tmp.pos.y))
+							LRTile_list.GetAt(p).right = FALSE;
+						if ((LRTile_list.GetAt(p1).pos.x == tmp.pos.x - B_SIZE) && (LRTile_list.GetAt(p1).pos.y == tmp.pos.y))
+							LRTile_list.GetAt(p).left = FALSE;
+					}
+				
 			}
 			object.c_visible = TRUE;
 
@@ -390,6 +421,10 @@ void CSpongeBobView::OnDraw(CDC* pDC)
 		for (POSITION p = Tile_list.GetHeadPosition(); p != NULL;)    //블록출력
 		{
 			CPoint pos(Tile_list.GetNext(p));
+			pDC->BitBlt(pos.x, pos.y, bmpinfo.bmWidth, bmpinfo.bmHeight, &dcmem, 0, 0, SRCCOPY);
+		}
+		for (POSITION p = LRTile_list.GetHeadPosition(); p != NULL;) {
+			CPoint pos = LRTile_list.GetNext(p).pos;
 			pDC->BitBlt(pos.x, pos.y, bmpinfo.bmWidth, bmpinfo.bmHeight, &dcmem, 0, 0, SRCCOPY);
 		}
 		if (object.c_visible)   //캐릭출력
