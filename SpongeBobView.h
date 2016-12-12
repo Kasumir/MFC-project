@@ -31,7 +31,8 @@ protected: // serialization에서만 만들어집니다.
 	int m_deadCount;
 	GameObject object;
 	CList<CPoint, CPoint&> Tile_list;
-	BOOL e_block, e_char, e_mon;
+	CList<tilestyle, tilestyle> LRTile_list;
+	BOOL e_block, e_char, e_mon, e_lrblock;
 	BOOL i_state;
 	BOOL openStage;
 	CRgn start_rgn, editor_rgn, end_rgn;
@@ -82,6 +83,8 @@ public:
 	afx_msg void OnUpdateBlock(CCmdUI *pCmdUI);
 	afx_msg void OnUpdateCharacter(CCmdUI *pCmdUI);
 	afx_msg void OnUpdateMonster(CCmdUI *pCmdUI);
+	afx_msg void OnLrblock();
+	afx_msg void OnUpdateLrblock(CCmdUI *pCmdUI);
 };
 
 #ifndef _DEBUG  // SpongeBobView.cpp의 디버그 버전

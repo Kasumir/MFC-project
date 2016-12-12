@@ -53,6 +53,8 @@
 #define ID_BLOCK                        32778
 #define ID_MONSTER                      32779
 #define ID_CHARACTER                    32780
+#define ID_32781                        32781
+#define ID_LRBLOCK                      32782
 
 // Next default values for new objects
 // 

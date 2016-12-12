@@ -22,7 +22,7 @@ GameObject::~GameObject()
 {
 
 }
-void GameObject::check(CList<CPoint, CPoint&>* Tile_list)
+void GameObject::check(CList<CPoint, CPoint&>* Tile_list, CList<tilestyle, tilestyle>* LRTile_list)
 {
 	POSITION p;
 	CPoint pos;
@@ -41,22 +41,35 @@ void GameObject::check(CList<CPoint, CPoint&>* Tile_list)
 		else if (c_UDstate == STOP) // 밑에 벽돌이 있는지 없는지 검사.
 			if (!(c_pos.x > pos.x - C_SIZE && c_pos.x < pos.x + B_SIZE && c_pos.y > pos.y - C_SIZE && c_pos.y < pos.y - C_SIZE + B_SIZE / 2))
 				count++;//밑에 모든 벽돌이 없는지 검사.
-/*		if (c_LRstate == LEFT || c_LRstate == STOP) {
-			if ((c_pos.x - B_SIZE <= pos.x) && (c_pos.x >= pos.x) && (c_pos.y + B_SIZE > pos.y) && (c_pos.y - B_SIZE < pos.y))
+	}
+	for (p = LRTile_list->GetHeadPosition(); p != NULL;) {
+		tilestyle s = LRTile_list->GetNext(p);
+		pos = s.pos;
+		if (c_UDstate == DOWN)
+		{
+			if (c_pos.x > pos.x - C_SIZE && c_pos.x < pos.x + B_SIZE && c_pos.y > pos.y - C_SIZE && c_pos.y < pos.y - C_SIZE + B_SIZE / 2)
 			{
-				c_LRstate = STOP;
-				c_pos.x = pos.x + B_SIZE;
+				c_UDstate = STOP;
+				c_pos.y = pos.y - C_SIZE;
 			}
 		}
-		else if (c_LRstate == RIGHT || c_LRstate == STOP) {
-			if ((c_pos.x + C_SIZE >= pos.x) && (c_pos.x <= pos.x) && (c_pos.y + B_SIZE > pos.y) && (c_pos.y - B_SIZE < pos.y))
-			{
-				c_LRstate = STOP;
-				c_pos.x = pos.x -C_SIZE;
-			}
-		}*/
+		else if (c_UDstate == STOP) // 밑에 벽돌이 있는지 없는지 검사.
+			if (!(c_pos.x > pos.x - C_SIZE && c_pos.x < pos.x + B_SIZE && c_pos.y > pos.y - C_SIZE && c_pos.y < pos.y - C_SIZE + B_SIZE / 2))
+				count++;//밑에 모든 벽돌이 없는지 검사.
+		if (c_LRstate == LEFT && s.right && c_pos.x > s.pos.x + B_SIZE - 15 && c_pos.x < s.pos.x + B_SIZE && c_pos.y > s.pos.y - C_SIZE && c_pos.y < s.pos.y + B_SIZE) //오른쪽 충돌
+		{
+			c_LRstate = STOP;
+			LRcount = -1;
+			c_pos.x = s.pos.x + B_SIZE + 1;
+		}
+		if (c_LRstate == RIGHT && s.left && c_pos.x + C_SIZE < s.pos.x + 15 && c_pos.x + C_SIZE > s.pos.x && c_pos.y > s.pos.y - C_SIZE && c_pos.y < s.pos.y  + B_SIZE) //왼쪽 충돌
+		{
+			c_LRstate = STOP;
+			LRcount = 1;
+			c_pos.x = s.pos.x - C_SIZE - 1;
+		}
 	}
-	if (count == Tile_list->GetCount())
+	if (count == Tile_list->GetCount() + LRTile_list->GetCount())
 		c_UDstate = DOWN; // 타일숫자 = 검사한 숫자 -> 떨어짐.
 	if (jumpcount == 6)
 		c_UDstate = DOWN;
