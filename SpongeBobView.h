@@ -85,6 +85,8 @@ public:
 	afx_msg void OnUpdateMonster(CCmdUI *pCmdUI);
 	afx_msg void OnLrblock();
 	afx_msg void OnUpdateLrblock(CCmdUI *pCmdUI);
+//	afx_msg void OnFileOpen();
+//	afx_msg void OnFileSave();
 };
 
 #ifndef _DEBUG  // SpongeBobView.cpp의 디버그 버전

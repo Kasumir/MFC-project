@@ -46,6 +46,8 @@ BEGIN_MESSAGE_MAP(CSpongeBobView, CView)
 //	ON_WM_MOUSEMOVE()
 ON_COMMAND(ID_LRBLOCK, &CSpongeBobView::OnLrblock)
 ON_UPDATE_COMMAND_UI(ID_LRBLOCK, &CSpongeBobView::OnUpdateLrblock)
+//ON_COMMAND(ID_FILE_OPEN, &CSpongeBobView::OnFileOpen)
+//ON_COMMAND(ID_FILE_SAVE, &CSpongeBobView::OnFileSave)
 END_MESSAGE_MAP()
 
 // CSpongeBobView 생성/소멸
@@ -1047,3 +1049,150 @@ void CSpongeBobView::OnUpdateLrblock(CCmdUI *pCmdUI)
 {
 	pCmdUI->SetCheck(e_lrblock);
 }
+
+
+//void CSpongeBobView::OnFileOpen()
+//{
+//	object.DeleteCharacter();
+//	for (int i = 0; i < 10; i++)
+//		monster[i].MonsterDie();
+//	Tile_list.RemoveAll();                  //리스트 초기화
+//	LRTile_list.RemoveAll();
+//
+//	i_state = FALSE;
+//	LoadDialog dlg;
+//	filename tmp;
+//	CFile name_list;
+//	CFileException e1;
+//	if (!name_list.Open(_T("filename.txt"), CFile::modeRead, &e1)) {//파일객체생성
+//		e1.ReportError();
+//		return;
+//	}
+//	int len = (int)(name_list.GetLength());
+//	while (1) {                          //filename.txt를 읽어들임
+//		if (name_list.GetPosition() >= len)
+//			break;
+//		name_list.Read(&tmp.size, sizeof(int));
+//		name_list.Read(tmp.name.GetBuffer(tmp.size), tmp.size);
+//		tmp.name.ReleaseBuffer(tmp.size);
+//		dlg.tmp_list.AddTail(tmp);
+//	}
+//
+//	int result = dlg.DoModal();
+//
+//	if (result == IDOK) {
+//		CFile file;
+//		CFileException e;
+//		if (!file.Open(dlg.str, CFile::modeRead, &e)) {
+//			e.ReportError();
+//			i_state = TRUE;
+//			Invalidate();
+//			return;
+//		}
+//		int buf[2];
+//		file.Read(buf, 2 * sizeof(int));
+//		object.c_pos.x = buf[0];
+//		object.c_pos.y = buf[1];
+//		object.CreateCharacter(object.c_pos.x, object.c_pos.y);   //캐릭터 읽고
+//		for (int i = 0; i < 10; i++) {
+//			file.Read(buf, 2 * sizeof(int));
+//			monster[i].m_pos.x = buf[0];
+//			monster[i].m_pos.y = buf[1];
+//			if (monster[i].m_pos.x != -1)
+//				monster[i].MonsterCreate(monster[i].m_pos.x, monster[i].m_pos.y);  //몬스터 읽고
+//		}
+//		int num;
+//		file.Read(&num, sizeof(int));
+//		for (int i = 0; i < num; i++) // 벽돌 좌표
+//		{
+//			file.Read(buf, 2 * sizeof(int));
+//			CPoint pos = { buf[0], buf[1] };
+//			Tile_list.AddTail(pos);
+//		}
+//		file.Read(&num, sizeof(int));
+//		for (int i = 0; i < num; i++) // 좌우 벽돌 좌표
+//		{
+//			file.Read(buf, 2 * sizeof(int));
+//			CPoint pos = { buf[0], buf[1] };
+//			tilestyle tmp;
+//			tmp.pos = pos;
+//			tmp.left = TRUE;
+//			tmp.right = TRUE;
+//			LRTile_list.AddTail(tmp);
+//		}
+//		for (POSITION p = LRTile_list.GetHeadPosition(); p != NULL; LRTile_list.GetNext(p)) {
+//			tilestyle tmp = LRTile_list.GetAt(p);
+//			for (POSITION p1 = LRTile_list.GetHeadPosition(); p1 != NULL; LRTile_list.GetNext(p1)) {
+//				if ((LRTile_list.GetAt(p1).pos.x == tmp.pos.x + B_SIZE) && (LRTile_list.GetAt(p1).pos.y == tmp.pos.y))
+//					LRTile_list.GetAt(p).right = FALSE;
+//				if ((LRTile_list.GetAt(p1).pos.x == tmp.pos.x - B_SIZE) && (LRTile_list.GetAt(p1).pos.y == tmp.pos.y))
+//					LRTile_list.GetAt(p).left = FALSE;
+//			}
+//		}
+//	}
+//	i_state = TRUE;
+//	Invalidate();
+//}
+
+
+//void CSpongeBobView::OnFileSave()
+//{
+//	// TODO: 여기에 명령 처리기 코드를 추가합니다.
+//	i_state = FALSE;
+//	//새파일 생성
+//	CString str;
+//	SaveDialog dlg;
+//	int result = dlg.DoModal();
+//	if (result == IDOK) {
+//		str.Format(_T("%s.txt"), dlg.str);
+//		CFile file;
+//		CFileException e;
+//		if (!file.Open(str, CFile::modeCreate | CFile::modeWrite, &e)) {
+//			e.ReportError();
+//			return;
+//		}
+//		int buf[2];
+//		int num;
+//		buf[0] = object.c_pos.x;
+//		buf[1] = object.c_pos.y;
+//		file.Write(buf, 2 * sizeof(int)); //캐릭좌표 저장
+//		for (int i = 0; i < 10; i++) {
+//			buf[0] = monster[i].m_pos.x;
+//			buf[1] = monster[i].m_pos.y;
+//			file.Write(buf, 2 * sizeof(int));  //몬스터 좌표 저장
+//		}
+//		num = Tile_list.GetSize();
+//		file.Write(&num, sizeof(int));// 벽돌 갯수 저장
+//		for (POSITION p = Tile_list.GetHeadPosition(); p != NULL;) {//벽돌좌표 저장
+//			buf[0] = Tile_list.GetAt(p).x;
+//			buf[1] = Tile_list.GetNext(p).y;
+//			file.Write(buf, 2 * sizeof(int));
+//		}
+//		num = LRTile_list.GetSize();
+//		file.Write(&num, sizeof(int));// 좌우벽돌 갯수 저장
+//		for (POSITION p = LRTile_list.GetHeadPosition(); p != NULL;) {//좌우벽돌 좌표 저장
+//			buf[0] = LRTile_list.GetAt(p).pos.x;
+//			buf[1] = LRTile_list.GetNext(p).pos.y;
+//			file.Write(buf, 2 * sizeof(int));
+//		}
+//
+//		//파일 목록 갱신
+//		CFile file_list;
+//		CFileException e1;
+//		filename tmp;
+//		CList<filename, filename&> namelist;
+//		if (!file_list.Open(_T("filename.txt"), CFile::modeReadWrite, &e1)) {  //파일객체 생성
+//			e1.ReportError();
+//			return;
+//		}
+//		tmp.size = (int)str.GetLength() * 2;
+//		tmp.name = str;
+//		file_list.SeekToEnd();
+//		file_list.Write(&(tmp.size), 4);
+//		file_list.Write(tmp.name.GetBuffer(tmp.size), tmp.size);
+//		tmp.name.ReleaseBuffer(tmp.size);
+//	}
+//
+//	i_state = TRUE;
+//	Invalidate();
+//}
