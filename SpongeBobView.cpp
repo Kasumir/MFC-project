@@ -58,10 +58,10 @@ CSpongeBobView::CSpongeBobView()
 	e_block = e_mon = e_char = e_lrblock = FALSE;
 	i_state = TRUE;
 	s_state = S_MENU;
-	szSoundPath = _T("C:\\Users\\user\\Source\\Repos\\MFC-project\\res\\Pen_Clicking.wav");
+/*	szSoundPath = _T("C:\\Users\\user\\Source\\Repos\\MFC-project\\res\\Pen_Clicking.wav");
 	sound_menu = _T("C:\\Users\\user\\Source\\Repos\\MFC-project\\res\\effect.wav");
 	sound_clear = _T("C:\\Users\\user\\Source\\Repos\\MFC-project\\res\\frash.wav");
-	sound_gameover = _T("C:\\Users\\user\\Source\\Repos\\MFC-project\\res\\gameover.wav");
+	sound_gameover = _T("C:\\Users\\user\\Source\\Repos\\MFC-project\\res\\gameover.wav");*/
 	
 	stageNum = 1;
 	openStage = TRUE;
@@ -537,7 +537,8 @@ void CSpongeBobView::OnDraw(CDC* pDC)
 		{
 			s_state = S_OVER;
 		}
-
+		if (object.life_time == 15) // 무적타임..?..그거
+			object.life_time = 0;
 		if (i_state)
 		{
 			Sleep(1000 / 8);     //프레임
@@ -547,7 +548,7 @@ void CSpongeBobView::OnDraw(CDC* pDC)
 		}
 	}
 	else if (s_state == S_OVER) {
-		PlaySound(sound_gameover, AfxGetInstanceHandle(), SND_ASYNC); //배경음
+		PlaySound(MAKEINTRESOURCE(IDR_OVER), AfxGetInstanceHandle(), SND_RESOURCE | SND_ASYNC); //배경음
 		CBitmap gameover_bitmap;
 		gameover_bitmap.LoadBitmap(IDB_GAMEOVER);
 		BITMAP over_bmpinfo;
@@ -560,7 +561,7 @@ void CSpongeBobView::OnDraw(CDC* pDC)
 	}
 	else if (s_state == S_STOP) {
 
-		PlaySound(sound_clear, AfxGetInstanceHandle(), SND_ASYNC);
+		PlaySound(MAKEINTRESOURCE(IDR_FRASH), AfxGetInstanceHandle(), SND_RESOURCE | SND_ASYNC);
 
 		CBitmap stageClear_bitmap;
 		stageClear_bitmap.LoadBitmap(IDB_StageClear);
@@ -625,17 +626,17 @@ void CSpongeBobView::OnLButtonDown(UINT nFlags, CPoint point)
 	if (s_state == S_MENU) {
 		if (start_rgn.PtInRegion(point)) {
 			s_state = S_START;
-			PlaySound(sound_menu, AfxGetInstanceHandle(), SND_ASYNC); 
+			PlaySound(MAKEINTRESOURCE(IDR_EFFECT), AfxGetInstanceHandle(), SND_RESOURCE|SND_ASYNC);
 			Invalidate();
 		}
 		else if (editor_rgn.PtInRegion(point)) {
 			s_state = S_EDITOR;
-			PlaySound(sound_menu, AfxGetInstanceHandle(), SND_ASYNC);
+			PlaySound(MAKEINTRESOURCE(IDR_EFFECT), AfxGetInstanceHandle(), SND_RESOURCE | SND_ASYNC);
 			Invalidate();
 		}
 		else if (end_rgn.PtInRegion(point)) {
 			s_state = S_END;
-			PlaySound(sound_menu, AfxGetInstanceHandle(), SND_ASYNC);
+			PlaySound(MAKEINTRESOURCE(IDR_EFFECT), AfxGetInstanceHandle(), SND_RESOURCE | SND_ASYNC);
 			AfxGetMainWnd()->PostMessage(WM_CLOSE);
 		}
 	}
@@ -776,7 +777,7 @@ void CSpongeBobView::OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags)
 				Invalidate();
 		}
 		else if (s_state == S_START) {
-			PlaySound(szSoundPath, AfxGetInstanceHandle(), SND_ASYNC); //효과음
+			PlaySound(MAKEINTRESOURCE(IDR_ATTACK), AfxGetInstanceHandle(), SND_RESOURCE | SND_ASYNC); //효과음
 			object.c_space = TRUE;
 			object.wdcount[0] = 0;
 			break;

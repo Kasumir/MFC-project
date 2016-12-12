@@ -31,8 +31,14 @@
 #define IDB_BITMAP1                     345
 #define IDB_StageClear                  345
 #define IDB_HEART                       346
-#define IDB_BITMAP2                     347
 #define IDB_GAMEOVER                    347
+#define IDR_ACCELERATOR1                348
+#define IDR_EFFECT                      350
+#define IDR_FRASH                       351
+#define IDR_OVER                        352
+#define IDR_ATTACK                      353
+#define IDR_WAVE1                       357
+#define IDR_DAM                         357
 #define IDC_EDIT1                       1001
 #define IDC_STR1                        1001
 #define IDC_LIST2                       1003
@@ -53,8 +59,8 @@
 // 
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
-#define _APS_NEXT_RESOURCE_VALUE        348
-#define _APS_NEXT_COMMAND_VALUE         32783
+#define _APS_NEXT_RESOURCE_VALUE        358
+#define _APS_NEXT_COMMAND_VALUE         32782
 #define _APS_NEXT_CONTROL_VALUE         1004
 #define _APS_NEXT_SYMED_VALUE           310
 #endif

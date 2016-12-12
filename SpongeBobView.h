@@ -36,10 +36,10 @@ protected: // serialization에서만 만들어집니다.
 	BOOL i_state;
 	BOOL openStage;
 	CRgn start_rgn, editor_rgn, end_rgn;
-	CString szSoundPath;
+/*	CString szSoundPath;
 	CString sound_menu;
 	CString sound_clear;
-	CString sound_gameover;
+	CString sound_gameover;*/
 	
 
 public:
