@@ -165,7 +165,7 @@ void CSpongeBobView::OnDraw(CDC* pDC)
 		if (object.c_visible)   //캐릭출력
 		{
 			object.move();
-			object.check(&Tile_list);
+			object.check(&Tile_list, &LRTile_list);
 			if (object.c_LRstate == STOP)
 			{
 				if (object.LRcount > 0) {
@@ -395,7 +395,7 @@ void CSpongeBobView::OnDraw(CDC* pDC)
 		if (object.c_visible)   //캐릭출력
 		{
 			object.move();
-			object.check(&Tile_list);
+			object.check(&Tile_list, &LRTile_list);
 			if (object.c_LRstate == STOP)
 			{
 				if (object.LRcount > 0) {
@@ -870,7 +870,8 @@ void CSpongeBobView::OnLoad()
 	object.DeleteCharacter();
 	for (int i = 0; i < 10; i++)
 		monster[i].MonsterDie();
-	Tile_list.RemoveAll();
+	Tile_list.RemoveAll();                  //리스트 초기화
+ 	LRTile_list.RemoveAll();
 
 	i_state = FALSE;
 	LoadDialog dlg;
@@ -914,12 +915,33 @@ void CSpongeBobView::OnLoad()
 			if(monster[i].m_pos.x != -1)
 				monster[i].MonsterCreate(monster[i].m_pos.x, monster[i].m_pos.y);  //몬스터 읽고
 		}
-
-		for (int i = 0; i < (file.GetLength() - 88) / 8; i++) // 벽돌 좌표
+		int num;
+		file.Read(&num, sizeof(int));
+		for (int i = 0; i < num; i++) // 벽돌 좌표
 		{
 			file.Read(buf, 2 * sizeof(int));
 			CPoint pos = { buf[0], buf[1] };
 			Tile_list.AddTail(pos);
+		}
+		file.Read(&num, sizeof(int));
+		for (int i = 0; i < num; i++) // 좌우 벽돌 좌표
+		{
+			file.Read(buf, 2 * sizeof(int));
+			CPoint pos = { buf[0], buf[1] };
+			tilestyle tmp;
+			tmp.pos = pos;
+			tmp.left = TRUE;
+			tmp.right = TRUE;
+			LRTile_list.AddTail(tmp);
+		}
+		for (POSITION p = LRTile_list.GetHeadPosition(); p != NULL; LRTile_list.GetNext(p)) {
+			tilestyle tmp = LRTile_list.GetAt(p);
+			for (POSITION p1 = LRTile_list.GetHeadPosition(); p1 != NULL; LRTile_list.GetNext(p1)) {
+				if ((LRTile_list.GetAt(p1).pos.x == tmp.pos.x + B_SIZE) && (LRTile_list.GetAt(p1).pos.y == tmp.pos.y))
+					LRTile_list.GetAt(p).right = FALSE;
+				if ((LRTile_list.GetAt(p1).pos.x == tmp.pos.x - B_SIZE) && (LRTile_list.GetAt(p1).pos.y == tmp.pos.y))
+					LRTile_list.GetAt(p).left = FALSE;
+			}
 		}
 	}
 	i_state = TRUE;
@@ -941,10 +963,10 @@ void CSpongeBobView::OnBlock()
 void CSpongeBobView::OnCharacter()
 {
 	if (e_char)
-		e_char = e_mon = e_block = FALSE;
+		e_char = e_mon = e_block = e_lrblock = FALSE;
 	else
 	{
-		e_mon = e_block = FALSE;
+		e_mon = e_block = e_lrblock = FALSE;
 		e_char = TRUE;
 	}
 }
@@ -952,10 +974,10 @@ void CSpongeBobView::OnCharacter()
 void CSpongeBobView::OnMonster()
 {
 	if (e_mon)
-		e_char = e_mon = e_block = FALSE;
+		e_char = e_mon = e_block = e_lrblock = FALSE;
 	else
 	{
-		e_char = e_block = FALSE;
+		e_char = e_block = e_lrblock = FALSE;
 		e_mon = TRUE;
 	}
 }
