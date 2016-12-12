@@ -112,7 +112,6 @@ void Monster::StopState()//게임대기상태나 캐릭터에게 공격당해서 갇혀있는 상태
 	m_UDstate = STOP;
 	m_pos.x += 0;
 	m_pos.y += 0;
-
 }
 
 

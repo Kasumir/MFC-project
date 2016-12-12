@@ -188,6 +188,7 @@ BEGIN
         MENUITEM "저장",                          ID_SAVE
         MENUITEM "불러오기",                        ID_LOAD
         MENUITEM "벽돌",                          ID_BLOCK
+        MENUITEM "벽돌(좌우충돌)",                    ID_LRBLOCK
         MENUITEM "몬스터",                         ID_MONSTER
         MENUITEM "캐릭터",                         ID_CHARACTER
     END

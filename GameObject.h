@@ -14,6 +14,11 @@
 #define UP 1
 #define DOWN 2
 
+typedef struct tilestyle {
+	CPoint pos;
+	BOOL left;
+	BOOL right;
+};
 
 class GameObject  //모든 오브젝트를 관리할 클레스
 {
