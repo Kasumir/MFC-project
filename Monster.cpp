@@ -57,7 +57,7 @@ void Monster::MoveState()//돌아다니다가 유저를 인식하면 쫓아감
 			random1 = rand() % 3;
 		}
 		if (Lcount < 10 || Rcount < 10)
-			if (random1 == 0) // 몬스터가 랜덤으로 돌아다님. 근데 점프 횟수를 더 적게.
+			if (random1 == 0) // 몬스터가 랜덤으로 돌아다님. 
 			{
 				m_LRstate = LEFT;
 				Lcount++;
@@ -67,11 +67,11 @@ void Monster::MoveState()//돌아다니다가 유저를 인식하면 쫓아감
 				m_LRstate = RIGHT;
 				Rcount++;
 			}
-			else  if (random1 == 2)// 랜덤으로 점프
+	/*		else  if (random1 == 2)// 랜덤으로 점프
 			{
 				for (; jumpcount < 6; jumpcount++)
 					m_UDstate = UP;
-			}
+			}*/
 		if (Lcount == 10 || Rcount == 10)
 		{
 			Lcount = 0;
@@ -112,7 +112,6 @@ void Monster::StopState()//게임대기상태나 캐릭터에게 공격당해서 갇혀있는 상태
 	m_UDstate = STOP;
 	m_pos.x += 0;
 	m_pos.y += 0;
-
 }
 
 

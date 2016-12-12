@@ -90,6 +90,9 @@
     <None Include="res\SpongeBob.rc2">
       <Filter>리소스 파일</Filter>
     </None>
+    <None Include="res\wave1.bin">
+      <Filter>리소스 파일</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <Image Include="res\SpongeBobDoc.ico">
@@ -161,17 +164,43 @@
     <Image Include="res\bitmap1.bmp">
       <Filter>리소스 파일</Filter>
     </Image>
-    <Image Include="..\..\..\..\Desktop\StageClear.png">
+    <Image Include="res\heart.bmp">
       <Filter>리소스 파일</Filter>
     </Image>
     <Image Include="..\..\..\..\desktop\png2.png">
       <Filter>리소스 파일</Filter>
     </Image>
-    <Image Include="res\StageClear.png">
+    <Image Include="..\..\..\..\Desktop\StageClear.png">
       <Filter>리소스 파일</Filter>
     </Image>
     <Image Include="res\StageClear.bmp">
       <Filter>리소스 파일</Filter>
     </Image>
+    <Image Include="res\StageClear.png">
+      <Filter>리소스 파일</Filter>
+    </Image>
+    <Image Include="res\over.bmp">
+      <Filter>리소스 파일</Filter>
+    </Image>
+  </ItemGroup>
+  <ItemGroup>
+    <Media Include="res\effect.wav">
+      <Filter>리소스 파일</Filter>
+    </Media>
+    <Media Include="res\frash.wav">
+      <Filter>리소스 파일</Filter>
+    </Media>
+    <Media Include="res\gameover.wav">
+      <Filter>리소스 파일</Filter>
+    </Media>
+    <Media Include="res\Pen_Clicking.wav">
+      <Filter>리소스 파일</Filter>
+    </Media>
+    <Media Include="res\damage.wav">
+      <Filter>리소스 파일</Filter>
+    </Media>
+    <Media Include="res\PEN.wav">
+      <Filter>리소스 파일</Filter>
+    </Media>
   </ItemGroup>
 </Project>

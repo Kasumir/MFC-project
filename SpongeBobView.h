@@ -15,6 +15,7 @@
 #define S_EDITOR 2
 #define S_END 3
 #define S_STOP 4
+#define S_OVER 5
 
 
 class CSpongeBobView : public CView
@@ -30,18 +31,20 @@ protected: // serialization에서만 만들어집니다.
 	int m_deadCount;
 	GameObject object;
 	CList<CPoint, CPoint&> Tile_list;
-	BOOL e_block, e_char, e_mon;
+	CList<tilestyle, tilestyle> LRTile_list;
+	BOOL e_block, e_char, e_mon, e_lrblock;
 	BOOL i_state;
 	BOOL openStage;
 	CRgn start_rgn, editor_rgn, end_rgn;
-	CString szSoundPath;
+/*	CString szSoundPath;
+	CString sound_menu;
+	CString sound_clear;
+	CString sound_gameover;*/
+	
 
 public:
 	CSpongeBobDoc* GetDocument() const;
-	MCI_OPEN_PARMS      mciOpen; //파일을 로드
-	MCI_PLAY_PARMS       mciPlay; //파일을 재생
-	DWORD wID;
-	MCIERROR err;
+	
 	// 작업입니다.
 public:
 
@@ -80,6 +83,8 @@ public:
 	afx_msg void OnUpdateBlock(CCmdUI *pCmdUI);
 	afx_msg void OnUpdateCharacter(CCmdUI *pCmdUI);
 	afx_msg void OnUpdateMonster(CCmdUI *pCmdUI);
+	afx_msg void OnLrblock();
+	afx_msg void OnUpdateLrblock(CCmdUI *pCmdUI);
 };
 
 #ifndef _DEBUG  // SpongeBobView.cpp의 디버그 버전

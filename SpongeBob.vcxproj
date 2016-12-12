@@ -218,6 +218,7 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="res\SpongeBob.rc2" />
+    <None Include="res\wave1.bin" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="..\..\..\..\desktop\png2.png" />
@@ -228,6 +229,7 @@
     <Image Include="res\bitmap2.bmp" />
     <Image Include="res\bmp00002.bmp" />
     <Image Include="res\bubble.bmp" />
+    <Image Include="res\heart.bmp" />
     <Image Include="res\L1.bmp" />
     <Image Include="res\L2.bmp" />
     <Image Include="res\L3.bmp" />
@@ -235,6 +237,7 @@
     <Image Include="res\L5.bmp" />
     <Image Include="res\L6.bmp" />
     <Image Include="res\L7.bmp" />
+    <Image Include="res\over.bmp" />
     <Image Include="res\R1.bmp" />
     <Image Include="res\R2.bmp" />
     <Image Include="res\R3.bmp" />
@@ -247,6 +250,14 @@
     <Image Include="res\StageClear.bmp" />
     <Image Include="res\StageClear.png" />
     <Image Include="res\Toolbar.bmp" />
+  </ItemGroup>
+  <ItemGroup>
+    <Media Include="res\damage.wav" />
+    <Media Include="res\effect.wav" />
+    <Media Include="res\frash.wav" />
+    <Media Include="res\gameover.wav" />
+    <Media Include="res\PEN.wav" />
+    <Media Include="res\Pen_Clicking.wav" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

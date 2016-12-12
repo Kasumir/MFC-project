@@ -119,6 +119,10 @@ IDB_StartMenu           BITMAP                  "res\\background1.bmp"
 
 IDB_StageClear          BITMAP                  "res\\StageClear.bmp"
 
+IDB_HEART               BITMAP                  "res\\heart.bmp"
+
+IDB_GAMEOVER            BITMAP                  "res\\over.bmp"
+
 
 /////////////////////////////////////////////////////////////////////////////
 //
@@ -184,6 +188,7 @@ BEGIN
         MENUITEM "저장",                          ID_SAVE
         MENUITEM "불러오기",                        ID_LOAD
         MENUITEM "벽돌",                          ID_BLOCK
+        MENUITEM "벽돌(좌우충돌)",                    ID_LRBLOCK
         MENUITEM "몬스터",                         ID_MONSTER
         MENUITEM "캐릭터",                         ID_CHARACTER
     END
@@ -212,6 +217,7 @@ BEGIN
     VK_F6,          ID_NEXT_PANE,           VIRTKEY 
     VK_F6,          ID_PREV_PANE,           VIRTKEY, SHIFT
 END
+
 
 
 /////////////////////////////////////////////////////////////////////////////
@@ -340,6 +346,24 @@ IDD_LOADDIALOG AFX_DIALOG_LAYOUT
 BEGIN
     0
 END
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// WAVE
+//
+
+IDR_EFFECT              WAVE                    "res\\effect.wav"
+
+IDR_FRASH               WAVE                    "res\\frash.wav"
+
+IDR_OVER                WAVE                    "res\\gameover.wav"
+
+IDR_ATTACK              WAVE                    "res\\Pen_Clicking.wav"
+
+IDR_DAM                 WAVE                    "res\\damage.wav"
+
+IDR_PEN                 WAVE                    "res\\PEN.wav"
 
 
 /////////////////////////////////////////////////////////////////////////////
