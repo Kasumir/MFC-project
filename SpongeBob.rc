@@ -218,6 +218,7 @@ BEGIN
 END
 
 
+
 /////////////////////////////////////////////////////////////////////////////
 //
 // Dialog
@@ -344,6 +345,22 @@ IDD_LOADDIALOG AFX_DIALOG_LAYOUT
 BEGIN
     0
 END
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// WAVE
+//
+
+IDR_EFFECT              WAVE                    "res\\effect.wav"
+
+IDR_FRASH               WAVE                    "res\\frash.wav"
+
+IDR_OVER                WAVE                    "res\\gameover.wav"
+
+IDR_ATTACK              WAVE                    "res\\Pen_Clicking.wav"
+
+IDR_DAM                 WAVE                    "res\\damage.wav"
 
 
 /////////////////////////////////////////////////////////////////////////////

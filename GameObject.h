@@ -19,7 +19,7 @@ class GameObject  //모든 오브젝트를 관리할 클레스
 {
 public:
 	CPoint c_pos;
-	CString sound_damege;
+//	CString sound_damege;
 	int c_UDstate;
 	int c_LRstate;
 	int jumpcount;
@@ -29,6 +29,7 @@ public:
 	int wdcount[11]; // 물방울 카운트, 인덱스 0은 일정 주기로 물방울을 쏘기 위해 OnPain()의 호출 횟수를 점검합니다.
 	int monster_index[11];
 	int life;
+	int life_time;
 	BOOL c_bottom; //캐릭터발이 땅에 닿아있는지
 	BOOL c_left;  //캐릭터 왼쪽에 벽이 있는지
 	BOOL c_right; //캐릭터 오른쪽에 벽이 있는지

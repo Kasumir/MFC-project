@@ -1,5 +1,6 @@
 #include "stdafx.h"
 #include "GameObject.h"
+#include "resource.h"
 
 
 GameObject::GameObject()
@@ -14,7 +15,8 @@ GameObject::GameObject()
 	c_lastLRstate = RIGHT;
 	crash[0] = crash[1] = crash[2] = crash[3]=crash[4]=crash[5]=crash[6]=crash[7]=crash[8]=crash[9]=crash[10]=FALSE;
 	life = 3;
-	sound_damege = _T("C:\\Users\\user\\Source\\Repos\\MFC-project\\res\\ddiyoung.wav");
+	life_time = 0;
+//	sound_damege = _T("res\ddiyoung.wav");
 }
 GameObject::~GameObject()
 {
@@ -103,10 +105,12 @@ void GameObject::WD_Cehck(CList<CPoint, CPoint&>* Tile_list, CArray<CPoint, CPoi
 				}
 				else if (wdcount[i] == 16 && Monster_point->GetAt(p - 1).x > c_pos.x - 40 && Monster_point->GetAt(p - 1).x < c_pos.x + 40 && (wd_pos.y + 24 > Monster_point->GetAt(p - 1).y) && (wd_pos.y - 24 < Monster_point->GetAt(p - 1).y)) {
 					wdcount[i] = 0;
+					crash[i] = TRUE;
 					break;
 				}
 				else if (wdcount[i] == 16 && Monster_point->GetAt(p - 1).x < c_pos.x + 40 && Monster_point->GetAt(p - 1).x >c_pos.x - 40 && (wd_pos.y + 24 > Monster_point->GetAt(p - 1).y) && (wd_pos.y - 24 < Monster_point->GetAt(p - 1).y)) {
 					wdcount[i] = 0;
+					crash[i] = TRUE;
 					break;
 				}
 			}
@@ -120,10 +124,12 @@ void GameObject::WD_Cehck(CList<CPoint, CPoint&>* Tile_list, CArray<CPoint, CPoi
 				}
 				else if (wdcount[i] == 16 && Monster_point->GetAt(p - 1).x < c_pos.x + 40 && Monster_point->GetAt(p - 1).x >c_pos.x - 40 && (wd_pos.y + 24 > Monster_point->GetAt(p - 1).y) && (wd_pos.y - 24 < Monster_point->GetAt(p - 1).y)) {
 					wdcount[i] = 0;
+					crash[i] = TRUE;
 					break;
 				}
 				else if (wdcount[i] == 16 && Monster_point->GetAt(p - 1).x > c_pos.x - 40 && Monster_point->GetAt(p - 1).x < c_pos.x + 40 && (wd_pos.y + 24 > Monster_point->GetAt(p - 1).y) && (wd_pos.y - 24 < Monster_point->GetAt(p - 1).y)) {
 					wdcount[i] = 0;
+					crash[i] = TRUE;
 					break;
 				}
 			}
@@ -268,19 +274,41 @@ int GameObject::monster_check(CPoint m_pos, int m_state)
 			m_pos.x = c_pos.x + C_SIZE + 2;
 		}
 	}*/
-	if ((m_state == RIGHT) && (m_pos.x < c_pos.x)) {
-		if ((m_pos.x + M_SIZE >= c_pos.x) && (c_pos.y - C_SIZE <= m_pos.y - M_SIZE) && (c_pos.y + M_SIZE >= m_pos.y))
+	
+		if ((m_state == RIGHT) )
 		{
-			life--;
-			PlaySound(sound_damege, AfxGetInstanceHandle(), SND_ASYNC);
+			if (((m_pos.x + M_SIZE >= c_pos.x)) && (c_pos.y - C_SIZE <= m_pos.y - M_SIZE) && (c_pos.y + M_SIZE >= m_pos.y) && (m_pos.x < c_pos.x) )
+			{
+				if (life_time == 0)
+				{
+					life--;
+					PlaySound(MAKEINTRESOURCE(IDR_DAM), AfxGetInstanceHandle(), SND_RESOURCE | SND_ASYNC);
+				}
+				else
+					life_time++;
+//			else if((m_pos.x+M_SIZE>=c_pos.x)&&(c_pos.y-C_SIZE <= m_pos.y-M_SIZE)&& (c_pos.y + M_SIZE >= m_pos.y) && (m_pos.x<c_pos.x))
+				
+			}
+			else
+				life_time = 0;
 		}
-	}
-	else if ((m_state == LEFT) && (m_pos.x > c_pos.x)) {
-		if ((m_pos.x <= c_pos.x + C_SIZE) && (c_pos.y - C_SIZE <= m_pos.y - M_SIZE) && (c_pos.y + M_SIZE >= m_pos.y))
+		else if ((m_state == LEFT))
 		{
-			life--;
-			PlaySound(sound_damege, AfxGetInstanceHandle(), SND_ASYNC);
+			if ((m_pos.x <= c_pos.x + C_SIZE) && (c_pos.y - C_SIZE <= m_pos.y - M_SIZE) && (c_pos.y + M_SIZE >= m_pos.y) && (m_pos.x > c_pos.x))
+			{
+				if (life_time == 0)
+				{
+					life--;
+					PlaySound(MAKEINTRESOURCE(IDR_DAM), AfxGetInstanceHandle(), SND_RESOURCE | SND_ASYNC);
+				}
+				else
+					life_time++;
+				
+			}
+			else
+				life_time = 0;
 		}
-	}
+		
+
 	return life;
 }
