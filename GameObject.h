@@ -46,7 +46,7 @@ public:
 public:
 	void move();
 	void check(CList<CPoint, CPoint&>*, CList<tilestyle, tilestyle>*);
-	void WD_Cehck(CList<CPoint, CPoint&>*, CArray<CPoint, CPoint&>*);
+	void WD_Cehck(CList<CPoint, CPoint&>*, CArray<CPoint, CPoint&>*, CList<tilestyle, tilestyle>*);
 	BOOL CreateCharacter(int, int);
 	BOOL DeleteCharacter();
 	void WaterDrop();

@@ -75,7 +75,7 @@ void GameObject::check(CList<CPoint, CPoint&>* Tile_list, CList<tilestyle, tiles
 		c_UDstate = DOWN;
 
 }
-void GameObject::WD_Cehck(CList<CPoint, CPoint&>* Tile_list, CArray<CPoint, CPoint&>* Monster_point)
+void GameObject::WD_Cehck(CList<CPoint, CPoint&>* Tile_list, CArray<CPoint, CPoint&>* Monster_point, CList<tilestyle, tilestyle>* LRTile_list)
 {
 	for (int i = 1; i <= 10; i++) {
 		CPoint wd_pos;
@@ -90,6 +90,26 @@ void GameObject::WD_Cehck(CList<CPoint, CPoint&>* Tile_list, CArray<CPoint, CPoi
 		for (p = Tile_list->GetHeadPosition(); p != NULL;)
 		{
 			tile_pos = Tile_list->GetNext(p);
+			if (wd_LRstate[i] == LEFT) {
+				if ((wd_pos.x - 36 <= tile_pos.x) && (wd_pos.x >= tile_pos.x) && (wd_pos.y + 24 > tile_pos.y) && (wd_pos.y - 24 < tile_pos.y))
+				{
+					wdcount[i] = 0;
+					break;
+				}
+			}
+			else if (wd_LRstate[i] == RIGHT) {
+				if ((wd_pos.x + 36 >= tile_pos.x) && (wd_pos.x <= tile_pos.x) && (wd_pos.y + 24 > tile_pos.y) && (wd_pos.y - 24 < tile_pos.y))
+				{
+					wdcount[i] = 0;
+					break;
+				}
+			}
+		}
+
+		for (p = LRTile_list->GetHeadPosition(); p != NULL;)
+		{
+			tilestyle s = LRTile_list->GetNext(p);
+			tile_pos = s.pos;
 			if (wd_LRstate[i] == LEFT) {
 				if ((wd_pos.x - 36 <= tile_pos.x) && (wd_pos.x >= tile_pos.x) && (wd_pos.y + 24 > tile_pos.y) && (wd_pos.y - 24 < tile_pos.y))
 				{

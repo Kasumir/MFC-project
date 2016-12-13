@@ -4,6 +4,8 @@
 
 #pragma once
 
+#define S_EDITOR 2
+
 
 class CMainFrame : public CFrameWnd
 {
