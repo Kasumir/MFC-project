@@ -502,7 +502,7 @@ void CSpongeBobView::OnDraw(CDC* pDC)
 			if (monster[i].m_visible)
 			{
 				monster[i].MoveState();
-				monster[i].check(&Tile_list);
+				monster[i].check(&Tile_list, &LRTile_list);
 				monster[i].followcharacter(object.c_pos, object.c_LRstate);
 				pDC->TransparentBlt(monster[i].m_pos.x, monster[i].m_pos.y, m_bmpinfo.bmWidth, m_bmpinfo.bmHeight, &m_dcmem, 0, 0, m_bmpinfo.bmWidth, m_bmpinfo.bmHeight, RGB(0, 255, 0));
 			}

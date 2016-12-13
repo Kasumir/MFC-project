@@ -1,4 +1,5 @@
 #pragma once
+#include "GameObject.h"
 
 #define M_SIZE 48		//몬스터의 가로 세로 길이.
 #define B_SIZE 48      //블록의 가로 세로 길이
@@ -39,7 +40,7 @@ protected:
 public:
 	void MoveState();
 	void StopState();
-	void check(CList<CPoint, CPoint&>*);
+	void check(CList<CPoint, CPoint&>*, CList<tilestyle, tilestyle>* LRTile_list);
 	void MonsterDie();
 	void MonsterCreate(int x, int y);
 	void followcharacter(CPoint point, int state);
