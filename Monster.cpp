@@ -119,7 +119,6 @@ void Monster::StopState()//게임대기상태나 캐릭터에게 공격당해서 갇혀있는 상태
 void Monster::check(CList<CPoint, CPoint&>* Tile_list, CList<tilestyle, tilestyle>* LRTile_list)
 {
 	POSITION p;
-	POSITION ps;
 	CPoint pos;
 	int count = 0;
 	for (p = Tile_list->GetHeadPosition(); p != NULL;) // 모든 벽돌에 대해 돎.
@@ -136,17 +135,13 @@ void Monster::check(CList<CPoint, CPoint&>* Tile_list, CList<tilestyle, tilestyl
 		else if (m_UDstate == STOP) // 밑에 벽돌이 있는지 없는지 검사.
 			if (!(m_pos.x > pos.x - M_SIZE && m_pos.x < pos.x + B_SIZE && m_pos.y > pos.y - M_SIZE && m_pos.y < pos.y - M_SIZE + B_SIZE / 2))
 				count++;//밑에 모든 벽돌이 없는지 검사.
-
-		if (count == Tile_list->GetCount())
-			m_UDstate = DOWN; // 타일숫자 = 검사한 숫자 -> 떨어짐.
-		if (jumpcount == 6) // 점프가 6번 프레임 만큼 돌고 떨어짐.
-			m_UDstate = DOWN;
+	
 	}
-	for (ps = LRTile_list->GetHeadPosition(); ps != NULL;)
+	for (p = LRTile_list->GetHeadPosition(); p != NULL;)
 	{
-		tilestyle s = LRTile_list->GetNext(ps);
+		tilestyle s = LRTile_list->GetNext(p);
 		pos = s.pos;
-		if (m_LRstate == LEFT||m_LRstate == STOP)
+	/*	if (m_LRstate == LEFT || m_LRstate == STOP)
 		{
 			if ((m_pos.x - B_SIZE <= pos.x) && (m_pos.x >= pos.x) && (m_pos.y + B_SIZE > pos.y) && (m_pos.y - B_SIZE < pos.y))
 			{
@@ -154,16 +149,40 @@ void Monster::check(CList<CPoint, CPoint&>* Tile_list, CList<tilestyle, tilestyl
 				m_pos.x = pos.x + B_SIZE;
 			}
 		}
-		else if (m_LRstate == RIGHT||m_LRstate == STOP)
+		else if (m_LRstate == RIGHT || m_LRstate == STOP)
 		{
 			if ((m_pos.x + B_SIZE >= pos.x) && (m_pos.x <= pos.x) && (m_pos.y + B_SIZE > pos.y) && (m_pos.y - B_SIZE < pos.y))
 			{
 				m_LRstate = STOP;
 				m_pos.x = pos.x - M_SIZE;
 			}
+		}*/
+		if (m_UDstate == DOWN)
+		{
+			if (m_pos.x > pos.x - M_SIZE && m_pos.x < pos.x + B_SIZE && m_pos.y > pos.y - M_SIZE && m_pos.y < pos.y - M_SIZE + B_SIZE / 2)
+			{
+				m_UDstate = STOP;
+				m_pos.y = pos.y - M_SIZE;
+			}
 		}
-
+		else if (m_UDstate == STOP) // 밑에 벽돌이 있는지 없는지 검사.
+			if (!(m_pos.x > pos.x - M_SIZE && m_pos.x < pos.x + B_SIZE && m_pos.y > pos.y - M_SIZE && m_pos.y < pos.y - M_SIZE + B_SIZE / 2))
+				count++;//밑에 모든 벽돌이 없는지 검사.
+		if (m_LRstate == LEFT && s.right && m_pos.x > s.pos.x + B_SIZE - 15 && m_pos.x < s.pos.x + B_SIZE && m_pos.y > s.pos.y - M_SIZE && m_pos.y < s.pos.y + B_SIZE) //오른쪽 충돌
+		{
+			m_LRstate = STOP;
+			m_pos.x = s.pos.x + B_SIZE + 1;
+		}
+		if (m_LRstate == RIGHT && s.left && m_pos.x + M_SIZE < s.pos.x + 15 && m_pos.x + M_SIZE > s.pos.x && m_pos.y > s.pos.y - M_SIZE && m_pos.y < s.pos.y + B_SIZE) //왼쪽 충돌
+		{
+			m_LRstate = STOP;
+			m_pos.x = s.pos.x - M_SIZE - 1;
+		}
 	}
+	if (count == Tile_list->GetCount() + LRTile_list->GetCount())
+		m_UDstate = DOWN; // 타일숫자 = 검사한 숫자 -> 떨어짐.
+	if (jumpcount == 6) // 점프가 6번 프레임 만큼 돌고 떨어짐.
+		m_UDstate = DOWN;
 }
 
 

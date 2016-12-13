@@ -552,7 +552,7 @@ void CSpongeBobView::OnDraw(CDC* pDC)
 			openStage = TRUE;
 			s_state = S_STOP;
 		}
-		if (stageNum == 3) {
+		if (stageNum == 5) {
 			s_state = S_CLEAR;
 		}
 
