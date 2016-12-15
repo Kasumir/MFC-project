@@ -131,7 +131,7 @@ IDR_MAINFRAME           BITMAP                  "res\\Toolbar.bmp"
 
 IDR_MAINFRAME MENU
 BEGIN
-    MENUITEM "끝내기(&X)",                     ID_APP_EXIT
+    MENUITEM "끝내기(&X)",                     ID_EDITEND
     POPUP "에디터"
     BEGIN
         MENUITEM "저장",                          ID_SAVE
@@ -462,6 +462,11 @@ END
 
 STRINGTABLE
 BEGIN
+    ID_SAVE                 "맵을 저장합니다. \n저장"
+    ID_LOAD                 "맵을 불러옵니다 \n불러오기"
+    ID_BLOCK                "벽돌을 추가합니다. \n벽돌"
+    ID_MONSTER              "몬스터를 추가합니다. \n몬스터"
+    ID_CHARACTER            "캐릭터를 추가합니다. \n캐릭터"
     ID_BUTTON32782          "좌우벽돌을 추가합니다. \n좌우충돌벽돌"
 END
 

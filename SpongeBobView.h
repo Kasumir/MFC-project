@@ -30,6 +30,7 @@ protected: // serialization에서만 만들어집니다.
 	int s_state; //scene의 상태
 	int stageNum;
 	int m_deadCount;
+	BOOL a;
 	GameObject object;
 	CList<CPoint, CPoint&> Tile_list;
 	CList<tilestyle, tilestyle> LRTile_list;
@@ -86,6 +87,9 @@ public:
 	afx_msg void OnUpdateMonster(CCmdUI *pCmdUI);
 	afx_msg void OnLrblock();
 	afx_msg void OnUpdateLrblock(CCmdUI *pCmdUI);
+	afx_msg void OnEditend();
+	afx_msg void OnUpdateSave(CCmdUI *pCmdUI);
+	afx_msg void OnUpdateLoad(CCmdUI *pCmdUI);
 };
 
 #ifndef _DEBUG  // SpongeBobView.cpp의 디버그 버전

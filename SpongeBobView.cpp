@@ -47,6 +47,9 @@ BEGIN_MESSAGE_MAP(CSpongeBobView, CView)
 //	ON_WM_MOUSEMOVE()
 ON_COMMAND(ID_LRBLOCK, &CSpongeBobView::OnLrblock)
 ON_UPDATE_COMMAND_UI(ID_LRBLOCK, &CSpongeBobView::OnUpdateLrblock)
+ON_COMMAND(ID_EDITEND, &CSpongeBobView::OnEditend)
+ON_UPDATE_COMMAND_UI(ID_SAVE, &CSpongeBobView::OnUpdateSave)
+ON_UPDATE_COMMAND_UI(ID_LOAD, &CSpongeBobView::OnUpdateLoad)
 END_MESSAGE_MAP()
 
 // CSpongeBobView 생성/소멸
@@ -67,6 +70,7 @@ CSpongeBobView::CSpongeBobView()
 	stageNum = 1;
 	openStage = TRUE;
 	m_deadCount = 0;
+	a = TRUE;
 }
 
 CSpongeBobView::~CSpongeBobView()
@@ -100,9 +104,12 @@ void CSpongeBobView::OnDraw(CDC* pDC)
 		menu_dcmem.CreateCompatibleDC(pDC);
 		menu_dcmem.SelectObject(&menu_bitmap);
 
-		start_rgn.CreateRectRgn(menu_bmpinfo.bmWidth * 2 / 3 - 100, menu_bmpinfo.bmHeight / 2 - 100, menu_bmpinfo.bmWidth * 2 / 3 + 100, menu_bmpinfo.bmHeight / 2 - 40);
-		editor_rgn.CreateRectRgn(menu_bmpinfo.bmWidth * 2 / 3 - 100, menu_bmpinfo.bmHeight / 2 + 10, menu_bmpinfo.bmWidth * 2 / 3 + 100, menu_bmpinfo.bmHeight / 2 + 70);
-		end_rgn.CreateRectRgn(menu_bmpinfo.bmWidth * 2 / 3 - 100, menu_bmpinfo.bmHeight / 2 + 120, menu_bmpinfo.bmWidth * 2 / 3 + 100, menu_bmpinfo.bmHeight / 2 + 180);
+		if (a) {
+			start_rgn.CreateRectRgn(menu_bmpinfo.bmWidth * 2 / 3 - 100, menu_bmpinfo.bmHeight / 2 - 100, menu_bmpinfo.bmWidth * 2 / 3 + 100, menu_bmpinfo.bmHeight / 2 - 40);
+			editor_rgn.CreateRectRgn(menu_bmpinfo.bmWidth * 2 / 3 - 100, menu_bmpinfo.bmHeight / 2 + 10, menu_bmpinfo.bmWidth * 2 / 3 + 100, menu_bmpinfo.bmHeight / 2 + 70);
+			end_rgn.CreateRectRgn(menu_bmpinfo.bmWidth * 2 / 3 - 100, menu_bmpinfo.bmHeight / 2 + 120, menu_bmpinfo.bmWidth * 2 / 3 + 100, menu_bmpinfo.bmHeight / 2 + 180);
+			a = FALSE;
+		}
 
 		pDC->StretchBlt(0, 0, menu_bmpinfo.bmWidth * 4 / 3, menu_bmpinfo.bmHeight * 4 / 3, &menu_dcmem, 0, 0, menu_bmpinfo.bmWidth, menu_bmpinfo.bmHeight, SRCCOPY);
 		CRect rect1, rect2, rect3;
@@ -120,6 +127,8 @@ void CSpongeBobView::OnDraw(CDC* pDC)
 	}
 	//-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 	else if (s_state == S_EDITOR) {
+
+		
 		//---------------------
 		CBitmap bitmap, c_bitmap; //블록 비트맵 로딩
 		CBitmap m_bitmap, b1_bitmap, wd_bitmap;
@@ -323,7 +332,8 @@ void CSpongeBobView::OnDraw(CDC* pDC)
 			CFile file;
 			CFileException e;
 			if (!file.Open(str, CFile::modeRead, &e)) {
-				e.ReportError();
+				//e.ReportError();
+				s_state = S_CLEAR;
 				i_state = TRUE;
 				Invalidate();
 				return;
@@ -552,9 +562,9 @@ void CSpongeBobView::OnDraw(CDC* pDC)
 			openStage = TRUE;
 			s_state = S_STOP;
 		}
-		if (stageNum == 5) {
-			s_state = S_CLEAR;
-		}
+		//if (stageNum == 6) {
+		//	s_state = S_CLEAR;
+		//}
 
 		for (int i = 0; i < 10; i++)
 			object.monster_check(monster[i].m_pos, monster[i].m_LRstate);
@@ -623,7 +633,6 @@ void CSpongeBobView::OnDraw(CDC* pDC)
 		stgeClear_dcmem.SelectObject(&stageClear_bitmap);
 
 		pDC->TransparentBlt(0, 20, stageClear_bmpinfo.bmWidth * 14 / 15, stageClear_bmpinfo.bmHeight * 8 / 5, &stgeClear_dcmem, 0, 0, stageClear_bmpinfo.bmWidth, stageClear_bmpinfo.bmHeight, RGB(0, 255, 0));
-
 	}
 	
 }
@@ -827,11 +836,19 @@ void CSpongeBobView::OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags)
 				s_state = S_START;
 				Invalidate();
 		}
+		else if (s_state == S_CLEAR) {
+			s_state = S_MENU;
+			Invalidate();
+		}
 		else if (s_state == S_START) {
 			PlaySound(MAKEINTRESOURCE(IDR_PEN), AfxGetInstanceHandle(), SND_RESOURCE | SND_ASYNC); //효과음
 			object.c_space = TRUE;
 			object.wdcount[0] = 0;
 			break;
+		}
+		else if (s_state == S_OVER) {
+			s_state = S_MENU;
+			Invalidate();
 		}
 	}
 }
@@ -1036,16 +1053,28 @@ void CSpongeBobView::OnMonster()
 void CSpongeBobView::OnUpdateBlock(CCmdUI *pCmdUI)
 {
 	pCmdUI->SetCheck(e_block);
+	if (s_state != S_EDITOR)
+		pCmdUI->Enable(FALSE);
+	else
+		pCmdUI->Enable(TRUE);
 }
 
 void CSpongeBobView::OnUpdateCharacter(CCmdUI *pCmdUI)
 {
 	pCmdUI->SetCheck(e_char);
+	if (s_state != S_EDITOR)
+		pCmdUI->Enable(FALSE);
+	else
+		pCmdUI->Enable(TRUE);
 }
 
 void CSpongeBobView::OnUpdateMonster(CCmdUI *pCmdUI)
 {
 	pCmdUI->SetCheck(e_mon);
+	if (s_state != S_EDITOR)
+		pCmdUI->Enable(FALSE);
+	else
+		pCmdUI->Enable(TRUE);
 }
 
 void CSpongeBobView::OnLrblock()
@@ -1062,4 +1091,41 @@ void CSpongeBobView::OnLrblock()
 void CSpongeBobView::OnUpdateLrblock(CCmdUI *pCmdUI)
 {
 	pCmdUI->SetCheck(e_lrblock);
+	if (s_state != S_EDITOR)
+		pCmdUI->Enable(FALSE);
+	else
+		pCmdUI->Enable(TRUE);
+}
+
+
+void CSpongeBobView::OnEditend()
+{
+	// TODO: 여기에 명령 처리기 코드를 추가합니다.
+	if (s_state == S_EDITOR) {
+		s_state = S_MENU;
+		Invalidate();
+	}
+	else {
+		AfxGetMainWnd()->PostMessage(WM_CLOSE);
+	}
+}
+
+
+void CSpongeBobView::OnUpdateSave(CCmdUI *pCmdUI)
+{
+	// TODO: 여기에 명령 업데이트 UI 처리기 코드를 추가합니다.
+	if (s_state != S_EDITOR)
+		pCmdUI->Enable(FALSE);
+	else
+		pCmdUI->Enable(TRUE);
+}
+
+
+void CSpongeBobView::OnUpdateLoad(CCmdUI *pCmdUI)
+{
+	// TODO: 여기에 명령 업데이트 UI 처리기 코드를 추가합니다.
+	if (s_state != S_EDITOR)
+		pCmdUI->Enable(FALSE);
+	else
+		pCmdUI->Enable(TRUE);
 }
